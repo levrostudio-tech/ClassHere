@@ -66,36 +66,36 @@ export default function T4Dashboard() {
         className="flex-1 overflow-y-auto no-scrollbar px-5 sm:px-6 pt-3 pb-24 space-y-4"
       >
         {/* Top Header & Profile */}
-        <div className="flex items-center justify-between pt-0.5 pb-0.5">
-          <div className="font-extrabold text-[22px] tracking-tight">
+        <div className="flex items-center justify-between pt-1 pb-1">
+          <div className="font-extrabold text-[24px] tracking-tight">
             <span className="text-[#0F172A]">Class</span>
             <span className="text-[#0075FF]">Here</span>
           </div>
           <button
             type="button"
             onClick={() => navigate('/profile')}
-            className="w-9 h-9 rounded-full bg-[#EBF3FE] border border-[#D0E2FB] flex items-center justify-center text-[#0075FF] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="w-10 h-10 rounded-full bg-[#EBF3FE] border border-[#D0E2FB] flex items-center justify-center text-[#0075FF] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
             aria-label="View Profile"
           >
-            <User className="w-4.5 h-4.5 fill-current" />
+            <User className="w-5 h-5 fill-current" />
           </button>
         </div>
 
         {/* Greeting & Date selector */}
-        <div className="flex items-end justify-between pt-0.5">
+        <div className="flex items-end justify-between pt-1">
           <div>
-            <p className="text-[12px] font-medium text-[#64748B]">{istTime.greeting}</p>
-            <h2 className="text-[20px] font-extrabold text-[#0F172A] tracking-tight">
+            <p className="text-[12.5px] font-medium text-[#64748B]">{istTime.greeting}</p>
+            <h2 className="text-[22px] font-extrabold text-[#0F172A] tracking-tight">
               {displayName}
             </h2>
           </div>
 
           <div
             onClick={() => navigate('/timetable')}
-            className="flex items-center gap-1.5 px-2.5 py-1 bg-[#F1F5F9] border border-[#E2E8F0] rounded-[10px] cursor-pointer hover:bg-slate-200/60 transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#F1F5F9] border border-[#E2E8F0] rounded-[10px] cursor-pointer hover:bg-slate-200/60 transition-colors"
           >
             <Calendar className="w-3.5 h-3.5 text-[#64748B]" />
-            <span className="text-[11.5px] font-semibold text-[#475569]">
+            <span className="text-[12px] font-semibold text-[#475569]">
               {istTime.formattedDate}
             </span>
             <ChevronDown className="w-3.5 h-3.5 text-[#64748B]" />
@@ -103,7 +103,7 @@ export default function T4Dashboard() {
         </div>
 
         {/* 4 Quick Action Cards */}
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-2.5">
           {[
             { title: 'Add Notes', icon: FileText },
             { title: 'Add Test', icon: ClipboardList },
@@ -118,12 +118,12 @@ export default function T4Dashboard() {
                 onClick={() => {
                   if (action.path) navigate(action.path);
                 }}
-                className="flex flex-col items-center justify-center py-2 px-1 bg-[#F1F6FE] border border-[#E2EDFD] rounded-[12px] active:scale-95 hover:bg-[#E7F0FD] transition-all cursor-pointer"
+                className="flex flex-col items-center justify-center py-2.5 px-1 bg-[#F1F6FE] border border-[#E2EDFD] rounded-[13px] active:scale-95 hover:bg-[#E7F0FD] transition-all cursor-pointer"
               >
                 <div className="text-[#0075FF] mb-1">
-                  <Icon className="w-5 h-5 stroke-[2]" />
+                  <Icon className="w-5.5 h-5.5 stroke-[2]" />
                 </div>
-                <span className="text-[10px] font-bold text-[#0F172A] text-center leading-tight whitespace-normal break-words h-7 flex items-center justify-center w-full px-0.5">
+                <span className="text-[10.5px] font-bold text-[#0F172A] text-center leading-tight whitespace-normal break-words h-7 flex items-center justify-center w-full px-0.5">
                   {action.title}
                 </span>
               </button>

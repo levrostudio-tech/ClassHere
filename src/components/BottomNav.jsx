@@ -21,14 +21,14 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
   return (
     <nav
       aria-label="Bottom Navigation"
-      className={`absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#EDF2F7] py-1.5 px-3 shadow-[0_-3px_15px_rgba(0,0,0,0.04)] z-30 transition-all duration-300 ease-in-out ${
+      className={`absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#EDF2F7] py-2 px-3 shadow-[0_-3px_15px_rgba(0,0,0,0.04)] z-30 transition-all duration-300 ease-in-out ${
         isVisible
           ? 'translate-y-0 opacity-100'
           : 'translate-y-full opacity-0 pointer-events-none'
       }`}
     >
       {/* 4-Tab Navigation Grid */}
-      <div className="grid grid-cols-4 gap-1 items-center justify-items-center max-w-sm mx-auto">
+      <div className="grid grid-cols-4 gap-1.5 items-center justify-items-center max-w-sm mx-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -42,7 +42,7 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
                   navigate(item.path);
                 }
               }}
-              className={`w-full max-w-[76px] h-[46px] flex flex-col items-center justify-center transition-all duration-150 cursor-pointer rounded-[12px] ${
+              className={`w-full max-w-[78px] h-[48px] flex flex-col items-center justify-center transition-all duration-150 cursor-pointer rounded-[12px] ${
                 isActive
                   ? 'bg-[#EAF3FF] text-[#0075FF]'
                   : 'text-[#64748B] hover:text-[#0F172A] hover:bg-slate-50'
@@ -57,7 +57,7 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
                 }`}
               />
               <span
-                className={`text-[10.5px] mt-0.5 leading-tight ${
+                className={`text-[11px] mt-0.5 leading-tight ${
                   isActive
                     ? 'font-bold text-[#0075FF]'
                     : 'font-medium text-[#64748B]'

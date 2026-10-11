@@ -91,10 +91,10 @@ export default function ProfileSettings() {
         <header className="flex items-center justify-between mb-4">
           {/* ClassHere Branding */}
           <div className="flex items-center">
-            <span className="text-[24px] font-black tracking-tight text-[#0F172A]">
+            <span className="text-[25px] font-black tracking-tight text-[#0F172A]">
               Class
             </span>
-            <span className="text-[24px] font-black tracking-tight text-[#0075FF]">
+            <span className="text-[25px] font-black tracking-tight text-[#0075FF]">
               Here
             </span>
           </div>
@@ -121,26 +121,26 @@ export default function ProfileSettings() {
 
         {/* Page Title & Subtitle */}
         <div className="mb-4">
-          <h1 className="text-[22px] sm:text-[24px] font-black text-[#0F172A] tracking-[-0.02em] leading-tight">
+          <h1 className="text-[25px] font-black text-[#0F172A] tracking-[-0.02em] leading-tight">
             Profile
           </h1>
-          <p className="text-[13px] font-medium text-[#64748B] mt-0.5">
+          <p className="text-[13.5px] font-medium text-[#64748B] mt-0.5">
             Manage your account and preferences.
           </p>
         </div>
 
         {/* Card 1: Faculty Profile Card */}
-        <div className="bg-[#F8FAFC]/90 rounded-[20px] border border-[#E2E8F0] p-3.5 flex items-center justify-between shadow-xs mb-3">
+        <div className="bg-[#F8FAFC]/90 rounded-[20px] border border-[#E2E8F0] p-4 flex items-center justify-between shadow-xs mb-3.5">
           {/* Left Avatar & Info */}
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-12 h-12 rounded-full bg-[#DBEAFE] flex items-center justify-center text-[#0075FF] shrink-0 shadow-inner">
-              <User className="w-6 h-6 fill-current" />
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div className="w-[54px] h-[54px] rounded-full bg-[#DBEAFE] flex items-center justify-center text-[#0075FF] shrink-0 shadow-inner">
+              <User className="w-6.5 h-6.5 fill-current" />
             </div>
             <div className="min-w-0 pr-2">
-              <h2 className="text-[16px] font-bold text-[#0F172A] tracking-tight truncate leading-tight">
+              <h2 className="text-[17px] font-bold text-[#0F172A] tracking-tight truncate leading-tight">
                 {profile.name}
               </h2>
-              <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
+              <p className="text-[12.5px] font-medium text-[#64748B] mt-1 leading-tight truncate">
                 {profile.designation} • {profile.department}
               </p>
             </div>
@@ -153,23 +153,23 @@ export default function ProfileSettings() {
               setEditForm({ ...profile });
               setActiveModal('edit');
             }}
-            className="px-3.5 py-1.5 rounded-[10px] bg-[#EBF3FE] hover:bg-[#DBEAFE] text-[#0075FF] font-bold text-[12.5px] active:scale-95 transition-all shrink-0 cursor-pointer"
+            className="px-3.5 py-1.5 rounded-[10px] bg-[#EBF3FE] hover:bg-[#DBEAFE] text-[#0075FF] font-bold text-[13px] active:scale-95 transition-all shrink-0 cursor-pointer"
           >
             Edit
           </button>
         </div>
 
         {/* Card 2: Department & College Info Card - Full width layout to eliminate truncation */}
-        <div className="bg-white rounded-[18px] border border-[#E2E8F0] p-3 shadow-xs mb-3 space-y-2">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-[10px] bg-[#E8F8EE] flex items-center justify-center text-[#10B981] shrink-0">
-              <GraduationCap className="w-4.5 h-4.5 stroke-[2]" />
+        <div className="bg-white rounded-[18px] border border-[#E2E8F0] p-3.5 shadow-xs mb-3.5 space-y-2.5">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-[11px] bg-[#E8F8EE] flex items-center justify-center text-[#10B981] shrink-0">
+              <GraduationCap className="w-5 h-5 stroke-[2]" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-[10px] font-semibold text-[#64748B] block leading-tight">
+              <span className="text-[10.5px] font-semibold text-[#64748B] block leading-tight">
                 Department
               </span>
-              <span className="text-[13px] font-bold text-[#0F172A] block leading-snug">
+              <span className="text-[13.5px] font-bold text-[#0F172A] block leading-snug">
                 {profile.department}
               </span>
             </div>
@@ -177,15 +177,15 @@ export default function ProfileSettings() {
 
           <div className="h-[1px] bg-[#F1F5F9] w-full" />
 
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-[10px] bg-[#EBF3FE] flex items-center justify-center text-[#0075FF] shrink-0">
-              <Building2 className="w-4.5 h-4.5 stroke-[2]" />
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-[11px] bg-[#EBF3FE] flex items-center justify-center text-[#0075FF] shrink-0">
+              <Building2 className="w-5 h-5 stroke-[2]" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-[10px] font-semibold text-[#64748B] block leading-tight">
+              <span className="text-[10.5px] font-semibold text-[#64748B] block leading-tight">
                 College
               </span>
-              <span className="text-[13px] font-bold text-[#0F172A] block leading-snug">
+              <span className="text-[13.5px] font-bold text-[#0F172A] block leading-snug">
                 {profile.college}
               </span>
             </div>
@@ -193,93 +193,93 @@ export default function ProfileSettings() {
         </div>
 
         {/* Card 3: Menu List Group */}
-        <div className="bg-white rounded-[18px] border border-[#E2E8F0] overflow-hidden shadow-xs mb-3 divide-y divide-[#F1F5F9]">
+        <div className="bg-white rounded-[18px] border border-[#E2E8F0] overflow-hidden shadow-xs mb-3.5 divide-y divide-[#F1F5F9]">
           {/* 1. Personal Information */}
           <button
             type="button"
             onClick={() => setActiveModal('personal')}
-            className="w-full p-3 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
           >
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-[11px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
-                <User className="w-4.5 h-4.5 stroke-[2]" />
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+                <User className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
                   Personal Information
                 </h3>
-                <p className="text-[11.5px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
+                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
                   Name, department, contact details
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-4.5 h-4.5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
           </button>
 
           {/* 2. Notifications */}
           <button
             type="button"
             onClick={() => setActiveModal('notifications')}
-            className="w-full p-3 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
           >
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-[11px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
-                <Bell className="w-4.5 h-4.5 stroke-[2]" />
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+                <Bell className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
                   Notifications
                 </h3>
-                <p className="text-[11.5px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
+                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
                   Manage what you want to be notified about
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-4.5 h-4.5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
           </button>
 
           {/* 3. Appearance */}
           <button
             type="button"
             onClick={() => setActiveModal('appearance')}
-            className="w-full p-3 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
           >
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-[11px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
-                <Palette className="w-4.5 h-4.5 stroke-[2]" />
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+                <Palette className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
                   Appearance
                 </h3>
-                <p className="text-[11.5px] font-medium text-[#64748B] mt-0.5 leading-tight capitalize truncate">
+                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight capitalize truncate">
                   {theme} mode
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-4.5 h-4.5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
           </button>
 
           {/* 4. About ClassHere */}
           <button
             type="button"
             onClick={() => setActiveModal('about')}
-            className="w-full p-3 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
           >
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-[11px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
-                <Info className="w-4.5 h-4.5 stroke-[2]" />
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+                <Info className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
                   About ClassHere
                 </h3>
-                <p className="text-[11.5px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
+                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
                   App version, faculty information and more
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-4.5 h-4.5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
           </button>
         </div>
 
@@ -287,9 +287,9 @@ export default function ProfileSettings() {
         <button
           type="button"
           onClick={() => setActiveModal('logout')}
-          className="w-full h-12 rounded-[14px] bg-[#FEF2F2] hover:bg-[#FEE2E2] active:scale-[0.99] border border-[#FEE2E2]/80 flex items-center justify-center gap-2 text-[#EF4444] font-bold text-[14px] transition-all cursor-pointer shadow-xs"
+          className="w-full h-[50px] rounded-[15px] bg-[#FEF2F2] hover:bg-[#FEE2E2] active:scale-[0.99] border border-[#FEE2E2]/80 flex items-center justify-center gap-2 text-[#EF4444] font-bold text-[14.5px] transition-all cursor-pointer shadow-xs"
         >
-          <LogOut className="w-4.5 h-4.5 stroke-[2.2]" />
+          <LogOut className="w-5 h-5 stroke-[2.2]" />
           <span>Log Out</span>
         </button>
       </div>

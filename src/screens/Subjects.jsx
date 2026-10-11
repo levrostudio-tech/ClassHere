@@ -122,7 +122,7 @@ export default function Subjects() {
       >
         {/* Header: Title and Batch Dropdown Pill */}
         <div className="flex items-center justify-between pt-1 relative">
-          <h1 className="text-[22px] sm:text-[24px] font-extrabold text-[#0F172A] tracking-tight leading-none">
+          <h1 className="text-[25px] font-extrabold text-[#0F172A] tracking-tight leading-none">
             My Subjects
           </h1>
 
@@ -131,7 +131,7 @@ export default function Subjects() {
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#F1F5F9] border border-[#E2E8F0] rounded-[12px] text-[12px] font-semibold text-[#475569] hover:bg-slate-200/70 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F5F9] border border-[#E2E8F0] rounded-[12px] text-[12.5px] font-semibold text-[#475569] hover:bg-slate-200/70 transition-colors cursor-pointer"
             >
               <GraduationCap className="w-3.5 h-3.5 text-[#64748B]" />
               <span className="truncate max-w-[130px]">{selectedBatch}</span>
@@ -168,7 +168,7 @@ export default function Subjects() {
           <button
             type="button"
             onClick={() => setActiveTab('current')}
-            className={`px-3.5 py-1.5 rounded-full text-[13px] transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-full text-[13.5px] transition-all cursor-pointer ${
               activeTab === 'current'
                 ? 'bg-[#EAF3FF] text-[#0075FF] font-bold shadow-xs'
                 : 'text-[#64748B] font-medium hover:text-[#0F172A]'
@@ -179,7 +179,7 @@ export default function Subjects() {
           <button
             type="button"
             onClick={() => setActiveTab('all')}
-            className={`px-3.5 py-1.5 rounded-full text-[13px] transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-full text-[13.5px] transition-all cursor-pointer ${
               activeTab === 'all'
                 ? 'bg-[#EAF3FF] text-[#0075FF] font-bold shadow-xs'
                 : 'text-[#64748B] font-medium hover:text-[#0F172A]'
