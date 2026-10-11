@@ -8,7 +8,7 @@ export default function DeviceFrame({ children }) {
   });
 
   const PHONE_WIDTH = 412;
-  const PHONE_HEIGHT = 860;
+  const PHONE_HEIGHT = 820;
 
   React.useEffect(() => {
     const handleResize = () => {
