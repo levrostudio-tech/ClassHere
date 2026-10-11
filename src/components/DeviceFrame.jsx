@@ -35,8 +35,8 @@ export default function DeviceFrame({ children }) {
   // On native mobile viewports (e.g. viewing directly on smartphone)
   if (isMobileScreen) {
     return (
-      <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-blue-500 selection:text-white">
-        <main className="flex-1 flex flex-col min-h-screen relative bg-white">
+      <div className="h-[100dvh] w-full bg-white flex flex-col font-sans selection:bg-blue-500 selection:text-white overflow-hidden">
+        <main className="flex-1 flex flex-col h-full w-full relative bg-white overflow-hidden">
           {children}
         </main>
       </div>

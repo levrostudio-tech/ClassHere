@@ -122,7 +122,7 @@ export default function Subjects() {
       >
         {/* Header: Title and Batch Dropdown Pill */}
         <div className="flex items-center justify-between pt-1 relative">
-          <h1 className="text-[30px] font-extrabold text-[#0F172A] tracking-tight leading-none">
+          <h1 className="text-[22px] sm:text-[24px] font-extrabold text-[#0F172A] tracking-tight leading-none">
             My Subjects
           </h1>
 

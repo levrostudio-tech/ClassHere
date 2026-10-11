@@ -92,17 +92,17 @@ export default function Timetable() {
         className="flex-1 overflow-y-auto no-scrollbar px-5 sm:px-6 pt-4 pb-24 space-y-4"
       >
         {/* Header: Timetable Title & Subtitle */}
-        <div className="pt-1">
-          <h1 className="text-[30px] font-extrabold text-[#0F172A] tracking-tight leading-none">
+        <div className="pt-0.5">
+          <h1 className="text-[22px] sm:text-[24px] font-extrabold text-[#0F172A] tracking-tight leading-none">
             Timetable
           </h1>
-          <p className="text-[13.5px] font-medium text-[#64748B] mt-1.5">
+          <p className="text-[13px] font-medium text-[#64748B] mt-1">
             Your class schedule for the week
           </p>
         </div>
 
         {/* Weekly Day Selector Tabs - Mon to Sat */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 -mx-5 px-5 sm:-mx-6 sm:px-6">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 -mx-5 px-5 sm:-mx-6 sm:px-6">
           {days.map((item) => {
             const isSelected = selectedDay === item.id;
             return (
@@ -110,21 +110,21 @@ export default function Timetable() {
                 key={item.id}
                 type="button"
                 onClick={() => setSelectedDay(item.id)}
-                className={`flex flex-col items-center justify-center min-w-[58px] py-2.5 px-2 rounded-[14px] transition-all duration-150 active:scale-95 cursor-pointer ${
+                className={`flex flex-col items-center justify-center min-w-[52px] py-2 px-1.5 rounded-[12px] transition-all duration-150 active:scale-95 cursor-pointer ${
                   isSelected
                     ? 'bg-[#0075FF] text-white shadow-md shadow-blue-500/25 font-bold'
                     : 'bg-[#F1F5F9] text-[#0F172A] hover:bg-slate-200/70 font-semibold'
                 }`}
               >
                 <span
-                  className={`text-[13px] leading-tight ${
+                  className={`text-[12.5px] leading-tight ${
                     isSelected ? 'text-white font-bold' : 'text-[#0F172A]'
                   }`}
                 >
                   {item.day}
                 </span>
                 <span
-                  className={`text-[11px] mt-0.5 leading-tight ${
+                  className={`text-[10px] mt-0.5 leading-tight ${
                     isSelected ? 'text-white/90 font-medium' : 'text-[#64748B]'
                   }`}
                 >
@@ -212,50 +212,50 @@ export default function Timetable() {
               return (
                 <div
                   key={item.id}
-                  className={`bg-white border rounded-[16px] p-3.5 flex items-center gap-3 shadow-card hover:shadow-card-hover transition-all ${
+                  className={`bg-white border rounded-[14px] p-3 flex items-center gap-2.5 shadow-card hover:shadow-card-hover transition-all ${
                     isFinished ? 'border-[#F1F5F9] opacity-80' : 'border-[#EEF2F6]'
                   }`}
                 >
                   {/* Time Column */}
-                  <div className="w-14 shrink-0">
-                    <p className="text-[13.5px] font-bold text-[#0F172A] leading-tight">
+                  <div className="w-[48px] shrink-0 text-center">
+                    <p className="text-[13px] font-bold text-[#0F172A] leading-tight">
                       {item.startTime}
                     </p>
-                    <p className="text-[11px] font-medium text-[#64748B] leading-tight">
+                    <p className="text-[10.5px] font-medium text-[#64748B] leading-tight">
                       to {item.endTime}
                     </p>
                   </div>
 
                   {/* Vertical divider */}
-                  <div className="w-[1px] h-9 bg-[#E2E8F0] shrink-0" />
+                  <div className="w-[1px] h-8 bg-[#E2E8F0] shrink-0" />
 
                   {/* Subject & Grade */}
-                  <div className="flex-1 min-w-0">
-                    <h5 className="text-[15px] font-bold text-[#0F172A] truncate">
+                  <div className="flex-1 min-w-0 pr-1">
+                    <h5 className="text-[13.5px] font-bold text-[#0F172A] leading-snug">
                       {item.subject}
                     </h5>
-                    <p className="text-[12px] font-normal text-[#64748B] truncate mt-0.5">
+                    <p className="text-[11.5px] font-normal text-[#64748B] truncate mt-0.5">
                       {item.grade}
                     </p>
                   </div>
 
                   {/* Room & Status badges */}
                   <div className="flex flex-col items-end gap-1 shrink-0">
-                    <span className="bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
+                    <span className="bg-[#F1F5F9] text-[#475569] text-[10px] font-semibold px-2 py-0.5 rounded-[6px]">
                       {item.room}
                     </span>
 
                     {isFinished ? (
                       <div className="flex items-center gap-1 bg-[#F1F5F9] px-1.5 py-0.5 rounded-[6px]">
                         <CheckCircle2 className="w-3 h-3 text-[#16A34A]" />
-                        <span className="text-[10.5px] font-semibold text-[#64748B]">
+                        <span className="text-[10px] font-semibold text-[#64748B]">
                           Finished
                         </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1 bg-[#F8FAFC] px-1.5 py-0.5 rounded-[6px]">
                         <Clock className="w-3 h-3 text-[#94A3B8]" />
-                        <span className="text-[10.5px] font-medium text-[#64748B]">
+                        <span className="text-[10px] font-medium text-[#64748B]">
                           Upcoming
                         </span>
                       </div>

@@ -66,44 +66,44 @@ export default function T4Dashboard() {
         className="flex-1 overflow-y-auto no-scrollbar px-5 sm:px-6 pt-3 pb-24 space-y-4"
       >
         {/* Top Header & Profile */}
-        <div className="flex items-center justify-between pt-1 pb-1">
-          <div className="font-extrabold text-[25px] tracking-tight">
+        <div className="flex items-center justify-between pt-0.5 pb-0.5">
+          <div className="font-extrabold text-[22px] tracking-tight">
             <span className="text-[#0F172A]">Class</span>
             <span className="text-[#0075FF]">Here</span>
           </div>
           <button
             type="button"
             onClick={() => navigate('/profile')}
-            className="w-10 h-10 rounded-full bg-[#EBF3FE] border border-[#D0E2FB] flex items-center justify-center text-[#0075FF] shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="w-9 h-9 rounded-full bg-[#EBF3FE] border border-[#D0E2FB] flex items-center justify-center text-[#0075FF] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
             aria-label="View Profile"
           >
-            <User className="w-5 h-5 fill-current" />
+            <User className="w-4.5 h-4.5 fill-current" />
           </button>
         </div>
 
         {/* Greeting & Date selector */}
-        <div className="flex items-end justify-between pt-1">
+        <div className="flex items-end justify-between pt-0.5">
           <div>
-            <p className="text-[13px] font-medium text-[#64748B]">{istTime.greeting}</p>
-            <h2 className="text-[23px] font-extrabold text-[#0F172A] tracking-tight">
+            <p className="text-[12px] font-medium text-[#64748B]">{istTime.greeting}</p>
+            <h2 className="text-[20px] font-extrabold text-[#0F172A] tracking-tight">
               {displayName}
             </h2>
           </div>
 
           <div
             onClick={() => navigate('/timetable')}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#F1F5F9] border border-[#E2E8F0] rounded-[10px] cursor-pointer hover:bg-slate-200/60 transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-[#F1F5F9] border border-[#E2E8F0] rounded-[10px] cursor-pointer hover:bg-slate-200/60 transition-colors"
           >
             <Calendar className="w-3.5 h-3.5 text-[#64748B]" />
-            <span className="text-[12px] font-semibold text-[#475569]">
+            <span className="text-[11.5px] font-semibold text-[#475569]">
               {istTime.formattedDate}
             </span>
-            <ChevronDown className="w-4 h-4 text-[#64748B]" />
+            <ChevronDown className="w-3.5 h-3.5 text-[#64748B]" />
           </div>
         </div>
 
         {/* 4 Quick Action Cards */}
-        <div className="grid grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-4 gap-2">
           {[
             { title: 'Add Notes', icon: FileText },
             { title: 'Add Test', icon: ClipboardList },
@@ -118,12 +118,12 @@ export default function T4Dashboard() {
                 onClick={() => {
                   if (action.path) navigate(action.path);
                 }}
-                className="flex flex-col items-center justify-center py-2.5 px-1 bg-[#F1F6FE] border border-[#E2EDFD] rounded-[14px] active:scale-95 hover:bg-[#E7F0FD] transition-all cursor-pointer"
+                className="flex flex-col items-center justify-center py-2 px-1 bg-[#F1F6FE] border border-[#E2EDFD] rounded-[12px] active:scale-95 hover:bg-[#E7F0FD] transition-all cursor-pointer"
               >
-                <div className="text-[#0075FF] mb-1.5">
-                  <Icon className="w-6 h-6 stroke-[2]" />
+                <div className="text-[#0075FF] mb-1">
+                  <Icon className="w-5 h-5 stroke-[2]" />
                 </div>
-                <span className="text-[11px] font-bold text-[#0F172A] text-center leading-tight truncate w-full">
+                <span className="text-[10px] font-bold text-[#0F172A] text-center leading-tight whitespace-normal break-words h-7 flex items-center justify-center w-full px-0.5">
                   {action.title}
                 </span>
               </button>
@@ -253,36 +253,36 @@ export default function T4Dashboard() {
             return (
               <div
                 key={item.id}
-                className={`bg-white border rounded-[16px] p-3.5 flex items-center gap-3 shadow-card hover:shadow-card-hover transition-all ${
+                className={`bg-white border rounded-[14px] p-3 flex items-center gap-2.5 shadow-card hover:shadow-card-hover transition-all ${
                   isFinished ? 'border-[#F1F5F9] opacity-80' : 'border-[#EEF2F6]'
                 }`}
               >
                 {/* Time Column */}
-                <div className="w-14 shrink-0">
-                  <p className="text-[13.5px] font-bold text-[#0F172A] leading-tight">
+                <div className="w-[50px] shrink-0 text-center">
+                  <p className="text-[13px] font-bold text-[#0F172A] leading-tight">
                     {item.startTime}
                   </p>
-                  <p className="text-[11px] font-medium text-[#64748B] leading-tight">
+                  <p className="text-[10.5px] font-medium text-[#64748B] leading-tight">
                     to {item.endTime}
                   </p>
                 </div>
 
                 {/* Vertical divider */}
-                <div className="w-[1px] h-9 bg-[#E2E8F0] shrink-0" />
+                <div className="w-[1px] h-8 bg-[#E2E8F0] shrink-0" />
 
                 {/* Subject & Grade */}
                 <div className="flex-1 min-w-0">
-                  <h5 className="text-[15px] font-bold text-[#0F172A] truncate">
+                  <h5 className="text-[14px] font-bold text-[#0F172A] truncate">
                     {item.subject}
                   </h5>
-                  <p className="text-[12px] font-normal text-[#64748B] truncate mt-0.5">
+                  <p className="text-[11.5px] font-normal text-[#64748B] truncate mt-0.5">
                     {item.grade}
                   </p>
                 </div>
 
                 {/* Room & Status Badge */}
                 <div className="flex flex-col items-end gap-1 shrink-0">
-                  <span className="bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
+                  <span className="bg-[#F1F5F9] text-[#475569] text-[10px] font-semibold px-2 py-0.5 rounded-[6px]">
                     {item.room}
                   </span>
 
