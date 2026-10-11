@@ -17,6 +17,7 @@ import FounderStory from './screens/FounderStory';
 
 import RecordClass from './screens/RecordClass';
 import RecordClassSuccess from './screens/RecordClassSuccess';
+import StudentDashboard from './screens/StudentDashboard';
 
 export default function App() {
   return (
@@ -42,6 +43,8 @@ export default function App() {
 
           {/* Core Academic Screens */}
           <Route path="/dashboard" element={<T4Dashboard />} />
+          <Route path="/student-dashboard" element={<StudentDashboard />} />
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/timetable" element={<Timetable />} />
           <Route path="/subjects" element={<Subjects />} />
           <Route path="/profile" element={<ProfileSettings />} />

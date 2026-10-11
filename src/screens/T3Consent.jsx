@@ -13,9 +13,19 @@ export default function T3Consent() {
   const handleAccept = () => {
     if (!agreed) return;
     setLoading(true);
+    const isStudent = location.state?.role === 'student';
+    if (isStudent) {
+      localStorage.setItem('classhere_role', 'student');
+    } else {
+      localStorage.setItem('classhere_role', 'teacher');
+    }
     setTimeout(() => {
       setLoading(false);
-      navigate('/dashboard', { state: location.state });
+      if (isStudent) {
+        navigate('/student-dashboard', { state: location.state });
+      } else {
+        navigate('/dashboard', { state: location.state });
+      }
     }, 300);
   };
 

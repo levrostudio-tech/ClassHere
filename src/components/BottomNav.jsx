@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Home,
   Calendar,
@@ -9,10 +9,20 @@ import {
 
 export default function BottomNav({ activeTab = 'home', isVisible = true }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // 4 Main Tabs: Home, Classes, Subjects, Profile (Notes removed per instruction)
+  const isStudent =
+    location.pathname.includes('student') ||
+    localStorage.getItem('classhere_role') === 'student';
+
+  // 4 Main Tabs: Home, Classes, Subjects, Profile
   const navItems = [
-    { id: 'home', label: 'Home', icon: Home, path: '/dashboard' },
+    {
+      id: 'home',
+      label: 'Home',
+      icon: Home,
+      path: isStudent ? '/student-dashboard' : '/dashboard',
+    },
     { id: 'classes', label: 'Classes', icon: Calendar, path: '/timetable' },
     { id: 'subjects', label: 'Subjects', icon: BookOpen, path: '/subjects' },
     { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
