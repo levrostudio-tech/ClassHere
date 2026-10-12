@@ -31,7 +31,7 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
   return (
     <nav
       aria-label="Bottom Navigation"
-      className={`absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#EDF2F7] py-2 px-3 shadow-[0_-3px_15px_rgba(0,0,0,0.04)] z-30 transition-all duration-300 ease-in-out ${
+      className={`absolute bottom-0 left-0 right-0 bg-white/95 dark:bg-[#0D1424]/95 backdrop-blur-md border-t border-[#EDF2F7] dark:border-[#1E293B] py-2 px-3 shadow-[0_-3px_15px_rgba(0,0,0,0.04)] z-30 transition-all duration-300 ease-in-out ${
         isVisible
           ? 'translate-y-0 opacity-100'
           : 'translate-y-full opacity-0 pointer-events-none'
@@ -54,23 +54,23 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
               }}
               className={`w-full max-w-[78px] h-[48px] flex flex-col items-center justify-center transition-all duration-150 cursor-pointer rounded-[12px] ${
                 isActive
-                  ? 'bg-[#EAF3FF] text-[#0075FF]'
-                  : 'text-[#64748B] hover:text-[#0F172A] hover:bg-slate-50'
+                  ? 'bg-[#EAF3FF] dark:bg-[#1A2640] text-[#0075FF] dark:text-[#3894FF]'
+                  : 'text-[#64748B] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F8FAFC] hover:bg-slate-50 dark:hover:bg-[#162036]'
               }`}
             >
               {/* Crisp vector icon */}
               <Icon
                 className={`w-5 h-5 transition-transform ${
                   isActive
-                    ? 'stroke-[2.4] text-[#0075FF] scale-105'
-                    : 'stroke-[1.9] text-[#64748B]'
+                    ? 'stroke-[2.4] text-[#0075FF] dark:text-[#3894FF] scale-105'
+                    : 'stroke-[1.9] text-[#64748B] dark:text-[#94A3B8]'
                 }`}
               />
               <span
                 className={`text-[11px] mt-0.5 leading-tight ${
                   isActive
-                    ? 'font-bold text-[#0075FF]'
-                    : 'font-medium text-[#64748B]'
+                    ? 'font-bold text-[#0075FF] dark:text-[#3894FF]'
+                    : 'font-medium text-[#64748B] dark:text-[#94A3B8]'
                 }`}
               >
                 {item.label}

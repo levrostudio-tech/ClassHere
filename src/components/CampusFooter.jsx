@@ -14,9 +14,9 @@ export default function CampusFooter() {
 
       {/* Crisp Native Typography - Centered below curved hill */}
       <div className="absolute bottom-3 sm:bottom-3.5 left-0 right-0 text-center px-4">
-        <p className="text-[13.5px] text-[#64748B] font-medium tracking-tight inline-flex items-center justify-center gap-1">
+        <p className="text-[13.5px] text-[#64748B] dark:text-[#94A3B8] font-medium tracking-tight inline-flex items-center justify-center gap-1">
           <span>A Product by</span>
-          <span className="font-bold text-[#0F172A]">Levro Studio</span>
+          <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">Levro Studio</span>
         </p>
       </div>
     </div>

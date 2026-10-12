@@ -33,7 +33,7 @@ export default function T1TeacherLogin({ onNavigate, initialPhone = '' }) {
   };
 
   return (
-    <div className="relative min-h-full flex-1 flex flex-col bg-white overflow-hidden justify-between select-none">
+    <div className="relative min-h-full flex-1 flex flex-col bg-white dark:bg-[#0B0F19] overflow-hidden justify-between select-none transition-colors duration-200">
       {/* Background soft circles */}
       <TopDecorCircles />
 
@@ -51,10 +51,10 @@ export default function T1TeacherLogin({ onNavigate, initialPhone = '' }) {
 
         {/* Title & Subtitle */}
         <div className="text-center mb-6">
-          <h1 className="text-[26px] font-extrabold text-[#0F172A] tracking-tight mb-1.5">
+          <h1 className="text-[26px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight mb-1.5">
             Teacher Login
           </h1>
-          <p className="text-[14.5px] font-medium text-[#64748B] leading-snug">
+          <p className="text-[14.5px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-snug">
             Enter your registered mobile number<br />
             to receive an OTP on WhatsApp.
           </p>

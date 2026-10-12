@@ -13,14 +13,18 @@ import {
   Download,
   BookMarked,
   Sparkles,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 import { useRealtimeTimetable } from '../hooks/useRealtimeTimetable';
 import { getISTNow } from '../lib/timetableService';
+import { useTheme } from '../context/ThemeContext';
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isDark, toggleTheme } = useTheme();
 
   // Scroll visibility for bottom nav
   const [isNavVisible, setIsNavVisible] = useState(true);
@@ -88,12 +92,6 @@ export default function StudentDashboard() {
     { id: 4, title: 'Phonetics & Pronunciation Workshop', subject: 'English Communication', time: '06 Oct, 9:00 AM', room: 'Room 101', faculty: 'Mrs. Simran Kaur' },
   ];
 
-
-
-  // Specific student classes mirroring the user's reference screenshot:
-  // Ongoing: English Communication (9:00 to 9:55) Room 101, B.Sc AI/ML – 1st Year, 32 min left
-  // Upcoming: Python (10:00 to 10:55, Room 204), Mathematics (11:00 to 11:55, Room 108),
-  // Computer Fundamentals (12:00 to 12:55, Room 108), Lab (2:00 to 4:00, Lab 2)
   const studentOngoingClass = ongoingClass || {
     subject: 'English Communication',
     grade: 'B.Sc AI/ML – 1st Year',
@@ -112,34 +110,43 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="relative h-full flex flex-col bg-[#FDFDFE] select-none overflow-hidden font-sans">
+    <div className="relative h-full flex flex-col bg-[#FDFDFE] dark:bg-[#0B0F19] transition-colors duration-200 select-none overflow-hidden font-sans">
       {/* Scrollable Container */}
       <div
         onScroll={handleScroll}
         className="flex-1 overflow-y-auto px-5 sm:px-6 pt-3 pb-24 no-scrollbar space-y-4"
       >
         {/* ======================================================== */}
-        {/* TOP BAR: ClassHere Brand Logo + User Avatar Pill (PM) */}
+        {/* TOP BAR: ClassHere Brand Logo + Theme toggle + User Avatar Pill */}
         {/* ======================================================== */}
         <header className="flex items-center justify-between pt-1">
           <div className="flex items-center">
-            <span className="text-[25px] font-black tracking-tight text-[#0F172A]">
+            <span className="text-[25px] font-black tracking-tight text-[#0F172A] dark:text-[#F8FAFC]">
               Class
             </span>
-            <span className="text-[25px] font-black tracking-tight text-[#0075FF]">
+            <span className="text-[25px] font-black tracking-tight text-[#0075FF] dark:text-[#3894FF]">
               Here
             </span>
           </div>
 
-          {/* User Profile Avatar Pill (PM) */}
-          <button
-            type="button"
-            onClick={() => setActiveModal('profile')}
-            className="w-10 h-10 rounded-full bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center text-[#0F172A] font-bold text-[13.5px] hover:bg-slate-200/70 active:scale-95 transition-all cursor-pointer shadow-xs"
-            aria-label="Student Profile"
-          >
-            PM
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#162238] border border-slate-200 dark:border-[#223354] flex items-center justify-center text-slate-700 dark:text-[#F8FAFC] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModal('profile')}
+              className="w-10 h-10 rounded-full bg-[#F1F5F9] dark:bg-[#162238] border border-[#E2E8F0] dark:border-[#223354] flex items-center justify-center text-[#0F172A] dark:text-[#F8FAFC] font-bold text-[13.5px] hover:bg-slate-200/70 dark:hover:bg-[#1E2E4A] active:scale-95 transition-all cursor-pointer shadow-xs"
+              aria-label="Student Profile"
+            >
+              PM
+            </button>
+          </div>
         </header>
 
         {/* ======================================================== */}
@@ -147,10 +154,10 @@ export default function StudentDashboard() {
         {/* ======================================================== */}
         <div className="flex items-end justify-between pt-0.5">
           <div>
-            <p className="text-[13px] font-medium text-[#64748B] leading-none mb-1">
+            <p className="text-[13px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-none mb-1">
               {istTime.greeting || 'Good morning,'}
             </p>
-            <h1 className="text-[23px] font-extrabold text-[#0F172A] tracking-tight leading-tight">
+            <h1 className="text-[23px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-tight">
               {studentName}
             </h1>
           </div>
@@ -158,10 +165,10 @@ export default function StudentDashboard() {
           {/* Date Selector Pill */}
           <div
             onClick={() => navigate('/timetable', { state: { role: 'student' } })}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F0F6FE] border border-[#E2EDFD] rounded-[11px] cursor-pointer hover:bg-blue-100/60 transition-colors shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F0F6FE] dark:bg-[#162036] border border-[#E2EDFD] dark:border-[#223354] rounded-[11px] cursor-pointer hover:bg-blue-100/60 dark:hover:bg-[#1E2E4A] transition-colors shadow-xs"
           >
-            <Calendar className="w-3.5 h-3.5 text-[#0075FF]" />
-            <span className="text-[12px] font-bold text-[#334155]">
+            <Calendar className="w-3.5 h-3.5 text-[#0075FF] dark:text-[#3894FF]" />
+            <span className="text-[12px] font-bold text-[#334155] dark:text-[#CBD5E1]">
               {istTime.formattedDate || 'Thursday, 24 Sep'}
             </span>
           </div>
@@ -183,12 +190,12 @@ export default function StudentDashboard() {
                 key={action.id}
                 type="button"
                 onClick={() => setActiveModal(action.id)}
-                className="flex flex-col items-center justify-center py-3 px-1 bg-[#F1F6FE] border border-[#E2EDFD] rounded-[16px] active:scale-95 hover:bg-[#E7F0FD] transition-all cursor-pointer shadow-xs group"
+                className="flex flex-col items-center justify-center py-3 px-1 bg-[#F1F6FE] dark:bg-[#162238] border border-[#E2EDFD] dark:border-[#223354] rounded-[16px] active:scale-95 hover:bg-[#E7F0FD] dark:hover:bg-[#1C2C47] transition-all cursor-pointer shadow-xs group"
               >
-                <div className="text-[#0075FF] mb-1.5 group-hover:scale-110 transition-transform">
+                <div className="text-[#0075FF] dark:text-[#3894FF] mb-1.5 group-hover:scale-110 transition-transform">
                   <Icon className="w-5.5 h-5.5 stroke-[2.2]" />
                 </div>
-                <span className="text-[11px] font-bold text-[#0F172A] text-center leading-tight whitespace-normal break-words h-7 flex items-center justify-center w-full px-0.5">
+                <span className="text-[11px] font-bold text-[#0F172A] dark:text-[#F8FAFC] text-center leading-tight whitespace-normal break-words h-7 flex items-center justify-center w-full px-0.5">
                   {action.title}
                 </span>
               </button>
@@ -200,13 +207,13 @@ export default function StudentDashboard() {
         {/* TODAY'S CLASSES HEADER */}
         {/* ======================================================== */}
         <div className="flex items-center justify-between pt-1">
-          <h2 className="text-[19px] font-extrabold text-[#0F172A] tracking-tight">
+          <h2 className="text-[19px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight">
             Today’s Classes
           </h2>
           <button
             type="button"
             onClick={() => navigate('/timetable', { state: { role: 'student' } })}
-            className="flex items-center gap-0.5 px-3 py-1 bg-[#EFF6FF] rounded-full text-[#0075FF] text-[12px] font-bold hover:bg-blue-100 transition-colors cursor-pointer"
+            className="flex items-center gap-0.5 px-3 py-1 bg-[#EFF6FF] dark:bg-[#162238] rounded-full text-[#0075FF] dark:text-[#3894FF] text-[12px] font-bold hover:bg-blue-100 dark:hover:bg-[#1E2E4A] transition-colors cursor-pointer"
           >
             <span>View Timetable</span>
           </button>
@@ -215,40 +222,40 @@ export default function StudentDashboard() {
         {/* ======================================================== */}
         {/* ONGOING CLASS CARD (English Communication) */}
         {/* ======================================================== */}
-        <div className="bg-[#EEFAF2] border border-[#CEEFDB] rounded-[18px] p-4 shadow-sm transition-all duration-300 relative overflow-hidden">
+        <div className="bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[18px] p-4 shadow-sm transition-all duration-300 relative overflow-hidden">
           {/* Status Row */}
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse" />
-              <span className="text-[13px] font-bold text-[#15803D]">Ongoing</span>
-              <span className="text-[12.5px] font-medium text-[#64748B]">
+              <span className="text-[13px] font-bold text-[#15803D] dark:text-[#4ADE80]">Ongoing</span>
+              <span className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8]">
                 · {studentOngoingClass.startTime} to {studentOngoingClass.endTime}
               </span>
             </div>
-            <span className="bg-[#DCFCE7] text-[#166534] text-[11px] font-bold px-2.5 py-0.5 rounded-[7px]">
+            <span className="bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#86EFAC] text-[11px] font-bold px-2.5 py-0.5 rounded-[7px]">
               {studentOngoingClass.room}
             </span>
           </div>
 
           {/* Subject & Grade */}
           <div className="mb-3">
-            <h3 className="text-[17px] font-extrabold text-[#0F172A] tracking-tight leading-snug">
+            <h3 className="text-[17px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-snug">
               {studentOngoingClass.subject}
             </h3>
-            <p className="text-[12.5px] font-medium text-[#64748B] mt-0.5">
+            <p className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5">
               {studentOngoingClass.grade}
             </p>
           </div>
 
           {/* Progress Bar & Time Left */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-1.5 bg-[#D3EEDC] rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-[#D3EEDC] dark:bg-[#133E27] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#16A34A] rounded-full transition-all duration-1000 ease-linear"
+                className="h-full bg-[#16A34A] dark:bg-[#22C55E] rounded-full transition-all duration-1000 ease-linear"
                 style={{ width: `${studentOngoingClass.progress || 42}%` }}
               />
             </div>
-            <span className="text-[12px] font-bold text-[#16A34A] shrink-0 text-right tabular-nums">
+            <span className="text-[12px] font-bold text-[#16A34A] dark:text-[#4ADE80] shrink-0 text-right tabular-nums">
               {studentOngoingClass.remainingLabel || '32 min left'}
             </span>
           </div>
@@ -261,39 +268,39 @@ export default function StudentDashboard() {
           {studentUpcomingClasses.map((item) => (
             <div
               key={item.id}
-              className="bg-white border border-[#EEF2F6] rounded-[16px] p-3.5 flex items-center justify-between shadow-card hover:shadow-card-hover transition-all"
+              className="bg-white dark:bg-[#131B2E] border border-[#EEF2F6] dark:border-[#1E293B] rounded-[16px] p-3.5 flex items-center justify-between shadow-card hover:shadow-card-hover transition-all"
             >
               {/* Left: Time Block */}
               <div className="w-[52px] shrink-0 text-center">
-                <p className="text-[14px] font-bold text-[#0F172A] leading-tight">
+                <p className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-tight">
                   {item.startTime}
                 </p>
-                <p className="text-[11px] font-medium text-[#64748B] leading-tight mt-0.5">
+                <p className="text-[11px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-tight mt-0.5">
                   to {item.endTime}
                 </p>
               </div>
 
               {/* Vertical subtle divider */}
-              <div className="w-[1px] h-9 bg-[#E2E8F0] shrink-0 mx-2" />
+              <div className="w-[1px] h-9 bg-[#E2E8F0] dark:bg-[#1E293B] shrink-0 mx-2" />
 
               {/* Middle: Subject & Grade */}
               <div className="flex-1 min-w-0 pr-2">
-                <h4 className="text-[14.5px] font-bold text-[#0F172A] leading-snug truncate">
+                <h4 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug truncate">
                   {item.subject}
                 </h4>
-                <p className="text-[12px] font-normal text-[#64748B] truncate mt-0.5">
+                <p className="text-[12px] font-normal text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5">
                   {item.grade}
                 </p>
               </div>
 
               {/* Right: Room & Upcoming Badge */}
               <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className="bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
+                <span className="bg-[#F1F5F9] dark:bg-[#162036] text-[#475569] dark:text-[#94A3B8] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
                   {item.room}
                 </span>
-                <div className="flex items-center gap-1 bg-[#F8FAFC] px-1.5 py-0.5 rounded-[6px]">
-                  <Clock className="w-3 h-3 text-[#94A3B8]" />
-                  <span className="text-[10px] font-medium text-[#64748B]">
+                <div className="flex items-center gap-1 bg-[#F8FAFC] dark:bg-[#162036] px-1.5 py-0.5 rounded-[6px]">
+                  <Clock className="w-3 h-3 text-[#94A3B8] dark:text-[#64748B]" />
+                  <span className="text-[10px] font-medium text-[#64748B] dark:text-[#94A3B8]">
                     Upcoming
                   </span>
                 </div>
@@ -316,18 +323,18 @@ export default function StudentDashboard() {
       {/* ======================================================== */}
       {activeModal === 'notes' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
                   <FileText className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="text-[18px] font-bold text-[#0F172A]">Class Notes</h3>
+                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Class Notes</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -337,22 +344,22 @@ export default function StudentDashboard() {
               {notesData.map((note) => (
                 <div
                   key={note.id}
-                  className="p-3.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[14px] flex items-center justify-between hover:bg-blue-50/50 transition-colors"
+                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px] flex items-center justify-between hover:bg-blue-50/50 dark:hover:bg-[#1C2C47] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-3">
-                    <h4 className="text-[14px] font-bold text-[#0F172A] leading-snug truncate">
+                    <h4 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug truncate">
                       {note.title}
                     </h4>
-                    <p className="text-[12px] font-medium text-[#0075FF] mt-0.5">
+                    <p className="text-[12px] font-medium text-[#0075FF] dark:text-[#3894FF] mt-0.5">
                       {note.subject}
                     </p>
-                    <p className="text-[11px] text-[#64748B] mt-0.5">
+                    <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">
                       {note.date} • {note.pages} • {note.size}
                     </p>
                   </div>
                   <button
                     type="button"
-                    className="p-2 bg-[#EAF3FF] hover:bg-[#DBEAFE] text-[#0075FF] rounded-[10px] cursor-pointer transition-colors shrink-0"
+                    className="p-2 bg-[#EAF3FF] dark:bg-[#1E2E4A] hover:bg-[#DBEAFE] dark:hover:bg-[#253A5C] text-[#0075FF] dark:text-[#3894FF] rounded-[10px] cursor-pointer transition-colors shrink-0"
                     title="Download Note"
                   >
                     <Download className="w-4 h-4" />
@@ -369,18 +376,18 @@ export default function StudentDashboard() {
       {/* ======================================================== */}
       {activeModal === 'syllabus' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
                   <BookOpen className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="text-[18px] font-bold text-[#0F172A]">Course Syllabus</h3>
+                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Course Syllabus</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -390,21 +397,21 @@ export default function StudentDashboard() {
               {syllabusData.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-3.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[14px]"
+                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px]"
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[14px] font-bold text-[#0F172A]">
+                    <span className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">
                       {item.subject}
                     </span>
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-[6px] bg-slate-200/60 text-slate-700">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-[6px] bg-slate-200/60 dark:bg-[#223354] text-slate-700 dark:text-[#94A3B8]">
                       {item.code}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[11.5px] text-[#64748B] mb-2">
+                  <div className="flex items-center justify-between text-[11.5px] text-[#64748B] dark:text-[#94A3B8] mb-2">
                     <span>{item.units} Units Total</span>
-                    <span className="font-bold text-[#0075FF]">{item.completed}% Completed</span>
+                    <span className="font-bold text-[#0075FF] dark:text-[#3894FF]">{item.completed}% Completed</span>
                   </div>
-                  <div className="w-full h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
+                  <div className="w-full h-1.5 bg-[#E2E8F0] dark:bg-[#223354] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full"
                       style={{ width: `${item.completed}%`, backgroundColor: item.color }}
@@ -422,18 +429,18 @@ export default function StudentDashboard() {
       {/* ======================================================== */}
       {activeModal === 'important' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[10px] bg-[#FFFBEB] text-[#D97706] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-[10px] bg-[#FFFBEB] dark:bg-amber-950/40 text-[#D97706] dark:text-amber-400 flex items-center justify-center">
                   <Star className="w-4.5 h-4.5 fill-current" />
                 </div>
-                <h3 className="text-[18px] font-bold text-[#0F172A]">Important Topics</h3>
+                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Important Topics</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -443,17 +450,17 @@ export default function StudentDashboard() {
               {importantTopicsData.map((top) => (
                 <div
                   key={top.id}
-                  className="p-3.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[14px]"
+                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px]"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <h4 className="text-[13.5px] font-bold text-[#0F172A] leading-snug">
+                    <h4 className="text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
                       {top.topic}
                     </h4>
-                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-[6px] bg-[#FEF3C7] text-[#B45309] shrink-0">
+                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-[6px] bg-[#FEF3C7] dark:bg-amber-950/60 text-[#B45309] dark:text-amber-300 shrink-0">
                       {top.weightage}
                     </span>
                   </div>
-                  <p className="text-[12px] font-medium text-[#0075FF] mt-1">
+                  <p className="text-[12px] font-medium text-[#0075FF] dark:text-[#3894FF] mt-1">
                     {top.subject}
                   </p>
                 </div>
@@ -468,18 +475,18 @@ export default function StudentDashboard() {
       {/* ======================================================== */}
       {activeModal === 'history' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
                   <History className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="text-[18px] font-bold text-[#0F172A]">Lecture History</h3>
+                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Lecture History</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -489,20 +496,20 @@ export default function StudentDashboard() {
               {historyData.map((item) => (
                 <div
                   key={item.id}
-                  className="p-3.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[14px]"
+                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px]"
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-[14px] font-bold text-[#0F172A] leading-snug">
+                    <h4 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
                       {item.title}
                     </h4>
-                    <span className="text-[11px] font-semibold text-[#64748B]">
+                    <span className="text-[11px] font-semibold text-[#64748B] dark:text-[#94A3B8]">
                       {item.time}
                     </span>
                   </div>
-                  <p className="text-[12px] font-medium text-[#0075FF]">
+                  <p className="text-[12px] font-medium text-[#0075FF] dark:text-[#3894FF]">
                     {item.subject} • {item.faculty}
                   </p>
-                  <p className="text-[11px] text-[#64748B] mt-0.5">
+                  <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">
                     Conducted in {item.room}
                   </p>
                 </div>
@@ -512,48 +519,46 @@ export default function StudentDashboard() {
         </div>
       )}
 
-
-
       {/* ======================================================== */}
       {/* MODAL 6: Student Profile Modal */}
       {/* ======================================================== */}
       {activeModal === 'profile' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A]">Student Profile</h3>
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Student Profile</h3>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="flex flex-col items-center text-center py-2 mb-4">
-              <div className="w-16 h-16 rounded-full bg-[#EBF3FE] border-2 border-[#0075FF] text-[#0075FF] font-black text-[22px] flex items-center justify-center mb-2 shadow-sm">
+              <div className="w-16 h-16 rounded-full bg-[#EBF3FE] dark:bg-[#162238] border-2 border-[#0075FF] dark:border-[#3894FF] text-[#0075FF] dark:text-[#3894FF] font-black text-[22px] flex items-center justify-center mb-2 shadow-sm">
                 PM
               </div>
-              <h4 className="text-[18px] font-bold text-[#0F172A]">{studentName}</h4>
-              <p className="text-[13px] text-[#64748B] mt-0.5">Roll No: 22BCA015</p>
-              <span className="text-[11px] font-bold bg-[#EAF3FF] text-[#0075FF] px-2.5 py-1 rounded-full mt-2">
+              <h4 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">{studentName}</h4>
+              <p className="text-[13px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">Roll No: 22BCA015</p>
+              <span className="text-[11px] font-bold bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] px-2.5 py-1 rounded-full mt-2">
                 B.Sc AI/ML – 1st Year
               </span>
             </div>
 
             <div className="space-y-2 mb-5">
-              <div className="p-3 bg-[#F8FAFC] rounded-[12px] flex justify-between text-[13px]">
-                <span className="text-[#64748B]">Department</span>
-                <span className="font-bold text-[#0F172A]">Computer Science</span>
+              <div className="p-3 bg-[#F8FAFC] dark:bg-[#162036] rounded-[12px] flex justify-between text-[13px]">
+                <span className="text-[#64748B] dark:text-[#94A3B8]">Department</span>
+                <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">Computer Science</span>
               </div>
-              <div className="p-3 bg-[#F8FAFC] rounded-[12px] flex justify-between text-[13px]">
-                <span className="text-[#64748B]">College</span>
-                <span className="font-bold text-[#0F172A]">DAV College, Amritsar</span>
+              <div className="p-3 bg-[#F8FAFC] dark:bg-[#162036] rounded-[12px] flex justify-between text-[13px]">
+                <span className="text-[#64748B] dark:text-[#94A3B8]">College</span>
+                <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">DAV College, Amritsar</span>
               </div>
-              <div className="p-3 bg-[#F8FAFC] rounded-[12px] flex justify-between text-[13px]">
-                <span className="text-[#64748B]">Attendance Rate</span>
-                <span className="font-bold text-[#16A34A]">91.5%</span>
+              <div className="p-3 bg-[#F8FAFC] dark:bg-[#162036] rounded-[12px] flex justify-between text-[13px]">
+                <span className="text-[#64748B] dark:text-[#94A3B8]">Attendance Rate</span>
+                <span className="font-bold text-[#16A34A] dark:text-[#4ADE80]">91.5%</span>
               </div>
             </div>
 
@@ -563,7 +568,7 @@ export default function StudentDashboard() {
                 setActiveModal(null);
                 navigate('/');
               }}
-              className="w-full py-3 bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#EF4444] font-bold rounded-[14px] text-[14px] transition-colors cursor-pointer"
+              className="w-full py-3 bg-[#FEF2F2] dark:bg-[#451010]/30 hover:bg-[#FEE2E2] dark:hover:bg-[#451010]/50 text-[#EF4444] dark:text-[#F87171] font-bold rounded-[14px] text-[14px] transition-colors cursor-pointer"
             >
               Sign Out
             </button>

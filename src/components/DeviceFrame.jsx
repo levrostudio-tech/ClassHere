@@ -35,8 +35,8 @@ export default function DeviceFrame({ children }) {
   // On native mobile viewports (e.g. viewing directly on smartphone)
   if (isMobileScreen) {
     return (
-      <div className="h-[100dvh] w-full bg-white flex flex-col font-sans selection:bg-blue-500 selection:text-white overflow-hidden">
-        <main className="flex-1 flex flex-col h-full w-full relative bg-white overflow-hidden">
+      <div className="h-[100dvh] w-full bg-white dark:bg-[#0B0F19] flex flex-col font-sans selection:bg-blue-500 selection:text-white overflow-hidden transition-colors duration-200">
+        <main className="flex-1 flex flex-col h-full w-full relative bg-white dark:bg-[#0B0F19] overflow-hidden">
           {children}
         </main>
       </div>
@@ -64,10 +64,10 @@ export default function DeviceFrame({ children }) {
             transform: `scale(${scale})`,
             transformOrigin: '0 0',
           }}
-          className="bg-white rounded-[44px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_0_10px_#1e293b] ring-1 ring-slate-700/50 flex flex-col overflow-hidden select-none"
+          className="bg-white dark:bg-[#0B0F19] rounded-[44px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_0_10px_#1e293b] ring-1 ring-slate-700/50 flex flex-col overflow-hidden select-none transition-colors duration-200"
         >
           {/* Screen Content */}
-          <main className="flex-1 flex flex-col overflow-hidden relative bg-white pt-2 sm:pt-3">
+          <main className="flex-1 flex flex-col overflow-hidden relative bg-white dark:bg-[#0B0F19] pt-2 sm:pt-3">
             {children}
           </main>
         </div>

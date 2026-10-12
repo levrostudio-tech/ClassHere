@@ -19,9 +19,11 @@ import {
   Sparkles,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
+import { useTheme } from '../context/ThemeContext';
 
 export default function ProfileSettings() {
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   // Scroll visibility for bottom nav
   const [isNavVisible, setIsNavVisible] = useState(true);
@@ -64,9 +66,6 @@ export default function ProfileSettings() {
     whatsappUpdates: false,
   });
 
-  // Appearance theme
-  const [theme, setTheme] = useState('light');
-
   // Edit form state
   const [editForm, setEditForm] = useState({ ...profile });
 
@@ -81,7 +80,7 @@ export default function ProfileSettings() {
   };
 
   return (
-    <div className="relative h-full flex flex-col bg-[#FDFDFE] select-none overflow-hidden font-sans">
+    <div className="relative h-full flex flex-col bg-[#FDFDFE] dark:bg-[#0B0F19] transition-colors duration-200 select-none overflow-hidden font-sans">
       {/* Scrollable Container */}
       <div
         onScroll={handleScroll}
@@ -91,10 +90,10 @@ export default function ProfileSettings() {
         <header className="flex items-center justify-between mb-4">
           {/* ClassHere Branding */}
           <div className="flex items-center">
-            <span className="text-[25px] font-black tracking-tight text-[#0F172A]">
+            <span className="text-[25px] font-black tracking-tight text-[#0F172A] dark:text-[#F8FAFC]">
               Class
             </span>
-            <span className="text-[25px] font-black tracking-tight text-[#0075FF]">
+            <span className="text-[25px] font-black tracking-tight text-[#0075FF] dark:text-[#3894FF]">
               Here
             </span>
           </div>
@@ -105,15 +104,15 @@ export default function ProfileSettings() {
             <button
               type="button"
               onClick={() => setActiveModal('notifications')}
-              className="relative p-2 text-[#0F172A] hover:text-[#0075FF] transition-colors focus:outline-none"
+              className="relative p-2 text-[#0F172A] dark:text-[#F8FAFC] hover:text-[#0075FF] dark:hover:text-[#3894FF] transition-colors focus:outline-none"
               aria-label="View notifications"
             >
               <Bell className="w-[23px] h-[23px] stroke-[2]" />
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#0075FF] rounded-full ring-2 ring-white" />
+              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#0075FF] rounded-full ring-2 ring-white dark:ring-[#0B0F19]" />
             </button>
 
             {/* Profile Avatar Pill */}
-            <div className="w-10 h-10 rounded-full bg-[#EBF3FE] flex items-center justify-center text-[#0075FF] border border-[#D0E2FB]">
+            <div className="w-10 h-10 rounded-full bg-[#EBF3FE] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] border border-[#D0E2FB] dark:border-[#223354]">
               <User className="w-5 h-5 fill-current" />
             </div>
           </div>
@@ -121,26 +120,26 @@ export default function ProfileSettings() {
 
         {/* Page Title & Subtitle */}
         <div className="mb-4">
-          <h1 className="text-[25px] font-black text-[#0F172A] tracking-[-0.02em] leading-tight">
+          <h1 className="text-[25px] font-black text-[#0F172A] dark:text-[#F8FAFC] tracking-[-0.02em] leading-tight">
             Profile
           </h1>
-          <p className="text-[13.5px] font-medium text-[#64748B] mt-0.5">
+          <p className="text-[13.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5">
             Manage your account and preferences.
           </p>
         </div>
 
         {/* Card 1: Faculty Profile Card */}
-        <div className="bg-[#F8FAFC]/90 rounded-[20px] border border-[#E2E8F0] p-4 flex items-center justify-between shadow-xs mb-3.5">
+        <div className="bg-[#F8FAFC]/90 dark:bg-[#131B2E] rounded-[20px] border border-[#E2E8F0] dark:border-[#1E293B] p-4 flex items-center justify-between shadow-xs mb-3.5 transition-colors">
           {/* Left Avatar & Info */}
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="w-[54px] h-[54px] rounded-full bg-[#DBEAFE] flex items-center justify-center text-[#0075FF] shrink-0 shadow-inner">
+            <div className="w-[54px] h-[54px] rounded-full bg-[#DBEAFE] dark:bg-[#1E2E4A] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0 shadow-inner">
               <User className="w-6.5 h-6.5 fill-current" />
             </div>
             <div className="min-w-0 pr-2">
-              <h2 className="text-[17px] font-bold text-[#0F172A] tracking-tight truncate leading-tight">
+              <h2 className="text-[17px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight truncate leading-tight">
                 {profile.name}
               </h2>
-              <p className="text-[12.5px] font-medium text-[#64748B] mt-1 leading-tight truncate">
+              <p className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-1 leading-tight truncate">
                 {profile.designation} • {profile.department}
               </p>
             </div>
@@ -153,39 +152,39 @@ export default function ProfileSettings() {
               setEditForm({ ...profile });
               setActiveModal('edit');
             }}
-            className="px-3.5 py-1.5 rounded-[10px] bg-[#EBF3FE] hover:bg-[#DBEAFE] text-[#0075FF] font-bold text-[13px] active:scale-95 transition-all shrink-0 cursor-pointer"
+            className="px-3.5 py-1.5 rounded-[10px] bg-[#EBF3FE] dark:bg-[#162238] hover:bg-[#DBEAFE] dark:hover:bg-[#1E2E4A] text-[#0075FF] dark:text-[#3894FF] font-bold text-[13px] active:scale-95 transition-all shrink-0 cursor-pointer"
           >
             Edit
           </button>
         </div>
 
         {/* Card 2: Department & College Info Card - Full width layout to eliminate truncation */}
-        <div className="bg-white rounded-[18px] border border-[#E2E8F0] p-3.5 shadow-xs mb-3.5 space-y-2.5">
+        <div className="bg-white dark:bg-[#131B2E] rounded-[18px] border border-[#E2E8F0] dark:border-[#1E293B] p-3.5 shadow-xs mb-3.5 space-y-2.5 transition-colors">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-[11px] bg-[#E8F8EE] flex items-center justify-center text-[#10B981] shrink-0">
+            <div className="w-9 h-9 rounded-[11px] bg-[#E8F8EE] dark:bg-[#064E3B]/40 flex items-center justify-center text-[#10B981] dark:text-[#34D399] shrink-0">
               <GraduationCap className="w-5 h-5 stroke-[2]" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-[10.5px] font-semibold text-[#64748B] block leading-tight">
+              <span className="text-[10.5px] font-semibold text-[#64748B] dark:text-[#94A3B8] block leading-tight">
                 Department
               </span>
-              <span className="text-[13.5px] font-bold text-[#0F172A] block leading-snug">
+              <span className="text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] block leading-snug">
                 {profile.department}
               </span>
             </div>
           </div>
 
-          <div className="h-[1px] bg-[#F1F5F9] w-full" />
+          <div className="h-[1px] bg-[#F1F5F9] dark:bg-[#1E293B] w-full" />
 
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-[11px] bg-[#EBF3FE] flex items-center justify-center text-[#0075FF] shrink-0">
+            <div className="w-9 h-9 rounded-[11px] bg-[#EBF3FE] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0">
               <Building2 className="w-5 h-5 stroke-[2]" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-[10.5px] font-semibold text-[#64748B] block leading-tight">
+              <span className="text-[10.5px] font-semibold text-[#64748B] dark:text-[#94A3B8] block leading-tight">
                 College
               </span>
-              <span className="text-[13.5px] font-bold text-[#0F172A] block leading-snug">
+              <span className="text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] block leading-snug">
                 {profile.college}
               </span>
             </div>
@@ -193,93 +192,93 @@ export default function ProfileSettings() {
         </div>
 
         {/* Card 3: Menu List Group */}
-        <div className="bg-white rounded-[18px] border border-[#E2E8F0] overflow-hidden shadow-xs mb-3.5 divide-y divide-[#F1F5F9]">
+        <div className="bg-white dark:bg-[#131B2E] rounded-[18px] border border-[#E2E8F0] dark:border-[#1E293B] overflow-hidden shadow-xs mb-3.5 divide-y divide-[#F1F5F9] dark:divide-[#1E293B] transition-colors">
           {/* 1. Personal Information */}
           <button
             type="button"
             onClick={() => setActiveModal('personal')}
-            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 dark:hover:bg-[#162036] active:bg-slate-100/70 dark:active:bg-[#1A2540] transition-colors text-left cursor-pointer group"
           >
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0 group-hover:scale-105 transition-transform">
                 <User className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-tight">
                   Personal Information
                 </h3>
-                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
+                <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-tight truncate">
                   Name, department, contact details
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] dark:text-[#64748B] stroke-[2.2] shrink-0 ml-2" />
           </button>
 
           {/* 2. Notifications */}
           <button
             type="button"
             onClick={() => setActiveModal('notifications')}
-            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 dark:hover:bg-[#162036] active:bg-slate-100/70 dark:active:bg-[#1A2540] transition-colors text-left cursor-pointer group"
           >
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0 group-hover:scale-105 transition-transform">
                 <Bell className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-tight">
                   Notifications
                 </h3>
-                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
+                <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-tight truncate">
                   Manage what you want to be notified about
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] dark:text-[#64748B] stroke-[2.2] shrink-0 ml-2" />
           </button>
 
           {/* 3. Appearance */}
           <button
             type="button"
             onClick={() => setActiveModal('appearance')}
-            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 dark:hover:bg-[#162036] active:bg-slate-100/70 dark:active:bg-[#1A2540] transition-colors text-left cursor-pointer group"
           >
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0 group-hover:scale-105 transition-transform">
                 <Palette className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-tight">
                   Appearance
                 </h3>
-                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight capitalize truncate">
+                <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-tight capitalize truncate">
                   {theme} mode
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] dark:text-[#64748B] stroke-[2.2] shrink-0 ml-2" />
           </button>
 
           {/* 4. About ClassHere */}
           <button
             type="button"
             onClick={() => setActiveModal('about')}
-            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 active:bg-slate-100/70 transition-colors text-left cursor-pointer group"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 dark:hover:bg-[#162036] active:bg-slate-100/70 dark:active:bg-[#1A2540] transition-colors text-left cursor-pointer group"
           >
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center text-[#0075FF] shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0 group-hover:scale-105 transition-transform">
                 <Info className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-[14.5px] font-bold text-[#0F172A] tracking-tight leading-tight">
+                <h3 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-tight">
                   About ClassHere
                 </h3>
-                <p className="text-[12px] font-medium text-[#64748B] mt-0.5 leading-tight truncate">
+                <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-tight truncate">
                   App version, faculty information and more
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] dark:text-[#64748B] stroke-[2.2] shrink-0 ml-2" />
           </button>
         </div>
 
@@ -287,7 +286,7 @@ export default function ProfileSettings() {
         <button
           type="button"
           onClick={() => setActiveModal('logout')}
-          className="w-full h-[50px] rounded-[15px] bg-[#FEF2F2] hover:bg-[#FEE2E2] active:scale-[0.99] border border-[#FEE2E2]/80 flex items-center justify-center gap-2 text-[#EF4444] font-bold text-[14.5px] transition-all cursor-pointer shadow-xs"
+          className="w-full h-[50px] rounded-[15px] bg-[#FEF2F2] dark:bg-[#451010]/30 hover:bg-[#FEE2E2] dark:hover:bg-[#451010]/50 active:scale-[0.99] border border-[#FEE2E2]/80 dark:border-[#7F1D1D]/40 flex items-center justify-center gap-2 text-[#EF4444] dark:text-[#F87171] font-bold text-[14.5px] transition-all cursor-pointer shadow-xs"
         >
           <LogOut className="w-5 h-5 stroke-[2.2]" />
           <span>Log Out</span>
@@ -302,13 +301,13 @@ export default function ProfileSettings() {
       {/* ======================================================== */}
       {activeModal === 'edit' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A]">Edit Profile</h3>
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Edit Profile</h3>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -316,53 +315,53 @@ export default function ProfileSettings() {
 
             <form onSubmit={handleSaveProfile} className="space-y-3.5">
               <div>
-                <label className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider block mb-1">
+                <label className="text-[12px] font-bold text-[#64748B] dark:text-[#94A3B8] uppercase tracking-wider block mb-1">
                   Full Name
                 </label>
                 <input
                   type="text"
                   value={editForm.name}
                   onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:border-[#0075FF] focus:outline-none"
+                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] dark:border-[#26354D] bg-white dark:bg-[#0B0F19] font-semibold text-[#0F172A] dark:text-[#F8FAFC] focus:border-[#0075FF] focus:outline-none"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider block mb-1">
+                <label className="text-[12px] font-bold text-[#64748B] dark:text-[#94A3B8] uppercase tracking-wider block mb-1">
                   Designation / Title
                 </label>
                 <input
                   type="text"
                   value={editForm.designation}
                   onChange={(e) => setEditForm({ ...editForm, designation: e.target.value })}
-                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:border-[#0075FF] focus:outline-none"
+                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] dark:border-[#26354D] bg-white dark:bg-[#0B0F19] font-semibold text-[#0F172A] dark:text-[#F8FAFC] focus:border-[#0075FF] focus:outline-none"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider block mb-1">
+                <label className="text-[12px] font-bold text-[#64748B] dark:text-[#94A3B8] uppercase tracking-wider block mb-1">
                   Department
                 </label>
                 <input
                   type="text"
                   value={editForm.department}
                   onChange={(e) => setEditForm({ ...editForm, department: e.target.value })}
-                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:border-[#0075FF] focus:outline-none"
+                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] dark:border-[#26354D] bg-white dark:bg-[#0B0F19] font-semibold text-[#0F172A] dark:text-[#F8FAFC] focus:border-[#0075FF] focus:outline-none"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider block mb-1">
+                <label className="text-[12px] font-bold text-[#64748B] dark:text-[#94A3B8] uppercase tracking-wider block mb-1">
                   Office / Cabin Location
                 </label>
                 <input
                   type="text"
                   value={editForm.cabin}
                   onChange={(e) => setEditForm({ ...editForm, cabin: e.target.value })}
-                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:border-[#0075FF] focus:outline-none"
+                  className="w-full h-12 px-3.5 rounded-[14px] border border-[#CBD5E1] dark:border-[#26354D] bg-white dark:bg-[#0B0F19] font-semibold text-[#0F172A] dark:text-[#F8FAFC] focus:border-[#0075FF] focus:outline-none"
                 />
               </div>
 
@@ -370,7 +369,7 @@ export default function ProfileSettings() {
                 <button
                   type="button"
                   onClick={() => setActiveModal(null)}
-                  className="flex-1 h-12 rounded-[14px] bg-slate-100 text-[#64748B] font-bold text-[14.5px] hover:bg-slate-200"
+                  className="flex-1 h-12 rounded-[14px] bg-slate-100 dark:bg-[#1E293B] text-[#64748B] dark:text-[#94A3B8] font-bold text-[14.5px] hover:bg-slate-200 dark:hover:bg-[#253248]"
                 >
                   Cancel
                 </button>
@@ -391,42 +390,42 @@ export default function ProfileSettings() {
       {/* ======================================================== */}
       {activeModal === 'personal' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A]">Personal Information</h3>
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Personal Information</h3>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-3.5">
-              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0]">
-                <span className="text-[11.5px] font-semibold text-[#94A3B8] block">Employee ID</span>
-                <span className="text-[14.5px] font-bold text-[#0F172A] block mt-0.5">{profile.employeeId}</span>
+              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354]">
+                <span className="text-[11.5px] font-semibold text-[#94A3B8] dark:text-[#64748B] block">Employee ID</span>
+                <span className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] block mt-0.5">{profile.employeeId}</span>
               </div>
 
-              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0]">
-                <span className="text-[11.5px] font-semibold text-[#94A3B8] block">Registered Email</span>
-                <span className="text-[14.5px] font-bold text-[#0F172A] block mt-0.5">{profile.email}</span>
+              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354]">
+                <span className="text-[11.5px] font-semibold text-[#94A3B8] dark:text-[#64748B] block">Registered Email</span>
+                <span className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] block mt-0.5">{profile.email}</span>
               </div>
 
-              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0]">
-                <span className="text-[11.5px] font-semibold text-[#94A3B8] block">WhatsApp / Mobile</span>
-                <span className="text-[14.5px] font-bold text-[#0F172A] block mt-0.5">{profile.phone}</span>
+              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354]">
+                <span className="text-[11.5px] font-semibold text-[#94A3B8] dark:text-[#64748B] block">WhatsApp / Mobile</span>
+                <span className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] block mt-0.5">{profile.phone}</span>
               </div>
 
-              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0]">
-                <span className="text-[11.5px] font-semibold text-[#94A3B8] block">Cabin Location</span>
-                <span className="text-[14.5px] font-bold text-[#0F172A] block mt-0.5">{profile.cabin}</span>
+              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354]">
+                <span className="text-[11.5px] font-semibold text-[#94A3B8] dark:text-[#64748B] block">Cabin Location</span>
+                <span className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] block mt-0.5">{profile.cabin}</span>
               </div>
 
-              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0]">
-                <span className="text-[11.5px] font-semibold text-[#94A3B8] block">Assigned Batches</span>
-                <span className="text-[14.5px] font-bold text-[#0075FF] block mt-0.5">CSE-4A, CSE-6B</span>
+              <div className="p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354]">
+                <span className="text-[11.5px] font-semibold text-[#94A3B8] dark:text-[#64748B] block">Assigned Batches</span>
+                <span className="text-[14.5px] font-bold text-[#0075FF] dark:text-[#3894FF] block mt-0.5">CSE-4A, CSE-6B</span>
               </div>
             </div>
 
@@ -446,13 +445,13 @@ export default function ProfileSettings() {
       {/* ======================================================== */}
       {activeModal === 'notifications' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A]">Notification Settings</h3>
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Notification Settings</h3>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -483,11 +482,11 @@ export default function ProfileSettings() {
               ].map((item) => (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0]"
+                  className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354]"
                 >
                   <div className="pr-3">
-                    <h4 className="text-[14px] font-bold text-[#0F172A]">{item.title}</h4>
-                    <p className="text-[12px] text-[#64748B] mt-0.5">{item.desc}</p>
+                    <h4 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">{item.title}</h4>
+                    <p className="text-[12px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">{item.desc}</p>
                   </div>
                   <button
                     type="button"
@@ -495,7 +494,7 @@ export default function ProfileSettings() {
                       setNotifications((prev) => ({ ...prev, [item.key]: !prev[item.key] }))
                     }
                     className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                      notifications[item.key] ? 'bg-[#0075FF]' : 'bg-slate-300'
+                      notifications[item.key] ? 'bg-[#0075FF]' : 'bg-slate-300 dark:bg-[#26354D]'
                     }`}
                   >
                     <div
@@ -524,13 +523,13 @@ export default function ProfileSettings() {
       {/* ======================================================== */}
       {activeModal === 'appearance' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A]">Appearance</h3>
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Appearance</h3>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -538,36 +537,28 @@ export default function ProfileSettings() {
 
             <div className="space-y-3">
               {[
-                { id: 'light', label: 'Light Mode', sub: 'Standard crisp high-contrast theme (Recommended)' },
-                { id: 'dark', label: 'Dark Mode', sub: 'Coming soon in the next institutional release', disabled: true },
+                { id: 'light', label: 'Light Mode', sub: 'Standard crisp high-contrast theme' },
+                { id: 'dark', label: 'Dark Mode', sub: 'Deep charcoal & obsidian aesthetic for low-light comfort' },
                 { id: 'system', label: 'System Default', sub: 'Match your operating system preferences' },
               ].map((opt) => (
                 <button
                   key={opt.id}
                   type="button"
-                  disabled={opt.disabled}
-                  onClick={() => {
-                    if (!opt.disabled) setTheme(opt.id);
-                  }}
-                  className={`w-full p-4 rounded-[18px] border text-left flex items-center justify-between transition-all ${
+                  onClick={() => setTheme(opt.id)}
+                  className={`w-full p-4 rounded-[18px] border text-left flex items-center justify-between transition-all cursor-pointer ${
                     theme === opt.id
-                      ? 'border-[#0075FF] bg-[#F0F6FE]'
-                      : 'border-[#E2E8F0] bg-white hover:bg-slate-50'
-                  } ${opt.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                      ? 'border-[#0075FF] bg-[#F0F6FE] dark:bg-[#162238] dark:border-[#3894FF]'
+                      : 'border-[#E2E8F0] dark:border-[#1E293B] bg-white dark:bg-[#131B2E] hover:bg-slate-50 dark:hover:bg-[#162036]'
+                  }`}
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[15px] font-bold text-[#0F172A]">{opt.label}</span>
-                      {opt.disabled && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full">
-                          Coming Soon
-                        </span>
-                      )}
+                      <span className="text-[15px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">{opt.label}</span>
                     </div>
-                    <p className="text-[12.5px] text-[#64748B] mt-0.5">{opt.sub}</p>
+                    <p className="text-[12.5px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">{opt.sub}</p>
                   </div>
                   {theme === opt.id && (
-                    <div className="w-6 h-6 rounded-full bg-[#0075FF] text-white flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-[#0075FF] text-white flex items-center justify-center shrink-0">
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
                   )}
@@ -578,9 +569,9 @@ export default function ProfileSettings() {
             <button
               type="button"
               onClick={() => setActiveModal(null)}
-              className="w-full mt-5 h-12 rounded-[14px] bg-[#0075FF] text-white font-bold text-[14.5px]"
+              className="w-full mt-5 h-12 rounded-[14px] bg-[#0075FF] hover:bg-[#0066E0] text-white font-bold text-[14.5px] cursor-pointer"
             >
-              Save Theme
+              Done
             </button>
           </div>
         </div>
@@ -591,24 +582,24 @@ export default function ProfileSettings() {
       {/* ======================================================== */}
       {activeModal === 'about' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A]">About ClassHere</h3>
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">About ClassHere</h3>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="text-center py-2 mb-4">
-              <div className="text-[26px] font-black tracking-tight text-[#0F172A]">
-                Class<span className="text-[#0075FF]">Here</span>
+              <div className="text-[26px] font-black tracking-tight text-[#0F172A] dark:text-[#F8FAFC]">
+                Class<span className="text-[#0075FF] dark:text-[#3894FF]">Here</span>
               </div>
-              <p className="text-[12.5px] font-bold text-[#64748B] mt-0.5">Faculty Academic Suite</p>
-              <span className="inline-block mt-2 px-3 py-1 rounded-full bg-[#EFF6FF] text-[#0075FF] text-[12px] font-bold">
+              <p className="text-[12.5px] font-bold text-[#64748B] dark:text-[#94A3B8] mt-0.5">Faculty Academic Suite</p>
+              <span className="inline-block mt-2 px-3 py-1 rounded-full bg-[#EFF6FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] text-[12px] font-bold">
                 Version 1.0.4 (Build 2026.10)
               </span>
             </div>
@@ -617,50 +608,50 @@ export default function ProfileSettings() {
               <Link
                 to="/founder-story"
                 onClick={() => setActiveModal(null)}
-                className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] transition-colors group"
+                className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] hover:bg-[#F1F5F9] dark:hover:bg-[#1E2E4A] transition-colors group"
               >
                 <div className="flex items-center gap-2.5">
-                  <Sparkles className="w-4 h-4 text-[#0075FF]" />
-                  <span className="text-[14px] font-bold text-[#0F172A]">Founder Story</span>
+                  <Sparkles className="w-4 h-4 text-[#0075FF] dark:text-[#3894FF]" />
+                  <span className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Founder Story</span>
                 </div>
-                <ExternalLink className="w-4 h-4 text-[#94A3B8]" />
+                <ExternalLink className="w-4 h-4 text-[#94A3B8] dark:text-[#64748B]" />
               </Link>
 
               <Link
                 to="/privacy-policy"
                 onClick={() => setActiveModal(null)}
-                className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] transition-colors"
+                className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] hover:bg-[#F1F5F9] dark:hover:bg-[#1E2E4A] transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <ShieldCheck className="w-4 h-4 text-[#0075FF]" />
-                  <span className="text-[14px] font-bold text-[#0F172A]">Privacy Policy</span>
+                  <ShieldCheck className="w-4 h-4 text-[#0075FF] dark:text-[#3894FF]" />
+                  <span className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Privacy Policy</span>
                 </div>
-                <ExternalLink className="w-4 h-4 text-[#94A3B8]" />
+                <ExternalLink className="w-4 h-4 text-[#94A3B8] dark:text-[#64748B]" />
               </Link>
 
               <Link
                 to="/terms-of-use"
                 onClick={() => setActiveModal(null)}
-                className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] transition-colors"
+                className="flex items-center justify-between p-3.5 rounded-[16px] bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] hover:bg-[#F1F5F9] dark:hover:bg-[#1E2E4A] transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <ShieldCheck className="w-4 h-4 text-[#0075FF]" />
-                  <span className="text-[14px] font-bold text-[#0F172A]">Terms of Use</span>
+                  <ShieldCheck className="w-4 h-4 text-[#0075FF] dark:text-[#3894FF]" />
+                  <span className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Terms of Use</span>
                 </div>
-                <ExternalLink className="w-4 h-4 text-[#94A3B8]" />
+                <ExternalLink className="w-4 h-4 text-[#94A3B8] dark:text-[#64748B]" />
               </Link>
             </div>
 
             <div className="mt-5 text-center">
-              <p className="text-[12.5px] text-[#64748B] font-medium">
-                A Product by <strong className="text-[#0F172A]">Levro Studio</strong>
+              <p className="text-[12.5px] text-[#64748B] dark:text-[#94A3B8] font-medium">
+                A Product by <strong className="text-[#0F172A] dark:text-[#F8FAFC]">Levro Studio</strong>
               </p>
             </div>
 
             <button
               type="button"
               onClick={() => setActiveModal(null)}
-              className="w-full mt-4 h-12 rounded-[14px] bg-[#0075FF] text-white font-bold text-[14.5px]"
+              className="w-full mt-4 h-12 rounded-[14px] bg-[#0075FF] hover:bg-[#0066E0] text-white font-bold text-[14.5px] cursor-pointer"
             >
               Close
             </button>
@@ -673,13 +664,13 @@ export default function ProfileSettings() {
       {/* ======================================================== */}
       {activeModal === 'logout' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white w-full rounded-[26px] p-6 text-center animate-scaleIn border border-slate-100 shadow-2xl">
-            <div className="w-14 h-14 rounded-full bg-red-100 text-red-500 mx-auto flex items-center justify-center mb-3">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-[26px] p-6 text-center animate-scaleIn border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="w-14 h-14 rounded-full bg-red-100 dark:bg-red-950/40 text-red-500 mx-auto flex items-center justify-center mb-3">
               <LogOut className="w-7 h-7 stroke-[2.2]" />
             </div>
 
-            <h3 className="text-[19px] font-bold text-[#0F172A]">Log Out</h3>
-            <p className="text-[14px] text-[#64748B] mt-1.5 leading-relaxed">
+            <h3 className="text-[19px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Log Out</h3>
+            <p className="text-[14px] text-[#64748B] dark:text-[#94A3B8] mt-1.5 leading-relaxed">
               Are you sure you want to log out of your ClassHere teacher account?
             </p>
 
@@ -687,14 +678,14 @@ export default function ProfileSettings() {
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="flex-1 h-12 rounded-[14px] bg-slate-100 hover:bg-slate-200 text-[#64748B] font-bold text-[14.5px]"
+                className="flex-1 h-12 rounded-[14px] bg-slate-100 dark:bg-[#1E293B] hover:bg-slate-200 dark:hover:bg-[#253248] text-[#64748B] dark:text-[#94A3B8] font-bold text-[14.5px] cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleLogOut}
-                className="flex-1 h-12 rounded-[14px] bg-[#EF4444] hover:bg-[#DC2626] text-white font-bold text-[14.5px] shadow-lg shadow-red-500/20"
+                className="flex-1 h-12 rounded-[14px] bg-[#EF4444] hover:bg-[#DC2626] text-white font-bold text-[14.5px] shadow-lg shadow-red-500/20 cursor-pointer"
               >
                 Yes, Log Out
               </button>

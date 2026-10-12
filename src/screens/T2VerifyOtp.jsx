@@ -96,7 +96,7 @@ export default function T2VerifyOtp({ onNavigate, phone: propPhone }) {
   };
 
   return (
-    <div className="relative min-h-full flex-1 flex flex-col bg-white overflow-hidden justify-between select-none">
+    <div className="relative min-h-full flex-1 flex flex-col bg-white dark:bg-[#0B0F19] transition-colors duration-200 overflow-hidden justify-between select-none">
       {/* Background concentric circles */}
       <TopDecorCircles />
 
@@ -124,21 +124,21 @@ export default function T2VerifyOtp({ onNavigate, phone: propPhone }) {
 
         {/* Title & Subtitle */}
         <div className="text-center mb-6">
-          <h1 className="text-[26px] font-extrabold text-[#0F172A] tracking-tight mb-1.5">
+          <h1 className="text-[26px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight mb-1.5">
             {isStudent ? 'Verify Student OTP' : 'Verify Your Number'}
           </h1>
-          <p className="text-[14.5px] font-medium text-[#64748B] leading-snug">
+          <p className="text-[14.5px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-snug">
             {isStudent ? (
               <>
                 We sent a 6-digit OTP to the mobile registered for{' '}
-                <span className="font-bold text-[#0075FF]">{rollNumber}</span> ending with{' '}
-                <span className="font-bold text-[#0F172A]">{lastFour}</span>.
+                <span className="font-bold text-[#0075FF] dark:text-[#3894FF]">{rollNumber}</span> ending with{' '}
+                <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">{lastFour}</span>.
               </>
             ) : (
               <>
                 We have sent a 6-digit OTP to your<br />
                 WhatsApp number ending with{' '}
-                <span className="font-bold text-[#0F172A]">{lastFour}</span>.
+                <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">{lastFour}</span>.
               </>
             )}
           </p>
@@ -160,8 +160,8 @@ export default function T2VerifyOtp({ onNavigate, phone: propPhone }) {
                 onPaste={handlePaste}
                 className={`w-12 h-14 sm:w-13 sm:h-15 text-center text-2xl font-bold rounded-[14px] border transition-all duration-150 focus:outline-none ${
                   digit
-                    ? 'border-[#0075FF] bg-white text-[#0F172A]'
-                    : 'border-[#D8E2EC] bg-white text-[#0F172A] focus:border-[#0075FF] focus:shadow-[0_0_0_3px_rgba(0,117,255,0.12)]'
+                    ? 'border-[#0075FF] bg-white text-[#0F172A] dark:bg-[#162036] dark:text-[#F8FAFC] dark:border-[#3894FF]'
+                    : 'border-[#D8E2EC] bg-white text-[#0F172A] dark:bg-[#131B2E] dark:border-[#223354] dark:text-[#F8FAFC] focus:border-[#0075FF] dark:focus:border-[#3894FF] focus:shadow-[0_0_0_3px_rgba(0,117,255,0.12)]'
                 }`}
               />
             ))}
@@ -185,17 +185,17 @@ export default function T2VerifyOtp({ onNavigate, phone: propPhone }) {
         </div>
 
         {/* Resend OTP */}
-        <div className="text-center text-[14px] text-[#64748B] font-medium">
+        <div className="text-center text-[14px] text-[#64748B] dark:text-[#94A3B8] font-medium">
           Resend OTP in{' '}
           {secondsRemaining > 0 ? (
-            <span className="font-bold text-[#0075FF]">
+            <span className="font-bold text-[#0075FF] dark:text-[#3894FF]">
               00:{secondsRemaining.toString().padStart(2, '0')}
             </span>
           ) : (
             <button
               type="button"
               onClick={() => setSecondsRemaining(59)}
-              className="font-bold text-[#0075FF] underline focus:outline-none"
+              className="font-bold text-[#0075FF] dark:text-[#3894FF] underline focus:outline-none"
             >
               Resend Now
             </button>

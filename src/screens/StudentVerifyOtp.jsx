@@ -105,7 +105,7 @@ export default function StudentVerifyOtp() {
   const formattedTimer = `00:${secondsRemaining < 10 ? `0${secondsRemaining}` : secondsRemaining}`;
 
   return (
-    <div className="relative min-h-full flex-1 flex flex-col bg-white overflow-hidden justify-between select-none">
+    <div className="relative min-h-full flex-1 flex flex-col bg-white dark:bg-[#0B0F19] overflow-hidden justify-between select-none transition-colors duration-200">
       {/* Background soft concentric circles */}
       <TopDecorCircles />
 
@@ -123,12 +123,12 @@ export default function StudentVerifyOtp() {
 
         {/* Title & Subtitle matching reference image */}
         <div className="text-center mb-6">
-          <h1 className="text-[26px] font-extrabold text-[#0F172A] tracking-tight mb-1.5">
+          <h1 className="text-[26px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight mb-1.5">
             Enter OTP
           </h1>
-          <p className="text-[14px] font-medium text-[#64748B] leading-snug">
+          <p className="text-[14px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-snug">
             We have sent a 6-digit OTP to your<br />
-            WhatsApp on <span className="font-bold text-[#0F172A]">+91 ******{lastFour}.</span>
+            WhatsApp on <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">+91 ******{lastFour}.</span>
           </p>
         </div>
 
@@ -152,10 +152,10 @@ export default function StudentVerifyOtp() {
                     onPaste={handlePaste}
                     className={`w-11 h-13.5 sm:w-12 sm:h-14 text-center text-2xl font-bold rounded-[16px] transition-all duration-150 focus:outline-none ${
                       isCurrent
-                        ? 'border-2 border-[#0075FF] bg-white text-[#0F172A] shadow-[0_0_0_3px_rgba(0,117,255,0.12)]'
+                        ? 'border-2 border-[#0075FF] dark:border-[#3894FF] bg-white dark:bg-[#162036] text-[#0F172A] dark:text-[#F8FAFC] shadow-[0_0_0_3px_rgba(0,117,255,0.18)]'
                         : digit
-                        ? 'border border-[#93C5FD] bg-white text-[#0F172A]'
-                        : 'border border-[#BFDBFE] bg-white text-[#0F172A]'
+                        ? 'border border-[#93C5FD] dark:border-[#3894FF]/60 bg-white dark:bg-[#162036] text-[#0F172A] dark:text-[#F8FAFC]'
+                        : 'border border-[#BFDBFE] dark:border-[#26354D] bg-white dark:bg-[#162036] text-[#0F172A] dark:text-[#F8FAFC]'
                     }`}
                   />
                 );

@@ -151,21 +151,21 @@ export default function RecordClass() {
   };
 
   return (
-    <div className="relative h-full flex flex-col bg-[#FBFBFD] select-none overflow-hidden">
+    <div className="relative h-full flex flex-col bg-[#FBFBFD] dark:bg-[#0B0F19] transition-colors duration-200 select-none overflow-hidden">
       {/* Top App Header with Back button and centered ClassHere Logo */}
-      <div className="shrink-0 px-5 sm:px-6 pt-3 pb-2 flex items-center justify-between border-b border-slate-100 bg-[#FBFBFD] z-30">
+      <div className="shrink-0 px-5 sm:px-6 pt-3 pb-2 flex items-center justify-between border-b border-slate-100 dark:border-[#1E293B] bg-[#FBFBFD] dark:bg-[#0B0F19] z-30 transition-colors">
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-[#0F172A] hover:bg-slate-100 active:scale-95 transition-all cursor-pointer"
+          className="w-9 h-9 rounded-full flex items-center justify-center text-[#0F172A] dark:text-[#F8FAFC] hover:bg-slate-100 dark:hover:bg-[#162036] active:scale-95 transition-all cursor-pointer"
           aria-label="Back"
         >
           <ArrowLeft className="w-5 h-5 stroke-[2.4]" />
         </button>
 
         <div className="font-extrabold text-[22px] tracking-tight">
-          <span className="text-[#0F172A]">Class</span>
-          <span className="text-[#0075FF]">Here</span>
+          <span className="text-[#0F172A] dark:text-[#F8FAFC]">Class</span>
+          <span className="text-[#0075FF] dark:text-[#3894FF]">Here</span>
         </div>
 
         {/* Placeholder to keep logo perfectly centered */}
@@ -175,15 +175,15 @@ export default function RecordClass() {
       {/* Main Scrollable Form */}
       <div className="flex-1 overflow-y-auto no-scrollbar px-5 sm:px-6 py-4 space-y-4.5">
         {/* Subject Header Card */}
-        <div className="bg-[#F1F6FE] border border-[#E2EDFD] rounded-[18px] p-3.5 sm:p-4 flex items-center gap-3.5 shadow-xs">
-          <div className="w-11 h-11 rounded-[13px] bg-[#E0EBFD] border border-[#CFE1FC] flex items-center justify-center text-[#0075FF] shrink-0">
+        <div className="bg-[#F1F6FE] dark:bg-[#162238] border border-[#E2EDFD] dark:border-[#223354] rounded-[18px] p-3.5 sm:p-4 flex items-center gap-3.5 shadow-xs transition-colors">
+          <div className="w-11 h-11 rounded-[13px] bg-[#E0EBFD] dark:bg-[#1E2E4A] border border-[#CFE1FC] dark:border-[#283E63] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0">
             <Code2 className="w-5 h-5 stroke-[2.2]" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="text-[16px] font-bold text-[#0F172A] tracking-tight truncate leading-tight">
+            <h2 className="text-[16px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight truncate leading-tight">
               {classInfo.subject}
             </h2>
-            <p className="text-[12.5px] font-medium text-[#64748B] truncate mt-0.5">
+            <p className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5">
               {classInfo.grade}
             </p>
           </div>
@@ -191,20 +191,20 @@ export default function RecordClass() {
 
         {/* Unit Dropdown Section */}
         <div>
-          <label className="block text-[13.5px] font-bold text-[#0F172A] mb-1.5">
+          <label className="block text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] mb-1.5">
             Unit
           </label>
           <div className="relative">
             <button
               type="button"
               onClick={() => setIsUnitDropdownOpen(!isUnitDropdownOpen)}
-              className="w-full bg-white border border-[#E2E8F0] rounded-[12px] px-3.5 py-3 flex items-center justify-between text-left hover:border-slate-300 transition-all cursor-pointer shadow-xs"
+              className="w-full bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#1E293B] rounded-[12px] px-3.5 py-3 flex items-center justify-between text-left hover:border-slate-300 dark:hover:border-slate-700 transition-all cursor-pointer shadow-xs"
             >
-              <span className="text-[13.5px] font-medium text-[#0F172A] truncate">
+              <span className="text-[13.5px] font-medium text-[#0F172A] dark:text-[#F8FAFC] truncate">
                 {selectedUnit}
               </span>
               <ChevronDown
-                className={`w-4 h-4 text-[#0F172A] stroke-[2.5] transition-transform duration-200 shrink-0 ml-2 ${
+                className={`w-4 h-4 text-[#0F172A] dark:text-[#F8FAFC] stroke-[2.5] transition-transform duration-200 shrink-0 ml-2 ${
                   isUnitDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
@@ -212,7 +212,7 @@ export default function RecordClass() {
 
             {/* Dropdown Menu */}
             {isUnitDropdownOpen && (
-              <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-[14px] shadow-lg py-1 z-40 max-h-56 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-[#1E293B] rounded-[14px] shadow-lg py-1 z-40 max-h-56 overflow-y-auto">
                 {units.map((unit) => (
                   <button
                     key={unit}
@@ -223,13 +223,13 @@ export default function RecordClass() {
                     }}
                     className={`w-full text-left px-3.5 py-2.5 text-[13px] transition-colors flex items-center justify-between ${
                       selectedUnit === unit
-                        ? 'font-bold text-[#0075FF] bg-blue-50/70'
-                        : 'font-medium text-slate-700 hover:bg-slate-50'
+                        ? 'font-bold text-[#0075FF] dark:text-[#3894FF] bg-blue-50/70 dark:bg-[#162238]'
+                        : 'font-medium text-slate-700 dark:text-[#CBD5E1] hover:bg-slate-50 dark:hover:bg-[#162036]'
                     }`}
                   >
                     <span className="truncate">{unit}</span>
                     {selectedUnit === unit && (
-                      <Check className="w-4 h-4 text-[#0075FF] shrink-0 ml-2" />
+                      <Check className="w-4 h-4 text-[#0075FF] dark:text-[#3894FF] shrink-0 ml-2" />
                     )}
                   </button>
                 ))}
@@ -242,17 +242,17 @@ export default function RecordClass() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h3 className="text-[14px] font-bold text-[#0F172A] leading-tight">
+              <h3 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-tight">
                 Topics Covered
               </h3>
-              <p className="text-[12px] font-medium text-[#64748B] mt-0.5">
+              <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5">
                 Select all topics you covered today
               </p>
             </div>
             <button
               type="button"
               onClick={handleSelectAllToggle}
-              className="px-2.5 py-1 bg-[#EAF3FF] hover:bg-[#DCEBFD] text-[#0075FF] text-[12px] font-bold rounded-[8px] transition-colors cursor-pointer"
+              className="px-2.5 py-1 bg-[#EAF3FF] dark:bg-[#162238] hover:bg-[#DCEBFD] dark:hover:bg-[#1E2E4A] text-[#0075FF] dark:text-[#3894FF] text-[12px] font-bold rounded-[8px] transition-colors cursor-pointer"
             >
               {allChecked ? 'Deselect All' : 'Select All'}
             </button>
@@ -264,10 +264,10 @@ export default function RecordClass() {
               <div
                 key={topic.id}
                 onClick={() => toggleTopicCheck(topic.id)}
-                className={`bg-white border rounded-[12px] px-3.5 py-3 flex items-center justify-between shadow-xs transition-all cursor-pointer ${
+                className={`border rounded-[12px] px-3.5 py-3 flex items-center justify-between shadow-xs transition-all cursor-pointer ${
                   topic.checked
-                    ? 'border-[#D0E2FB] bg-blue-50/20'
-                    : 'border-[#EEF2F6] hover:border-slate-300'
+                    ? 'border-[#D0E2FB] dark:border-[#3894FF]/40 bg-blue-50/20 dark:bg-[#162238]'
+                    : 'bg-white dark:bg-[#131B2E] border-[#EEF2F6] dark:border-[#1E293B] hover:border-slate-300 dark:hover:border-slate-700'
                 }`}
               >
                 {/* Checkbox and Topic Title */}
@@ -276,7 +276,7 @@ export default function RecordClass() {
                     className={`w-5 h-5 rounded-[6px] flex items-center justify-center transition-all shrink-0 ${
                       topic.checked
                         ? 'bg-[#0075FF] border border-[#0075FF] text-white shadow-xs'
-                        : 'border-2 border-[#CBD5E1] bg-white'
+                        : 'border-2 border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#0B0F19]'
                     }`}
                   >
                     {topic.checked && (
@@ -286,8 +286,8 @@ export default function RecordClass() {
                   <span
                     className={`text-[13.5px] truncate select-none ${
                       topic.checked
-                        ? 'font-semibold text-[#0F172A]'
-                        : 'font-medium text-[#334155]'
+                        ? 'font-semibold text-[#0F172A] dark:text-[#F8FAFC]'
+                        : 'font-medium text-[#334155] dark:text-[#CBD5E1]'
                     }`}
                   >
                     {topic.title}
@@ -301,13 +301,13 @@ export default function RecordClass() {
                   title={
                     topic.important ? 'Marked Important' : 'Mark as Important'
                   }
-                  className="p-1 -mr-1 rounded-full hover:bg-slate-100 transition-colors cursor-pointer shrink-0 ml-2"
+                  className="p-1 -mr-1 rounded-full hover:bg-slate-100 dark:hover:bg-[#1E2E4A] transition-colors cursor-pointer shrink-0 ml-2"
                 >
                   <Star
                     className={`w-4.5 h-4.5 transition-all ${
                       topic.important
                         ? 'text-[#F59E0B] fill-[#F59E0B] scale-105'
-                        : 'text-[#CBD5E1] hover:text-[#94A3B8]'
+                        : 'text-[#CBD5E1] dark:text-[#475569] hover:text-[#94A3B8]'
                     }`}
                   />
                 </button>
@@ -318,7 +318,7 @@ export default function RecordClass() {
 
         {/* Completion Status Section */}
         <div>
-          <label className="block text-[13.5px] font-bold text-[#0F172A] mb-1.5">
+          <label className="block text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] mb-1.5">
             Completion Status
           </label>
           <div className="grid grid-cols-2 gap-2.5">
@@ -328,15 +328,15 @@ export default function RecordClass() {
               onClick={() => setCompletionStatus('Completed')}
               className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-[12px] font-bold text-[13px] transition-all cursor-pointer ${
                 completionStatus === 'Completed'
-                  ? 'bg-white border-2 border-[#0075FF] text-[#0075FF] shadow-xs'
-                  : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:bg-slate-100/70'
+                  ? 'bg-white dark:bg-[#162238] border-2 border-[#0075FF] dark:border-[#3894FF] text-[#0075FF] dark:text-[#3894FF] shadow-xs'
+                  : 'bg-[#F8FAFC] dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#1E293B] text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-100/70 dark:hover:bg-[#162036]'
               }`}
             >
               <div
                 className={`w-5 h-5 rounded-full flex items-center justify-center ${
                   completionStatus === 'Completed'
                     ? 'bg-[#16A34A] text-white'
-                    : 'bg-slate-200 text-slate-400'
+                    : 'bg-slate-200 dark:bg-[#223354] text-slate-400 dark:text-slate-500'
                 }`}
               >
                 <Check className="w-3 h-3 stroke-[3]" />
@@ -350,15 +350,15 @@ export default function RecordClass() {
               onClick={() => setCompletionStatus('In Progress')}
               className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-[12px] font-bold text-[13px] transition-all cursor-pointer ${
                 completionStatus === 'In Progress'
-                  ? 'bg-white border-2 border-[#0075FF] text-[#0075FF] shadow-xs'
-                  : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:bg-slate-100/70'
+                  ? 'bg-white dark:bg-[#162238] border-2 border-[#0075FF] dark:border-[#3894FF] text-[#0075FF] dark:text-[#3894FF] shadow-xs'
+                  : 'bg-[#F8FAFC] dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#1E293B] text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-100/70 dark:hover:bg-[#162036]'
               }`}
             >
               <Clock
                 className={`w-4.5 h-4.5 ${
                   completionStatus === 'In Progress'
-                    ? 'text-[#0075FF]'
-                    : 'text-[#94A3B8]'
+                    ? 'text-[#0075FF] dark:text-[#3894FF]'
+                    : 'text-[#94A3B8] dark:text-[#64748B]'
                 }`}
               />
               <span>In Progress</span>
@@ -368,7 +368,7 @@ export default function RecordClass() {
 
         {/* Notes (Optional) Section */}
         <div>
-          <label className="block text-[13.5px] font-bold text-[#0F172A] mb-1.5">
+          <label className="block text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] mb-1.5">
             Notes (Optional)
           </label>
           <div className="relative">
@@ -378,9 +378,9 @@ export default function RecordClass() {
               maxLength={500}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add any important notes, instructions or details for this class..."
-              className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-[14px] p-3 text-[13px] text-[#0F172A] placeholder:text-[#94A3B8] focus:bg-white focus:border-[#0075FF] focus:outline-none focus:ring-1 focus:ring-[#0075FF] transition-all resize-none"
+              className="w-full bg-[#F8FAFC] dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#1E293B] rounded-[14px] p-3 text-[13px] text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-[#94A3B8] dark:placeholder:text-[#64748B] focus:bg-white dark:focus:bg-[#162036] focus:border-[#0075FF] dark:focus:border-[#3894FF] focus:outline-none focus:ring-1 focus:ring-[#0075FF] transition-all resize-none"
             />
-            <div className="text-[11px] font-medium text-[#94A3B8] text-right mt-0.5">
+            <div className="text-[11px] font-medium text-[#94A3B8] dark:text-[#64748B] text-right mt-0.5">
               {notes.length}/500
             </div>
           </div>
@@ -388,22 +388,22 @@ export default function RecordClass() {
 
         {/* Add Files (Optional) Section */}
         <div>
-          <label className="block text-[13.5px] font-bold text-[#0F172A] mb-1.5">
+          <label className="block text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] mb-1.5">
             Add Files (Optional)
           </label>
 
-          <label className="border-2 border-dashed border-[#CFE1FC] bg-[#F8FAFC] hover:bg-[#F1F6FE] rounded-[14px] p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-colors block">
+          <label className="border-2 border-dashed border-[#CFE1FC] dark:border-[#223354] bg-[#F8FAFC] dark:bg-[#131B2E] hover:bg-[#F1F6FE] dark:hover:bg-[#162238] rounded-[14px] p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-colors block">
             <input
               type="file"
               multiple
               onChange={handleFileUpload}
               className="hidden"
             />
-            <UploadCloud className="w-7 h-7 text-[#0075FF] stroke-[2]" />
-            <p className="text-[13px] font-bold text-[#0F172A] mt-1.5 leading-tight">
+            <UploadCloud className="w-7 h-7 text-[#0075FF] dark:text-[#3894FF] stroke-[2]" />
+            <p className="text-[13px] font-bold text-[#0F172A] dark:text-[#F8FAFC] mt-1.5 leading-tight">
               Tap to upload files
             </p>
-            <p className="text-[11px] font-medium text-[#64748B] mt-0.5 leading-tight">
+            <p className="text-[11px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-tight">
               PDF, PPT, DOC, Images (Max 10MB)
             </p>
           </label>
@@ -414,21 +414,21 @@ export default function RecordClass() {
               {files.map((file, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between px-3 py-2 bg-white border border-[#E2E8F0] rounded-[10px] text-xs shadow-xs"
+                  className="flex items-center justify-between px-3 py-2 bg-white dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[10px] text-xs shadow-xs"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <FileText className="w-4 h-4 text-[#0075FF] shrink-0" />
-                    <span className="font-semibold text-[#0F172A] truncate">
+                    <FileText className="w-4 h-4 text-[#0075FF] dark:text-[#3894FF] shrink-0" />
+                    <span className="font-semibold text-[#0F172A] dark:text-[#F8FAFC] truncate">
                       {file.name}
                     </span>
-                    <span className="text-[#64748B] shrink-0 text-[11px]">
+                    <span className="text-[#64748B] dark:text-[#94A3B8] shrink-0 text-[11px]">
                       ({file.size})
                     </span>
                   </div>
                   <button
                     type="button"
                     onClick={() => removeFile(idx)}
-                    className="p-1 text-slate-400 hover:text-red-500 rounded-full transition-colors ml-2 cursor-pointer"
+                    className="p-1 text-slate-400 dark:text-slate-500 hover:text-red-500 rounded-full transition-colors ml-2 cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>

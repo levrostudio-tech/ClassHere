@@ -18,11 +18,13 @@ import FounderStory from './screens/FounderStory';
 import RecordClass from './screens/RecordClass';
 import RecordClassSuccess from './screens/RecordClassSuccess';
 import StudentDashboard from './screens/StudentDashboard';
+import { ThemeProvider } from './context/ThemeContext';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <DeviceFrame>
+    <ThemeProvider>
+      <BrowserRouter>
+        <DeviceFrame>
         <Routes>
           {/* Landing Screen: Choose Role */}
           <Route path="/" element={<RoleSelect />} />
@@ -59,5 +61,6 @@ export default function App() {
         </Routes>
       </DeviceFrame>
     </BrowserRouter>
+  </ThemeProvider>
   );
 }

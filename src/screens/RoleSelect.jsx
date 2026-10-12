@@ -1,13 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, GraduationCap } from 'lucide-react';
+import { ArrowRight, GraduationCap, Moon, Sun } from 'lucide-react';
 import AppBackButton from '../components/AppBackButton';
 import BrandLogo from '../components/BrandLogo';
 import CampusFooter from '../components/CampusFooter';
 import TopDecorCircles from '../components/TopDecorCircles';
+import { useTheme } from '../context/ThemeContext';
 
 export default function RoleSelect() {
   const navigate = useNavigate();
+  const { isDark, toggleTheme } = useTheme();
 
   const handleRoleClick = (role) => {
     if (role === 'teacher') {
@@ -20,14 +22,14 @@ export default function RoleSelect() {
   };
 
   return (
-    <div className="relative min-h-full flex-1 flex flex-col bg-white overflow-hidden justify-between select-none">
+    <div className="relative min-h-full flex-1 flex flex-col bg-white dark:bg-[#0B0F19] overflow-hidden justify-between select-none transition-colors duration-200">
       {/* Background Soft Accent Circles */}
       <TopDecorCircles />
 
       {/* Main Content Area */}
       <div className="relative z-10 flex-1 flex flex-col justify-start px-6 pt-4 sm:pt-5 pb-2">
-        {/* Top Header with Back Button */}
-        <div className="flex items-center mb-2">
+        {/* Top Header with Back Button and Quick Dark Mode Toggle */}
+        <div className="flex items-center justify-between mb-2">
           <AppBackButton
             onClick={() => {
               if (window.history.length > 1) {
@@ -35,6 +37,15 @@ export default function RoleSelect() {
               }
             }}
           />
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle dark mode"
+            className="w-10 h-10 rounded-[14px] bg-[#F1F5F9] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#26354D] flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:text-[#0075FF] dark:hover:text-[#3894FF] active:scale-95 transition-all cursor-pointer shadow-xs"
+          >
+            {isDark ? <Sun className="w-5 h-5 text-amber-400 stroke-[2.2]" /> : <Moon className="w-5 h-5 text-[#475569] stroke-[2.2]" />}
+          </button>
         </div>
 
         {/* Logo & App Icon */}
@@ -44,10 +55,10 @@ export default function RoleSelect() {
 
         {/* Headings */}
         <div className="text-center mb-6">
-          <h1 className="text-[26px] sm:text-[27px] font-extrabold text-[#0F172A] tracking-tight mb-1">
+          <h1 className="text-[26px] sm:text-[27px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight mb-1">
             Welcome to ClassHere
           </h1>
-          <p className="text-[15px] font-medium text-[#64748B] leading-snug">
+          <p className="text-[15px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-snug">
             Choose how you want to continue
           </p>
         </div>
@@ -58,12 +69,12 @@ export default function RoleSelect() {
           <button
             type="button"
             onClick={() => handleRoleClick('teacher')}
-            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white border border-[#DCE8FC] hover:border-[#0075FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
+            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white dark:bg-[#131B2E] border border-[#DCE8FC] dark:border-[#223354] hover:border-[#0075FF]/60 dark:hover:border-[#3894FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
           >
             <div className="flex items-center gap-3.5">
-              <div className="w-14 h-14 rounded-[18px] bg-[#EAF3FF] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-14 h-14 rounded-[18px] bg-[#EAF3FF] dark:bg-[#1A2640] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <svg
-                  className="w-7 h-7 text-[#0075FF]"
+                  className="w-7 h-7 text-[#0075FF] dark:text-[#3894FF]"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -77,28 +88,28 @@ export default function RoleSelect() {
                   <path d="M16 8h3M16 10.5h2" strokeWidth="1.8" />
                 </svg>
               </div>
-              <span className="text-[18.5px] font-bold text-[#0F172A] tracking-tight group-hover:text-[#0075FF] transition-colors">
+              <span className="text-[18.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight group-hover:text-[#0075FF] dark:group-hover:text-[#3894FF] transition-colors">
                 Teacher Login
               </span>
             </div>
-            <ArrowRight className="w-5.5 h-5.5 text-[#0075FF] stroke-[2.4] group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-5.5 h-5.5 text-[#0075FF] dark:text-[#3894FF] stroke-[2.4] group-hover:translate-x-1 transition-transform" />
           </button>
 
           {/* 2. Student Login */}
           <button
             type="button"
             onClick={() => handleRoleClick('student')}
-            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white border border-[#DCE8FC] hover:border-[#0075FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
+            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white dark:bg-[#131B2E] border border-[#DCE8FC] dark:border-[#223354] hover:border-[#0075FF]/60 dark:hover:border-[#3894FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
           >
             <div className="flex items-center gap-3.5">
-              <div className="w-14 h-14 rounded-[18px] bg-[#EAF3FF] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <GraduationCap className="w-7 h-7 text-[#0075FF] stroke-[2.2]" />
+              <div className="w-14 h-14 rounded-[18px] bg-[#EAF3FF] dark:bg-[#1A2640] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-7 h-7 text-[#0075FF] dark:text-[#3894FF] stroke-[2.2]" />
               </div>
-              <span className="text-[18.5px] font-bold text-[#0F172A] tracking-tight group-hover:text-[#0075FF] transition-colors">
+              <span className="text-[18.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight group-hover:text-[#0075FF] dark:group-hover:text-[#3894FF] transition-colors">
                 Student Login
               </span>
             </div>
-            <ArrowRight className="w-5.5 h-5.5 text-[#0075FF] stroke-[2.4] group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-5.5 h-5.5 text-[#0075FF] dark:text-[#3894FF] stroke-[2.4] group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>

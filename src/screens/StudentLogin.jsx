@@ -41,7 +41,7 @@ export default function StudentLogin() {
   };
 
   return (
-    <div className="relative min-h-full flex-1 flex flex-col bg-white overflow-hidden justify-between select-none">
+    <div className="relative min-h-full flex-1 flex flex-col bg-white dark:bg-[#0B0F19] overflow-hidden justify-between select-none transition-colors duration-200">
       {/* Background soft concentric circles */}
       <TopDecorCircles />
 
@@ -59,10 +59,10 @@ export default function StudentLogin() {
 
         {/* Title & Subtitle */}
         <div className="text-center mb-6">
-          <h1 className="text-[26px] font-extrabold text-[#0F172A] tracking-tight mb-1.5">
+          <h1 className="text-[26px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight mb-1.5">
             Student Login
           </h1>
-          <p className="text-[14.5px] font-medium text-[#64748B] leading-snug">
+          <p className="text-[14.5px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-snug">
             Enter your roll number to continue.
           </p>
         </div>
@@ -72,20 +72,20 @@ export default function StudentLogin() {
           {/* Roll Number Input Card */}
           <div>
             <div
-              className={`relative flex items-center gap-3.5 px-4 py-3 bg-white border ${
+              className={`relative flex items-center gap-3.5 px-4 py-3 bg-white dark:bg-[#162036] border ${
                 error
                   ? 'border-red-400 ring-2 ring-red-100'
-                  : 'border-[#BFDBFE]/90 focus-within:border-[#0075FF] focus-within:ring-2 focus-within:ring-[#0075FF]/20'
+                  : 'border-[#BFDBFE]/90 dark:border-[#26354D] focus-within:border-[#0075FF] focus-within:ring-2 focus-within:ring-[#0075FF]/20'
               } rounded-[20px] transition-all duration-150 shadow-[0_2px_8px_rgba(0,117,255,0.04)]`}
             >
               {/* Left graduation cap icon */}
-              <div className="shrink-0 text-[#0F172A] pl-0.5">
+              <div className="shrink-0 text-[#0F172A] dark:text-[#F8FAFC] pl-0.5">
                 <GraduationCap className="w-6 h-6 stroke-[2]" />
               </div>
 
               {/* Label + Input */}
               <div className="flex-1 flex flex-col justify-center">
-                <label className="text-[11.5px] font-semibold text-[#64748B] leading-none mb-1">
+                <label className="text-[11.5px] font-semibold text-[#64748B] dark:text-[#94A3B8] leading-none mb-1">
                   Roll Number
                 </label>
                 <input
@@ -96,7 +96,7 @@ export default function StudentLogin() {
                     if (error) setError('');
                   }}
                   placeholder="e.g. 22BCA015"
-                  className="w-full bg-transparent text-[16px] font-semibold text-[#0F172A] placeholder:text-[#93C5FD] focus:outline-none tracking-wide uppercase"
+                  className="w-full bg-transparent text-[16px] font-semibold text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-[#93C5FD] dark:placeholder:text-[#475569] focus:outline-none tracking-wide uppercase"
                   autoCapitalize="characters"
                   autoFocus
                 />

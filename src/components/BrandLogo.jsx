@@ -29,8 +29,8 @@ export default function BrandLogo({ showIcon = true, iconSize = 82, fontSize = '
         </div>
       )}
       <div className={`font-black tracking-tight ${fontSize} leading-tight`}>
-        <span className="text-[#0F172A]">Class</span>
-        <span className="text-[#0075FF]">Here</span>
+        <span className="text-[#0F172A] dark:text-[#F8FAFC]">Class</span>
+        <span className="text-[#0075FF] dark:text-[#3894FF]">Here</span>
       </div>
     </div>
   );

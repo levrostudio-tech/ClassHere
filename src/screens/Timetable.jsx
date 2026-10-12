@@ -90,7 +90,7 @@ export default function Timetable() {
   );
 
   return (
-    <div className="relative h-full flex flex-col bg-[#FBFBFD] select-none overflow-hidden">
+    <div className="relative h-full flex flex-col bg-[#FBFBFD] dark:bg-[#0B0F19] transition-colors duration-200 select-none overflow-hidden">
       {/* Scrollable Container */}
       <div
         onScroll={handleScroll}
@@ -98,10 +98,10 @@ export default function Timetable() {
       >
         {/* Header: Timetable Title & Subtitle */}
         <div className="pt-0.5">
-          <h1 className="text-[25px] font-extrabold text-[#0F172A] tracking-tight leading-none">
+          <h1 className="text-[25px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-none">
             Timetable
           </h1>
-          <p className="text-[13.5px] font-medium text-[#64748B] mt-1">
+          <p className="text-[13.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-1">
             Your class schedule for the week
           </p>
         </div>
@@ -118,19 +118,19 @@ export default function Timetable() {
                 className={`flex flex-col items-center justify-center min-w-[56px] py-2.5 px-2 rounded-[13px] transition-all duration-150 active:scale-95 cursor-pointer ${
                   isSelected
                     ? 'bg-[#0075FF] text-white shadow-md shadow-blue-500/25 font-bold'
-                    : 'bg-[#F1F5F9] text-[#0F172A] hover:bg-slate-200/70 font-semibold'
+                    : 'bg-[#F1F5F9] dark:bg-[#162036] text-[#0F172A] dark:text-[#F8FAFC] hover:bg-slate-200/70 dark:hover:bg-[#1C2C47] font-semibold'
                 }`}
               >
                 <span
                   className={`text-[13px] leading-tight ${
-                    isSelected ? 'text-white font-bold' : 'text-[#0F172A]'
+                    isSelected ? 'text-white font-bold' : 'text-[#0F172A] dark:text-[#F8FAFC]'
                   }`}
                 >
                   {item.day}
                 </span>
                 <span
                   className={`text-[10.5px] mt-0.5 leading-tight ${
-                    isSelected ? 'text-white/90 font-medium' : 'text-[#64748B]'
+                    isSelected ? 'text-white/90 font-medium' : 'text-[#64748B] dark:text-[#94A3B8]'
                   }`}
                 >
                   {item.date}
@@ -144,7 +144,7 @@ export default function Timetable() {
         <div className="space-y-2.5 pt-1">
           {/* Ongoing Class Card (if selected day is today and a class is active) */}
           {isSelectedToday && ongoingClass && (
-            <div className="relative bg-[#EEFAF2] border border-[#CEEFDB] rounded-[16px] p-4 shadow-sm overflow-hidden">
+            <div className="relative bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[16px] p-4 shadow-sm overflow-hidden">
               {/* Vibrant green left vertical accent bar */}
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#10B981] rounded-l-[16px]" />
 
@@ -152,14 +152,14 @@ export default function Timetable() {
               <div className="flex items-center justify-between mb-2.5 pl-1">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse" />
-                  <span className="text-[12.5px] font-bold text-[#15803D]">
+                  <span className="text-[12.5px] font-bold text-[#15803D] dark:text-[#4ADE80]">
                     Ongoing
                   </span>
-                  <span className="text-[12.5px] font-medium text-[#64748B]">
+                  <span className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8]">
                     · {ongoingClass.startTime} to {ongoingClass.endTime}
                   </span>
                 </div>
-                <span className="bg-[#DCFCE7] text-[#166534] text-[11px] font-semibold px-2.5 py-0.5 rounded-[6px]">
+                <span className="bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#86EFAC] text-[11px] font-semibold px-2.5 py-0.5 rounded-[6px]">
                   {ongoingClass.room}
                 </span>
               </div>
@@ -167,10 +167,10 @@ export default function Timetable() {
               {/* Subject & Grade */}
               <div className="flex items-center justify-between gap-3 mb-3 pl-1">
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-[16px] font-extrabold text-[#0F172A] truncate tracking-tight">
+                  <h4 className="text-[16px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] truncate tracking-tight">
                     {ongoingClass.subject}
                   </h4>
-                  <p className="text-[12px] font-medium text-[#64748B] truncate mt-0.5">
+                  <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5">
                     {ongoingClass.grade}
                   </p>
                 </div>
@@ -198,13 +198,13 @@ export default function Timetable() {
 
               {/* Progress Bar & Time Left */}
               <div className="flex items-center gap-3 pl-1">
-                <div className="flex-1 h-1.5 bg-[#D3EEDC] rounded-full overflow-hidden">
+                <div className="flex-1 h-1.5 bg-[#D3EEDC] dark:bg-[#133E27] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#16A34A] rounded-full transition-all duration-1000 ease-linear"
+                    className="h-full bg-[#16A34A] dark:bg-[#22C55E] rounded-full transition-all duration-1000 ease-linear"
                     style={{ width: `${ongoingClass.progress}%` }}
                   />
                 </div>
-                <span className="text-[12px] font-bold text-[#16A34A] shrink-0 min-w-[70px] text-right tabular-nums">
+                <span className="text-[12px] font-bold text-[#16A34A] dark:text-[#4ADE80] shrink-0 min-w-[70px] text-right tabular-nums">
                   {ongoingClass.remainingLabel}
                 </span>
               </div>
@@ -219,50 +219,50 @@ export default function Timetable() {
               return (
                 <div
                   key={item.id}
-                  className={`bg-white border rounded-[15px] p-3.5 flex items-center gap-3 shadow-card hover:shadow-card-hover transition-all ${
-                    isFinished ? 'border-[#F1F5F9] opacity-80' : 'border-[#EEF2F6]'
+                  className={`bg-white dark:bg-[#131B2E] border rounded-[15px] p-3.5 flex items-center gap-3 shadow-card hover:shadow-card-hover transition-all ${
+                    isFinished ? 'border-[#F1F5F9] dark:border-[#1A2234] opacity-80 dark:opacity-75' : 'border-[#EEF2F6] dark:border-[#1E293B]'
                   }`}
                 >
                   {/* Time Column */}
                   <div className="w-[52px] shrink-0 text-center">
-                    <p className="text-[13.5px] font-bold text-[#0F172A] leading-tight">
+                    <p className="text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-tight">
                       {item.startTime}
                     </p>
-                    <p className="text-[11px] font-medium text-[#64748B] leading-tight">
+                    <p className="text-[11px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-tight">
                       to {item.endTime}
                     </p>
                   </div>
 
                   {/* Vertical divider */}
-                  <div className="w-[1px] h-8 bg-[#E2E8F0] shrink-0" />
+                  <div className="w-[1px] h-8 bg-[#E2E8F0] dark:bg-[#1E293B] shrink-0" />
 
                   {/* Subject & Grade */}
                   <div className="flex-1 min-w-0 pr-1">
-                    <h5 className="text-[14.5px] font-bold text-[#0F172A] leading-snug">
+                    <h5 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
                       {item.subject}
                     </h5>
-                    <p className="text-[12px] font-normal text-[#64748B] truncate mt-0.5">
+                    <p className="text-[12px] font-normal text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5">
                       {item.grade}
                     </p>
                   </div>
 
                   {/* Room & Status badges */}
                   <div className="flex flex-col items-end gap-1 shrink-0">
-                    <span className="bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
+                    <span className="bg-[#F1F5F9] dark:bg-[#162036] text-[#475569] dark:text-[#94A3B8] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
                       {item.room}
                     </span>
 
                     {isFinished ? (
-                      <div className="flex items-center gap-1 bg-[#F1F5F9] px-1.5 py-0.5 rounded-[6px]">
-                        <CheckCircle2 className="w-3 h-3 text-[#16A34A]" />
-                        <span className="text-[10px] font-semibold text-[#64748B]">
+                      <div className="flex items-center gap-1 bg-[#F1F5F9] dark:bg-[#162036] px-1.5 py-0.5 rounded-[6px]">
+                        <CheckCircle2 className="w-3 h-3 text-[#16A34A] dark:text-[#4ADE80]" />
+                        <span className="text-[10px] font-semibold text-[#64748B] dark:text-[#94A3B8]">
                           Finished
                         </span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-1 bg-[#F8FAFC] px-1.5 py-0.5 rounded-[6px]">
-                        <Clock className="w-3 h-3 text-[#94A3B8]" />
-                        <span className="text-[10px] font-medium text-[#64748B]">
+                      <div className="flex items-center gap-1 bg-[#F8FAFC] dark:bg-[#162036] px-1.5 py-0.5 rounded-[6px]">
+                        <Clock className="w-3 h-3 text-[#94A3B8] dark:text-[#64748B]" />
+                        <span className="text-[10px] font-medium text-[#64748B] dark:text-[#94A3B8]">
                           Upcoming
                         </span>
                       </div>
@@ -272,9 +272,9 @@ export default function Timetable() {
               );
             })
           ) : (
-            <div className="bg-white border border-[#E2E8F0] rounded-[16px] p-6 text-center text-[#64748B]">
-              <Calendar className="w-8 h-8 text-[#94A3B8] mx-auto mb-2" />
-              <p className="text-[14px] font-bold text-[#0F172A]">No classes scheduled</p>
+            <div className="bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#1E293B] rounded-[16px] p-6 text-center text-[#64748B] dark:text-[#94A3B8]">
+              <Calendar className="w-8 h-8 text-[#94A3B8] dark:text-[#64748B] mx-auto mb-2" />
+              <p className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">No classes scheduled</p>
               <p className="text-[12px] mt-0.5">There are no classes scheduled for this day.</p>
             </div>
           )}

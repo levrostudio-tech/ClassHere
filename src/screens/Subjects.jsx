@@ -114,7 +114,7 @@ export default function Subjects() {
   ];
 
   return (
-    <div className="relative h-full flex flex-col bg-[#FBFBFD] select-none overflow-hidden">
+    <div className="relative h-full flex flex-col bg-[#FBFBFD] dark:bg-[#0B0F19] transition-colors duration-200 select-none overflow-hidden">
       {/* Scrollable Container */}
       <div
         onScroll={handleScroll}
@@ -122,7 +122,7 @@ export default function Subjects() {
       >
         {/* Header: Title and Batch Dropdown Pill */}
         <div className="flex items-center justify-between pt-1 relative">
-          <h1 className="text-[25px] font-extrabold text-[#0F172A] tracking-tight leading-none">
+          <h1 className="text-[25px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-none">
             My Subjects
           </h1>
 
@@ -131,16 +131,16 @@ export default function Subjects() {
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F5F9] border border-[#E2E8F0] rounded-[12px] text-[12.5px] font-semibold text-[#475569] hover:bg-slate-200/70 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F5F9] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[12px] text-[12.5px] font-semibold text-[#475569] dark:text-[#CBD5E1] hover:bg-slate-200/70 dark:hover:bg-[#1E2E4A] transition-colors cursor-pointer"
             >
-              <GraduationCap className="w-3.5 h-3.5 text-[#64748B]" />
+              <GraduationCap className="w-3.5 h-3.5 text-[#64748B] dark:text-[#94A3B8]" />
               <span className="truncate max-w-[130px]">{selectedBatch}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#64748B]" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#64748B] dark:text-[#94A3B8]" />
             </button>
 
             {/* Dropdown Menu */}
             {isDropdownOpen && (
-              <div className="absolute right-0 top-9 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-30 animate-fadeIn">
+              <div className="absolute right-0 top-9 w-48 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-[#1E293B] rounded-xl shadow-lg py-1 z-30 animate-fadeIn">
                 {batches.map((b) => (
                   <button
                     key={b}
@@ -151,8 +151,8 @@ export default function Subjects() {
                     }}
                     className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
                       selectedBatch === b
-                        ? 'font-bold text-[#0075FF] bg-blue-50'
-                        : 'text-slate-700 hover:bg-slate-50'
+                        ? 'font-bold text-[#0075FF] dark:text-[#3894FF] bg-blue-50 dark:bg-[#162238]'
+                        : 'text-slate-700 dark:text-[#CBD5E1] hover:bg-slate-50 dark:hover:bg-[#162036]'
                     }`}
                   >
                     {b}
@@ -170,8 +170,8 @@ export default function Subjects() {
             onClick={() => setActiveTab('current')}
             className={`px-4 py-1.5 rounded-full text-[13.5px] transition-all cursor-pointer ${
               activeTab === 'current'
-                ? 'bg-[#EAF3FF] text-[#0075FF] font-bold shadow-xs'
-                : 'text-[#64748B] font-medium hover:text-[#0F172A]'
+                ? 'bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] font-bold shadow-xs'
+                : 'text-[#64748B] dark:text-[#94A3B8] font-medium hover:text-[#0F172A] dark:hover:text-[#F8FAFC]'
             }`}
           >
             Current Semester
@@ -181,8 +181,8 @@ export default function Subjects() {
             onClick={() => setActiveTab('all')}
             className={`px-4 py-1.5 rounded-full text-[13.5px] transition-all cursor-pointer ${
               activeTab === 'all'
-                ? 'bg-[#EAF3FF] text-[#0075FF] font-bold shadow-xs'
-                : 'text-[#64748B] font-medium hover:text-[#0F172A]'
+                ? 'bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] font-bold shadow-xs'
+                : 'text-[#64748B] dark:text-[#94A3B8] font-medium hover:text-[#0F172A] dark:hover:text-[#F8FAFC]'
             }`}
           >
             All Subjects
@@ -194,33 +194,33 @@ export default function Subjects() {
           {subjectsList.map((sub) => {
             const isGreen = sub.colorType === 'green';
             const barColor = isGreen ? 'bg-[#10B981]' : 'bg-[#0075FF]';
-            const textColor = isGreen ? 'text-[#16A34A]' : 'text-[#0075FF]';
+            const textColor = isGreen ? 'text-[#16A34A] dark:text-[#4ADE80]' : 'text-[#0075FF] dark:text-[#3894FF]';
 
             return (
               <div
                 key={sub.id}
-                className="bg-white border border-[#EEF2F6] rounded-[18px] p-3.5 flex items-center gap-3.5 shadow-card hover:shadow-card-hover transition-all cursor-pointer group"
+                className="bg-white dark:bg-[#131B2E] border border-[#EEF2F6] dark:border-[#1E293B] rounded-[18px] p-3.5 flex items-center gap-3.5 shadow-card hover:shadow-card-hover transition-all cursor-pointer group"
               >
                 {/* Avatar Badge with Subject Initials */}
                 <div
-                  className={`w-11 h-11 rounded-full ${sub.avatarBg} flex items-center justify-center shrink-0 font-bold text-[14px] ${sub.avatarText}`}
+                  className={`w-11 h-11 rounded-full ${sub.avatarBg} dark:bg-[#1E2E4A] flex items-center justify-center shrink-0 font-bold text-[14px] ${sub.avatarText} dark:text-[#3894FF]`}
                 >
                   {sub.code}
                 </div>
 
                 {/* Subject Details & Progress Bar */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[15px] font-bold text-[#0F172A] truncate leading-snug">
+                  <h3 className="text-[15px] font-bold text-[#0F172A] dark:text-[#F8FAFC] truncate leading-snug">
                     {sub.name}
                   </h3>
-                  <p className="text-[12px] font-normal text-[#64748B] truncate mt-0.5 mb-2 leading-tight">
+                  <p className="text-[12px] font-normal text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5 mb-2 leading-tight">
                     {sub.grade}
                   </p>
 
                   {/* Progress Bar & Percentage row - longer and thicker */}
                   <div className="flex items-center gap-3">
                     {/* Track */}
-                    <div className="flex-1 max-w-[195px] h-2 bg-[#EEF2F6] rounded-full overflow-hidden">
+                    <div className="flex-1 max-w-[195px] h-2 bg-[#EEF2F6] dark:bg-[#223354] rounded-full overflow-hidden">
                       <div
                         className={`h-full ${barColor} rounded-full transition-all duration-500`}
                         style={{ width: `${sub.progress}%` }}
@@ -236,7 +236,7 @@ export default function Subjects() {
                 </div>
 
                 {/* Right Arrow Button */}
-                <div className="w-8 h-8 rounded-full bg-[#F1F5F9] text-[#64748B] flex items-center justify-center shrink-0 group-hover:bg-[#E2E8F0] group-hover:text-[#0F172A] transition-colors">
+                <div className="w-8 h-8 rounded-full bg-[#F1F5F9] dark:bg-[#162036] text-[#64748B] dark:text-[#94A3B8] flex items-center justify-center shrink-0 group-hover:bg-[#E2E8F0] dark:group-hover:bg-[#1E2E4A] group-hover:text-[#0F172A] dark:group-hover:text-[#F8FAFC] transition-colors">
                   <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                 </div>
               </div>
