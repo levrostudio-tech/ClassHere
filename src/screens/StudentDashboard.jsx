@@ -79,10 +79,78 @@ export default function StudentDashboard() {
   ];
 
   const importantTopicsData = [
-    { id: 1, topic: 'Mastering Pointers & Recursion in Lab', subject: 'Computer Fundamentals', weightage: 'High (15 Marks)' },
-    { id: 2, topic: 'Rank of Matrices & System of Equations', subject: 'Mathematics', weightage: 'Very High (20 Marks)' },
-    { id: 3, topic: 'List Comprehensions & Lambda Functions', subject: 'Python', weightage: 'Medium (10 Marks)' },
-    { id: 4, topic: 'Formal Letter & Report Writing Formats', subject: 'English Communication', weightage: 'High (15 Marks)' },
+    {
+      id: 'python',
+      code: 'PN',
+      badgeBg: 'bg-[#EAF3FF] dark:bg-[#162238]',
+      badgeText: 'text-[#0075FF] dark:text-[#3894FF]',
+      subject: 'Programming using Python',
+      markedText: '4 of 20 topics marked important',
+      progress: 20,
+      progressColor: 'bg-[#0075FF] dark:bg-[#3894FF]',
+      textColor: 'text-[#0075FF] dark:text-[#3894FF]',
+      filesCount: '8 files',
+    },
+    {
+      id: 'maths',
+      code: 'AS',
+      badgeBg: 'bg-[#F5E8FF] dark:bg-[#2E1065]/40',
+      badgeText: 'text-[#9333EA] dark:text-[#C084FC]',
+      subject: 'Applied & Discrete Mathematics',
+      markedText: '3 of 18 topics marked important',
+      progress: 17,
+      progressColor: 'bg-[#0075FF] dark:bg-[#3894FF]',
+      textColor: 'text-[#0075FF] dark:text-[#3894FF]',
+      filesCount: '5 files',
+    },
+    {
+      id: 'comp_fund',
+      code: 'CS',
+      badgeBg: 'bg-[#E8F9EE] dark:bg-[#064E3B]/30',
+      badgeText: 'text-[#16A34A] dark:text-[#34D399]',
+      subject: 'Computer Fundamentals',
+      markedText: '2 of 16 topics marked important',
+      progress: 13,
+      progressColor: 'bg-[#0075FF] dark:bg-[#3894FF]',
+      textColor: 'text-[#0075FF] dark:text-[#3894FF]',
+      filesCount: '4 files',
+    },
+    {
+      id: 'comm_eng',
+      code: 'CH',
+      badgeBg: 'bg-[#FEF3C7] dark:bg-[#451A03]/30',
+      badgeText: 'text-[#D97706] dark:text-[#FBBF24]',
+      subject: 'Communication Skills in English',
+      markedText: '3 of 15 topics marked important',
+      progress: 20,
+      progressColor: 'bg-[#0075FF] dark:bg-[#3894FF]',
+      textColor: 'text-[#0075FF] dark:text-[#3894FF]',
+      filesCount: '6 files',
+    },
+    {
+      id: 'internet',
+      code: 'IT',
+      badgeBg: 'bg-[#F3E8FF] dark:bg-[#2E1065]/40',
+      badgeText: 'text-[#8B5CF6] dark:text-[#A78BFA]',
+      subject: 'Introduction to Internet',
+      markedText: '2 of 14 topics marked important',
+      progress: 14,
+      progressColor: 'bg-[#0075FF] dark:bg-[#3894FF]',
+      textColor: 'text-[#0075FF] dark:text-[#3894FF]',
+      filesCount: '3 files',
+    },
+    {
+      id: 'python_lab',
+      code: 'PB',
+      badgeBg: 'bg-[#FEE2E2] dark:bg-[#450A0A]/30',
+      badgeText: 'text-[#EF4444] dark:text-[#F87171]',
+      subject: 'Practical: Python Lab',
+      markedText: '1 of 10 topics marked important',
+      progress: 10,
+      progressColor: 'bg-[#16A34A] dark:bg-[#4ADE80]',
+      textColor: 'text-[#16A34A] dark:text-[#4ADE80]',
+      filesCount: '2 files',
+    },
   ];
 
   const historyData = [
@@ -189,7 +257,13 @@ export default function StudentDashboard() {
               <button
                 key={action.id}
                 type="button"
-                onClick={() => setActiveModal(action.id)}
+                onClick={() => {
+                  if (action.id === 'important') {
+                    navigate('/important-topics', { state: { role: 'student' } });
+                  } else {
+                    setActiveModal(action.id);
+                  }
+                }}
                 className="flex flex-col items-center justify-center py-3 px-1 bg-[#F1F6FE] dark:bg-[#162238] border border-[#E2EDFD] dark:border-[#223354] rounded-[16px] active:scale-95 hover:bg-[#E7F0FD] dark:hover:bg-[#1C2C47] transition-all cursor-pointer shadow-xs group"
               >
                 <div className="text-[#0075FF] dark:text-[#3894FF] mb-1.5 group-hover:scale-110 transition-transform">
@@ -429,13 +503,13 @@ export default function StudentDashboard() {
       {/* ======================================================== */}
       {activeModal === 'important' && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[10px] bg-[#FFFBEB] dark:bg-amber-950/40 text-[#D97706] dark:text-amber-400 flex items-center justify-center">
-                  <Star className="w-4.5 h-4.5 fill-current" />
-                </div>
-                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Important Topics</h3>
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-3.5">
+              <div>
+                <h3 className="text-[19px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC]">Important Topics</h3>
+                <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8]">
+                  Semester 1 · B.Sc. (AI & ML)
+                </p>
               </div>
               <button
                 type="button"
@@ -446,26 +520,69 @@ export default function StudentDashboard() {
               </button>
             </div>
 
-            <div className="space-y-2.5">
-              {importantTopicsData.map((top) => (
+            <div className="space-y-3">
+              {importantTopicsData.map((item) => (
                 <div
-                  key={top.id}
-                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px]"
+                  key={item.id}
+                  onClick={() => {
+                    setActiveModal(null);
+                    navigate('/important-topics', { state: { role: 'student' } });
+                  }}
+                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[18px] cursor-pointer hover:border-[#CBD5E1] dark:hover:border-[#2B3B59] transition-all"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <h4 className="text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
-                      {top.topic}
-                    </h4>
-                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-[6px] bg-[#FEF3C7] dark:bg-amber-950/60 text-[#B45309] dark:text-amber-300 shrink-0">
-                      {top.weightage}
-                    </span>
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={`w-11 h-11 rounded-[13px] flex items-center justify-center font-bold text-[14.5px] shrink-0 ${item.badgeBg} ${item.badgeText}`}
+                    >
+                      {item.code}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <h4 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
+                            {item.subject}
+                          </h4>
+                          <p className="text-[12px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">
+                            {item.markedText}
+                          </p>
+                        </div>
+                        <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-[#1A2640] border border-slate-200 dark:border-[#26354D] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] shrink-0">
+                          <ChevronRight className="w-3.5 h-3.5 stroke-[2.2]" />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 mt-2">
+                        <div className="flex-1 h-1.5 bg-[#E2E8F0] dark:bg-[#1E293B] rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${item.progressColor}`}
+                            style={{ width: `${item.progress}%` }}
+                          />
+                        </div>
+                        <span className={`text-[12px] font-bold shrink-0 ${item.textColor}`}>
+                          {item.progress}%
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 mt-1.5 text-[#64748B] dark:text-[#94A3B8]">
+                        <FileText className="w-3 h-3 stroke-[2]" />
+                        <span className="text-[11.5px] font-medium">{item.filesCount}</span>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-[12px] font-medium text-[#0075FF] dark:text-[#3894FF] mt-1">
-                    {top.subject}
-                  </p>
                 </div>
               ))}
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveModal(null);
+                navigate('/important-topics', { state: { role: 'student' } });
+              }}
+              className="w-full mt-4 h-11 rounded-[14px] bg-[#0075FF] hover:bg-[#0066E0] text-white font-bold text-[14px] cursor-pointer"
+            >
+              Open Full Screen
+            </button>
           </div>
         </div>
       )}

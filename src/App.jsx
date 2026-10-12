@@ -18,6 +18,7 @@ import FounderStory from './screens/FounderStory';
 import RecordClass from './screens/RecordClass';
 import RecordClassSuccess from './screens/RecordClassSuccess';
 import StudentDashboard from './screens/StudentDashboard';
+import StudentImportantTopics from './screens/StudentImportantTopics';
 import { ThemeProvider } from './context/ThemeContext';
 
 export default function App() {
@@ -55,6 +56,8 @@ export default function App() {
           <Route path="/about" element={<FounderStory />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-use" element={<TermsOfUse />} />
+          <Route path="/important-topics" element={<StudentImportantTopics />} />
+          <Route path="/student/important-topics" element={<StudentImportantTopics />} />
           <Route path="/record-class" element={<RecordClass />} />
           <Route path="/record-class-success" element={<RecordClassSuccess />} />
           <Route path="*" element={<Navigate to="/" replace />} />
