@@ -26,6 +26,7 @@ export default function StudentLogin() {
 
     setError('');
     setLoading(true);
+    localStorage.setItem('classhere_role', 'student');
 
     setTimeout(() => {
       setLoading(false);

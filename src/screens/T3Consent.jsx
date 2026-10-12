@@ -5,7 +5,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import { Check } from 'lucide-react';
 
 export default function T3Consent() {
-  const [agreed, setAgreed] = useState(true);
+  const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();

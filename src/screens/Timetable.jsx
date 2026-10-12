@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Calendar,
   Clock,
@@ -12,6 +12,11 @@ import { getISTNow } from '../lib/timetableService';
 
 export default function Timetable() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isStudent =
+    location.state?.role === 'student' ||
+    localStorage.getItem('classhere_role') === 'student';
+
   const [isNavVisible, setIsNavVisible] = useState(true);
   const lastScrollTopRef = useRef(0);
 
@@ -170,23 +175,25 @@ export default function Timetable() {
                   </p>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    navigate('/record-class', {
-                      state: {
-                        subject: ongoingClass.subject,
-                        grade: ongoingClass.grade,
-                        room: ongoingClass.room,
-                        time: `${ongoingClass.startTime} to ${ongoingClass.endTime}`,
-                      },
-                    })
-                  }
-                  className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] text-white text-[12px] font-bold shadow-record-btn active:scale-95 transition-all bg-[#EA3829] hover:bg-[#D93022] cursor-pointer"
-                >
-                  <BookOpen className="w-3.5 h-3.5" />
-                  <span>Record Class</span>
-                </button>
+                {!isStudent && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate('/record-class', {
+                        state: {
+                          subject: ongoingClass.subject,
+                          grade: ongoingClass.grade,
+                          room: ongoingClass.room,
+                          time: `${ongoingClass.startTime} to ${ongoingClass.endTime}`,
+                        },
+                      })
+                    }
+                    className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] text-white text-[12px] font-bold shadow-record-btn active:scale-95 transition-all bg-[#EA3829] hover:bg-[#D93022] cursor-pointer"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Record Class</span>
+                  </button>
+                )}
               </div>
 
               {/* Progress Bar & Time Left */}

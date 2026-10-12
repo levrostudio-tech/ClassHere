@@ -11,9 +11,11 @@ export default function RoleSelect() {
 
   const handleRoleClick = (role) => {
     if (role === 'teacher') {
+      localStorage.setItem('classhere_role', 'teacher');
       navigate('/login', { state: { role: 'teacher' } });
     } else if (role === 'student') {
-      navigate('/student-login');
+      localStorage.setItem('classhere_role', 'student');
+      navigate('/student-login', { state: { role: 'student' } });
     }
   };
 

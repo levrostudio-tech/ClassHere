@@ -157,7 +157,7 @@ export default function StudentDashboard() {
 
           {/* Date Selector Pill */}
           <div
-            onClick={() => navigate('/timetable')}
+            onClick={() => navigate('/timetable', { state: { role: 'student' } })}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F0F6FE] border border-[#E2EDFD] rounded-[11px] cursor-pointer hover:bg-blue-100/60 transition-colors shadow-xs"
           >
             <Calendar className="w-3.5 h-3.5 text-[#0075FF]" />
@@ -205,7 +205,7 @@ export default function StudentDashboard() {
           </h2>
           <button
             type="button"
-            onClick={() => navigate('/timetable')}
+            onClick={() => navigate('/timetable', { state: { role: 'student' } })}
             className="flex items-center gap-0.5 px-3 py-1 bg-[#EFF6FF] rounded-full text-[#0075FF] text-[12px] font-bold hover:bg-blue-100 transition-colors cursor-pointer"
           >
             <span>View Timetable</span>
