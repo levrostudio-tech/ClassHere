@@ -12,8 +12,6 @@ export default function RoleSelect() {
   const handleRoleClick = (role) => {
     if (role === 'teacher') {
       navigate('/login', { state: { role: 'teacher' } });
-    } else if (role === 'admin') {
-      navigate('/login', { state: { role: 'admin' } });
     } else if (role === 'student') {
       navigate('/student-login');
     }
@@ -39,63 +37,31 @@ export default function RoleSelect() {
 
         {/* Logo & App Icon */}
         <div className="mt-1 mb-5">
-          <BrandLogo showIcon={true} iconSize={80} fontSize="text-[30px]" />
+          <BrandLogo showIcon={true} iconSize={84} fontSize="text-[34px]" />
         </div>
 
         {/* Headings */}
-        <div className="text-center mb-5">
-          <h1 className="text-[25px] sm:text-[27px] font-extrabold text-[#0F172A] tracking-tight mb-1">
+        <div className="text-center mb-6">
+          <h1 className="text-[26px] sm:text-[27px] font-extrabold text-[#0F172A] tracking-tight mb-1">
             Welcome to ClassHere
           </h1>
-          <p className="text-[14.5px] font-medium text-[#64748B] leading-snug">
+          <p className="text-[15px] font-medium text-[#64748B] leading-snug">
             Choose how you want to continue
           </p>
         </div>
 
-        {/* 3 Role Selection Cards */}
-        <div className="space-y-3">
-          {/* 1. Admin Login */}
-          <button
-            type="button"
-            onClick={() => handleRoleClick('admin')}
-            className="w-full flex items-center justify-between p-3.5 sm:p-4 bg-white border border-[#E2E8F0] hover:border-[#0075FF]/60 rounded-[20px] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_6px_16px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-[16px] bg-[#EAF3FF] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <svg
-                  className="w-6 h-6 text-[#0075FF]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <circle cx="12" cy="11.5" r="2.2" />
-                  <path
-                    d="M12 8.3v1M12 13.7v1M8.8 11.5h1M14.2 11.5h1M9.7 9.2l.7.7M13.6 13.1l.7.7M9.7 13.8l.7-.7M13.6 9.9l.7-.7"
-                    strokeWidth="1.6"
-                  />
-                </svg>
-              </div>
-              <span className="text-[17px] font-bold text-[#0F172A] tracking-tight group-hover:text-[#0075FF] transition-colors">
-                Admin Login
-              </span>
-            </div>
-            <ArrowRight className="w-5 h-5 text-[#0075FF] stroke-[2.4] group-hover:translate-x-0.5 transition-transform" />
-          </button>
-
-          {/* 2. Teacher Login */}
+        {/* 2 Role Selection Cards: Teacher Login & Student Login */}
+        <div className="space-y-3.5">
+          {/* 1. Teacher Login */}
           <button
             type="button"
             onClick={() => handleRoleClick('teacher')}
-            className="w-full flex items-center justify-between p-3.5 sm:p-4 bg-white border border-[#E2E8F0] hover:border-[#0075FF]/60 rounded-[20px] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_6px_16px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
+            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white border border-[#DCE8FC] hover:border-[#0075FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
           >
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-[16px] bg-[#EAF3FF] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-14 h-14 rounded-[18px] bg-[#EAF3FF] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <svg
-                  className="w-6 h-6 text-[#0075FF]"
+                  className="w-7 h-7 text-[#0075FF]"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -103,39 +69,39 @@ export default function RoleSelect() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M11 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-2A3.5 3.5 0 0 0 2 17.5V19" />
-                  <circle cx="6.5" cy="8.5" r="3" />
-                  <rect x="13" y="6" width="9" height="7" rx="1.5" />
-                  <path d="M15.5 8.8h4M15.5 10.8h2.5" strokeWidth="1.6" />
+                  <circle cx="7" cy="8" r="3.2" />
+                  <path d="M2 19v-1.5a4.5 4.5 0 0 1 9 0V19" />
+                  <rect x="13" y="5" width="9" height="8" rx="1.5" />
+                  <path d="M16 8h3M16 10.5h2" strokeWidth="1.8" />
                 </svg>
               </div>
-              <span className="text-[17px] font-bold text-[#0F172A] tracking-tight group-hover:text-[#0075FF] transition-colors">
+              <span className="text-[18.5px] font-bold text-[#0F172A] tracking-tight group-hover:text-[#0075FF] transition-colors">
                 Teacher Login
               </span>
             </div>
-            <ArrowRight className="w-5 h-5 text-[#0075FF] stroke-[2.4] group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-5.5 h-5.5 text-[#0075FF] stroke-[2.4] group-hover:translate-x-1 transition-transform" />
           </button>
 
-          {/* 3. Student Login */}
+          {/* 2. Student Login */}
           <button
             type="button"
             onClick={() => handleRoleClick('student')}
-            className="w-full flex items-center justify-between p-3.5 sm:p-4 bg-white border border-[#E2E8F0] hover:border-[#0075FF]/60 rounded-[20px] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_6px_16px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
+            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white border border-[#DCE8FC] hover:border-[#0075FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
           >
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-[16px] bg-[#EAF3FF] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <GraduationCap className="w-6 h-6 text-[#0075FF] stroke-[2.2]" />
+              <div className="w-14 h-14 rounded-[18px] bg-[#EAF3FF] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-7 h-7 text-[#0075FF] stroke-[2.2]" />
               </div>
-              <span className="text-[17px] font-bold text-[#0F172A] tracking-tight group-hover:text-[#0075FF] transition-colors">
+              <span className="text-[18.5px] font-bold text-[#0F172A] tracking-tight group-hover:text-[#0075FF] transition-colors">
                 Student Login
               </span>
             </div>
-            <ArrowRight className="w-5 h-5 text-[#0075FF] stroke-[2.4] group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-5.5 h-5.5 text-[#0075FF] stroke-[2.4] group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>
 
-      {/* Bottom Campus Illustration - Edge-to-edge seamless bleed */}
+      {/* Bottom Campus Illustration - Edge-to-edge seamless bleed with "A Product by Levro Studio" */}
       <div className="relative z-10 w-full mt-auto">
         <CampusFooter />
       </div>
