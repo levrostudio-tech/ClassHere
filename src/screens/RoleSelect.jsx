@@ -1,15 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, GraduationCap, Moon, Sun } from 'lucide-react';
-import AppBackButton from '../components/AppBackButton';
+import { ArrowRight, GraduationCap } from 'lucide-react';
 import BrandLogo from '../components/BrandLogo';
 import CampusFooter from '../components/CampusFooter';
 import TopDecorCircles from '../components/TopDecorCircles';
-import { useTheme } from '../context/ThemeContext';
 
 export default function RoleSelect() {
   const navigate = useNavigate();
-  const { isDark, toggleTheme } = useTheme();
 
   const handleRoleClick = (role) => {
     if (role === 'teacher') {
@@ -27,27 +24,7 @@ export default function RoleSelect() {
       <TopDecorCircles />
 
       {/* Main Content Area */}
-      <div className="relative z-10 flex-1 flex flex-col justify-start px-6 pt-4 sm:pt-5 pb-2">
-        {/* Top Header with Back Button and Quick Dark Mode Toggle */}
-        <div className="flex items-center justify-between mb-2">
-          <AppBackButton
-            onClick={() => {
-              if (window.history.length > 1) {
-                navigate(-1);
-              }
-            }}
-          />
-
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label="Toggle dark mode"
-            className="w-10 h-10 rounded-[14px] bg-[#F1F5F9] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#26354D] flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:text-[#0075FF] dark:hover:text-[#3894FF] active:scale-95 transition-all cursor-pointer shadow-xs"
-          >
-            {isDark ? <Sun className="w-5 h-5 text-amber-400 stroke-[2.2]" /> : <Moon className="w-5 h-5 text-[#475569] stroke-[2.2]" />}
-          </button>
-        </div>
-
+      <div className="relative z-10 flex-1 flex flex-col justify-start px-6 pt-7 sm:pt-9 pb-2">
         {/* Logo & App Icon */}
         <div className="mt-1 mb-5">
           <BrandLogo showIcon={true} iconSize={84} fontSize="text-[34px]" />
