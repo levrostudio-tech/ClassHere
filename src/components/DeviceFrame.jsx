@@ -45,7 +45,7 @@ export default function DeviceFrame({ children }) {
 
   // Desktop viewport with authentic simulated device frame cleanly centered
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-2 sm:p-4 font-sans selection:bg-blue-500 selection:text-white overflow-y-auto">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col items-center justify-center p-2 sm:p-4 font-sans selection:bg-blue-500 selection:text-white overflow-y-auto transition-colors duration-200">
       {/* Proportional Device Frame Scaled Container */}
       <div
         className="relative shrink-0 my-auto transition-transform duration-150 ease-out"
@@ -64,7 +64,7 @@ export default function DeviceFrame({ children }) {
             transform: `scale(${scale})`,
             transformOrigin: '0 0',
           }}
-          className="bg-white dark:bg-[#0B0F19] rounded-[44px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_0_10px_#1e293b] ring-1 ring-slate-700/50 flex flex-col overflow-hidden select-none transition-colors duration-200"
+          className="bg-white dark:bg-[#0B0F19] rounded-[44px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12),0_0_0_10px_#CBD5E1] dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),0_0_0_10px_#1e293b] ring-1 ring-slate-200 dark:ring-slate-700/50 flex flex-col overflow-hidden select-none transition-colors duration-200"
         >
           {/* Screen Content */}
           <main className="flex-1 flex flex-col overflow-hidden relative bg-white dark:bg-[#0B0F19] pt-2 sm:pt-3">

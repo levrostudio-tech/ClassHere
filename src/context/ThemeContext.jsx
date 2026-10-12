@@ -40,13 +40,19 @@ export function ThemeProvider({ children }) {
     return systemIsDark;
   }, [theme, systemIsDark]);
 
-  // Synchronize 'dark' class on HTML root element and browser theme color
+  // Synchronize 'dark' class on HTML root element, body, and browser theme color
   useEffect(() => {
     const root = document.documentElement;
+    const body = document.body;
+    
     if (isDark) {
       root.classList.add('dark');
+      if (body) body.classList.add('dark');
+      root.setAttribute('data-theme', 'dark');
     } else {
       root.classList.remove('dark');
+      if (body) body.classList.remove('dark');
+      root.setAttribute('data-theme', 'light');
     }
 
     // Update browser status bar / chrome color

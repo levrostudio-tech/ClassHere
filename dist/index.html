@@ -19,10 +19,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-Dr8--kh2.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C6lZ0lXF.css">
+
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('classhere_theme');
+          var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved === 'dark' || (saved === 'system' && systemDark) || (!saved && false);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-BO1WnopW.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-EOkiHUl4.css">
   </head>
-  <body class="bg-slate-900 font-sans antialiased text-slate-900 overflow-x-hidden select-none">
+  <body class="bg-slate-100 dark:bg-slate-950 font-sans antialiased text-slate-900 dark:text-slate-100 overflow-x-hidden select-none transition-colors duration-200">
     <div id="root"></div>
     <script>
       // Clear any previous PWA service worker registrations to keep prototype live
