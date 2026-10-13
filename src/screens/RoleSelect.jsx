@@ -6,8 +6,6 @@ import {
   MoreVertical,
   ShieldCheck,
   X,
-  Lock,
-  Sparkles,
 } from 'lucide-react';
 import BrandLogo from '../components/BrandLogo';
 import CampusFooter from '../components/CampusFooter';
@@ -16,11 +14,9 @@ import TopDecorCircles from '../components/TopDecorCircles';
 export default function RoleSelect() {
   const navigate = useNavigate();
 
-  // State for Three-Dot Dropdown & Admin Access Modal
+  // State for Three-Dot Dropdown & Desktop Notice
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [adminPasscode, setAdminPasscode] = useState('');
-  const [adminError, setAdminError] = useState('');
+  const [showDesktopNotice, setShowDesktopNotice] = useState(false);
 
   const handleRoleClick = (role) => {
     if (role === 'teacher') {
@@ -32,15 +28,16 @@ export default function RoleSelect() {
     }
   };
 
-  const handleAdminSubmit = (e) => {
-    e?.preventDefault();
-    // Allow demo passcode '1234', 'ADMIN', or direct entry
-    if (adminPasscode.trim() === '1234' || adminPasscode.trim().toUpperCase() === 'ADMIN' || adminPasscode.trim() === '') {
-      localStorage.setItem('classhere_role', 'admin');
-      setShowAdminModal(false);
-      navigate('/dashboard', { state: { role: 'admin', isAdmin: true } });
+  const handleAdminAccessClick = () => {
+    // Always close the dropdown after selection
+    setIsMenuOpen(false);
+
+    // Below 1024px: show message, do not navigate
+    // At 1024px and above: navigate to /admin/login
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setShowDesktopNotice(true);
     } else {
-      setAdminError('Invalid Passcode. Use 1234 for demo.');
+      navigate('/admin/login');
     }
   };
 
@@ -74,10 +71,7 @@ export default function RoleSelect() {
               <div className="absolute top-9 right-0 z-50 bg-white dark:bg-[#131B2E] rounded-[18px] shadow-[0_12px_32px_rgba(0,0,0,0.14)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.6)] border border-[#E2E8F0] dark:border-[#223354] p-1.5 min-w-[195px] animate-fadeIn">
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    setShowAdminModal(true);
-                  }}
+                  onClick={handleAdminAccessClick}
                   className="w-full flex items-center justify-between p-2 rounded-[14px] hover:bg-[#F8FAFC] dark:hover:bg-[#1A2640] active:scale-[0.98] transition-all cursor-pointer group"
                 >
                   <div className="flex items-center gap-2.5">
@@ -161,87 +155,26 @@ export default function RoleSelect() {
         </div>
       </div>
 
-      {/* Admin Access Modal */}
-      {showAdminModal && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
-            {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-[12px] bg-[#EAF3FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF]">
-                  <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
-                </div>
-                <div>
-                  <h3 className="text-[17px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">
-                    Admin Portal Access
-                  </h3>
-                  <p className="text-[11.5px] text-[#64748B] dark:text-[#94A3B8]">
-                    Institutional & Department Console
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowAdminModal(false);
-                  setAdminError('');
-                }}
-                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
+      {/* Desktop-Only Notice Dialog for Mobile Viewports (< 1024px) */}
+      {showDesktopNotice && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[340px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] text-center animate-slideUp">
+            <div className="w-12 h-12 rounded-[16px] bg-[#EAF3FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] mx-auto mb-3.5">
+              <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
             </div>
-
-            {/* Passcode Form */}
-            <form onSubmit={handleAdminSubmit} className="space-y-4">
-              <div>
-                <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1.5">
-                  Admin Passcode
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94A3B8]">
-                    <Lock className="w-4.5 h-4.5" />
-                  </div>
-                  <input
-                    type="password"
-                    value={adminPasscode}
-                    onChange={(e) => {
-                      setAdminPasscode(e.target.value);
-                      setAdminError('');
-                    }}
-                    placeholder="Enter PIN (Demo: 1234)"
-                    className="w-full h-12 pl-10 pr-4 rounded-[14px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[#0F172A] dark:text-[#F8FAFC] font-semibold text-[15px] focus:outline-none focus:border-[#0075FF] dark:focus:border-[#3894FF]"
-                    autoFocus
-                  />
-                </div>
-                {adminError ? (
-                  <p className="text-[12px] font-medium text-red-500 mt-1.5">{adminError}</p>
-                ) : (
-                  <p className="text-[11.5px] text-[#64748B] dark:text-[#94A3B8] mt-1.5">
-                    Demo Passcode: <span className="font-bold text-[#0075FF] dark:text-[#3894FF]">1234</span>
-                  </p>
-                )}
-              </div>
-
-              <div className="pt-1 flex gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAdminPasscode('1234');
-                    setAdminError('');
-                  }}
-                  className="px-3.5 h-11 rounded-[13px] bg-slate-100 dark:bg-[#162036] text-[#475569] dark:text-[#94A3B8] text-[12.5px] font-bold hover:bg-slate-200 dark:hover:bg-[#1E2E4A] cursor-pointer shrink-0"
-                >
-                  Fill Demo (1234)
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 h-11 rounded-[13px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[13.5px] font-bold shadow-md shadow-blue-500/25 active:scale-95 transition-all cursor-pointer"
-                >
-                  Enter Admin Console
-                </button>
-              </div>
-            </form>
+            <h3 className="text-[17px] font-bold text-[#0F172A] dark:text-[#F8FAFC] mb-2">
+              Desktop Only Access
+            </h3>
+            <p className="text-[14px] leading-relaxed text-[#64748B] dark:text-[#94A3B8] mb-5">
+              Admin Access is available on desktop only. Please use a laptop or desktop to continue.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowDesktopNotice(false)}
+              className="w-full h-11 rounded-[14px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[14px] font-semibold transition-all active:scale-95 shadow-md shadow-blue-500/20 cursor-pointer"
+            >
+              Understood
+            </button>
           </div>
         </div>
       )}

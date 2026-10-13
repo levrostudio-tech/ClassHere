@@ -19,6 +19,9 @@ import RecordClass from './screens/RecordClass';
 import RecordClassSuccess from './screens/RecordClassSuccess';
 import StudentDashboard from './screens/StudentDashboard';
 import StudentImportantTopics from './screens/StudentImportantTopics';
+import AdminLogin from './screens/AdminLogin';
+import AdminDashboard from './screens/AdminDashboard';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
 import { ThemeProvider } from './context/ThemeContext';
 
 export default function App() {
@@ -56,10 +59,24 @@ export default function App() {
           <Route path="/about" element={<FounderStory />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-use" element={<TermsOfUse />} />
+          {/* Academic Screens */}
           <Route path="/important-topics" element={<StudentImportantTopics />} />
           <Route path="/student/important-topics" element={<StudentImportantTopics />} />
           <Route path="/record-class" element={<RecordClass />} />
           <Route path="/record-class-success" element={<RecordClassSuccess />} />
+
+          {/* Admin Flow - Desktop optimized & authorization guarded */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </DeviceFrame>

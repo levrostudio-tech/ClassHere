@@ -1,6 +1,10 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function DeviceFrame({ children }) {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   // Viewport-aware proportional auto-scaling for desktop screens
   const [scale, setScale] = React.useState(1);
   const [isMobileScreen, setIsMobileScreen] = React.useState(() => {
@@ -31,6 +35,15 @@ export default function DeviceFrame({ children }) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Admin pages are optimized for full desktop layout without phone frame constraints
+  if (isAdminRoute) {
+    return (
+      <div className="min-h-screen w-full bg-white dark:bg-[#0B0F19] text-[#0F172A] dark:text-[#F8FAFC] font-sans selection:bg-blue-500 selection:text-white transition-colors duration-200">
+        {children}
+      </div>
+    );
+  }
 
   // On native mobile viewports (e.g. viewing directly on smartphone)
   if (isMobileScreen) {
