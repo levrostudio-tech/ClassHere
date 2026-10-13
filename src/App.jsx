@@ -19,6 +19,7 @@ import RecordClass from './screens/RecordClass';
 import RecordClassSuccess from './screens/RecordClassSuccess';
 import StudentDashboard from './screens/StudentDashboard';
 import StudentImportantTopics from './screens/StudentImportantTopics';
+import StudentNotes from './screens/StudentNotes';
 import AdminLogin from './screens/AdminLogin';
 import AdminDashboard from './screens/AdminDashboard';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
@@ -60,6 +61,9 @@ function AnimatedRoutes() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
         {/* Academic Screens */}
+        <Route path="/notes" element={<StudentNotes />} />
+        <Route path="/student/notes" element={<StudentNotes />} />
+        <Route path="/student-notes" element={<StudentNotes />} />
         <Route path="/important-topics" element={<StudentImportantTopics />} />
         <Route path="/student/important-topics" element={<StudentImportantTopics />} />
         <Route path="/record-class" element={<RecordClass />} />

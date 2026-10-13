@@ -27,7 +27,7 @@ export default function StudentDashboard() {
   const [isNavVisible, setIsNavVisible] = useState(true);
   const lastScrollTopRef = useRef(0);
 
-  // Active modal state: 'notes' | 'syllabus' | 'important' | 'history' | 'students' | null
+  // Active modal state: 'syllabus' | 'history' | 'students' | null
   const [activeModal, setActiveModal] = useState(null);
 
   // Search query within modals
@@ -60,14 +60,7 @@ export default function StudentDashboard() {
     lastScrollTopRef.current = currentScrollTop;
   };
 
-  // Student specific mock data for the 4 action items
-  const notesData = [
-    { id: 1, title: 'Unit 2: Active & Passive Voice', subject: 'English Communication', date: 'Yesterday', pages: '8 pages', size: '1.4 MB' },
-    { id: 2, title: 'Lists, Tuples & Dictionaries in Python', subject: 'Python', date: '08 Oct', pages: '14 pages', size: '2.8 MB' },
-    { id: 3, title: 'Eigenvalues & Diagonalization Notes', subject: 'Mathematics', date: '06 Oct', pages: '11 pages', size: '2.1 MB' },
-    { id: 4, title: 'CPU Architecture & Memory Hierarchy', subject: 'Computer Fundamentals', date: '04 Oct', pages: '19 pages', size: '3.5 MB' },
-  ];
-
+  // Student specific mock data for the action items
   const syllabusData = [
     { subject: 'English Communication', code: 'EC-101', units: 4, completed: 65, color: '#0075FF' },
     { subject: 'Python Programming', code: 'CS-102', units: 5, completed: 48, color: '#10B981' },
@@ -255,6 +248,8 @@ export default function StudentDashboard() {
                 onClick={() => {
                   if (action.id === 'important') {
                     navigate('/important-topics', { state: { role: 'student' } });
+                  } else if (action.id === 'notes') {
+                    navigate('/notes', { state: { role: 'student' } });
                   } else {
                     setActiveModal(action.id);
                   }
@@ -387,58 +382,7 @@ export default function StudentDashboard() {
         isVisible={isNavVisible}
       />
 
-      {/* ======================================================== */}
-      {/* MODAL 1: Notes Modal */}
-      {/* ======================================================== */}
-      {activeModal === 'notes' && (
-        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
-                  <FileText className="w-4.5 h-4.5" />
-                </div>
-                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Class Notes</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
 
-            <div className="space-y-2.5">
-              {notesData.map((note) => (
-                <div
-                  key={note.id}
-                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px] flex items-center justify-between hover:bg-blue-50/50 dark:hover:bg-[#1C2C47] transition-colors"
-                >
-                  <div className="min-w-0 flex-1 pr-3">
-                    <h4 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug truncate">
-                      {note.title}
-                    </h4>
-                    <p className="text-[12px] font-medium text-[#0075FF] dark:text-[#3894FF] mt-0.5">
-                      {note.subject}
-                    </p>
-                    <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">
-                      {note.date} • {note.pages} • {note.size}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="p-2 bg-[#EAF3FF] dark:bg-[#1E2E4A] hover:bg-[#DBEAFE] dark:hover:bg-[#253A5C] text-[#0075FF] dark:text-[#3894FF] rounded-[10px] cursor-pointer transition-colors shrink-0"
-                    title="Download Note"
-                  >
-                    <Download className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ======================================================== */}
       {/* MODAL 2: Syllabus Modal */}
