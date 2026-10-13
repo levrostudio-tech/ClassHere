@@ -3,8 +3,21 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    overscroll-behavior-y: none;
+  }
+
+  /* Smooth Apple theme color transitions */
+  *, ::before, ::after {
+    border-color: currentColor;
   }
 }
 
@@ -15,4 +28,79 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ==========================================================================
+   Apple-Inspired Micro-Interactions & Spring Animations
+   ========================================================================== */
+
+/* Apple Button & Interactive Elements: subtle haptic spring press */
+.apple-btn {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.15s ease,
+              opacity 0.15s ease;
+  will-change: transform;
+}
+.apple-btn:active {
+  transform: scale(0.965);
+  opacity: 0.92;
+}
+
+/* Apple Card: subtle lift on hover, slight scale on active press */
+.apple-card {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.18s ease;
+  will-change: transform;
+}
+.apple-card:hover {
+  transform: translateY(-1.5px);
+}
+.apple-card:active {
+  transform: scale(0.985);
+}
+
+/* Apple Tab Pill: fluid active bounce */
+.apple-tab {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.18s ease,
+              box-shadow 0.18s ease;
+  will-change: transform;
+}
+.apple-tab:active {
+  transform: scale(0.92);
+}
+
+/* Apple Dropdown Menu: pops in with spring physics from anchor */
+.apple-dropdown {
+  transform-origin: top right;
+  animation: dropdownPop 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Apple Modal Backdrop: frosted glass blur with smooth fade */
+.apple-backdrop {
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  will-change: opacity;
+}
+
+/* Apple Bottom Sheet: smooth glide up with iOS sheet curve */
+.apple-sheet {
+  animation: sheetUp 0.32s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  will-change: transform;
+}
+
+/* Apple Center Dialog / Alert: subtle spring pop */
+.apple-dialog {
+  animation: dialogPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Apple Breathing Dot for Live Status indicators */
+.apple-live-pulse {
+  animation: breathe 2.4s ease-in-out infinite;
 }

@@ -317,8 +317,8 @@ export default function ProfileSettings() {
       {/* MODAL 1: Edit Profile Modal */}
       {/* ======================================================== */}
       {activeModal === 'edit' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Edit Profile</h3>
               <button
@@ -406,8 +406,8 @@ export default function ProfileSettings() {
       {/* MODAL 2: Personal Information Detail Sheet */}
       {/* ======================================================== */}
       {activeModal === 'personal' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Personal Information</h3>
               <button
@@ -461,8 +461,8 @@ export default function ProfileSettings() {
       {/* MODAL 3: Notifications Preferences */}
       {/* ======================================================== */}
       {activeModal === 'notifications' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Notification Settings</h3>
               <button
@@ -539,8 +539,8 @@ export default function ProfileSettings() {
       {/* MODAL 4: Appearance Settings */}
       {/* ======================================================== */}
       {activeModal === 'appearance' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Appearance</h3>
               <button
@@ -627,8 +627,8 @@ export default function ProfileSettings() {
       {/* MODAL 5: About ClassHere */}
       {/* ======================================================== */}
       {activeModal === 'about' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">About ClassHere</h3>
               <button
@@ -709,8 +709,8 @@ export default function ProfileSettings() {
       {/* MODAL 6: Log Out Confirmation Dialog */}
       {/* ======================================================== */}
       {activeModal === 'logout' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-[26px] p-6 text-center animate-scaleIn border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-sm rounded-[26px] p-6 text-center apple-dialog border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="w-14 h-14 rounded-full bg-red-100 dark:bg-red-950/40 text-red-500 mx-auto flex items-center justify-center mb-3">
               <LogOut className="w-7 h-7 stroke-[2.2]" />
             </div>

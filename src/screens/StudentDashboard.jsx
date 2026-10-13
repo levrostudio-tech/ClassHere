@@ -202,7 +202,7 @@ export default function StudentDashboard() {
             <button
               type="button"
               onClick={toggleTheme}
-              className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#162238] border border-slate-200 dark:border-[#223354] flex items-center justify-center text-slate-700 dark:text-[#F8FAFC] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#162238] border border-slate-200 dark:border-[#223354] flex items-center justify-center text-slate-700 dark:text-[#F8FAFC] shadow-xs apple-btn cursor-pointer"
               aria-label="Toggle theme"
             >
               {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
@@ -210,7 +210,7 @@ export default function StudentDashboard() {
             <button
               type="button"
               onClick={() => setActiveModal('profile')}
-              className="w-10 h-10 rounded-full bg-[#F1F5F9] dark:bg-[#162238] border border-[#E2E8F0] dark:border-[#223354] flex items-center justify-center text-[#0F172A] dark:text-[#F8FAFC] font-bold text-[13.5px] hover:bg-slate-200/70 dark:hover:bg-[#1E2E4A] active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="w-10 h-10 rounded-full bg-[#F1F5F9] dark:bg-[#162238] border border-[#E2E8F0] dark:border-[#223354] flex items-center justify-center text-[#0F172A] dark:text-[#F8FAFC] font-bold text-[13.5px] hover:bg-slate-200/70 dark:hover:bg-[#1E2E4A] apple-btn cursor-pointer shadow-xs"
               aria-label="Student Profile"
             >
               PM
@@ -234,7 +234,7 @@ export default function StudentDashboard() {
           {/* Date Selector Pill */}
           <div
             onClick={() => navigate('/timetable', { state: { role: 'student' } })}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F0F6FE] dark:bg-[#162036] border border-[#E2EDFD] dark:border-[#223354] rounded-[11px] cursor-pointer hover:bg-blue-100/60 dark:hover:bg-[#1E2E4A] transition-colors shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F0F6FE] dark:bg-[#162036] border border-[#E2EDFD] dark:border-[#223354] rounded-[11px] cursor-pointer hover:bg-blue-100/60 dark:hover:bg-[#1E2E4A] apple-tab shadow-xs"
           >
             <Calendar className="w-3.5 h-3.5 text-[#0075FF] dark:text-[#3894FF]" />
             <span className="text-[12px] font-bold text-[#334155] dark:text-[#CBD5E1]">
@@ -265,7 +265,7 @@ export default function StudentDashboard() {
                     setActiveModal(action.id);
                   }
                 }}
-                className="flex flex-col items-center justify-center py-3 px-1 bg-[#F1F6FE] dark:bg-[#162238] border border-[#E2EDFD] dark:border-[#223354] rounded-[16px] active:scale-95 hover:bg-[#E7F0FD] dark:hover:bg-[#1C2C47] transition-all cursor-pointer shadow-xs group"
+                className="flex flex-col items-center justify-center py-3 px-1 bg-[#F1F6FE] dark:bg-[#162238] border border-[#E2EDFD] dark:border-[#223354] rounded-[16px] apple-card hover:bg-[#E7F0FD] dark:hover:bg-[#1C2C47] cursor-pointer shadow-xs group"
               >
                 <div className="text-[#0075FF] dark:text-[#3894FF] mb-1.5 group-hover:scale-110 transition-transform">
                   <Icon className="w-5.5 h-5.5 stroke-[2.2]" />
@@ -297,11 +297,11 @@ export default function StudentDashboard() {
         {/* ======================================================== */}
         {/* ONGOING CLASS CARD (English Communication) */}
         {/* ======================================================== */}
-        <div className="bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[18px] p-4 shadow-sm transition-all duration-300 relative overflow-hidden">
+        <div className="bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[18px] p-4 shadow-sm relative overflow-hidden apple-card">
           {/* Status Row */}
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse" />
               <span className="text-[13px] font-bold text-[#15803D] dark:text-[#4ADE80]">Ongoing</span>
               <span className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8]">
                 · {studentOngoingClass.startTime} to {studentOngoingClass.endTime}
@@ -343,7 +343,7 @@ export default function StudentDashboard() {
           {studentUpcomingClasses.map((item) => (
             <div
               key={item.id}
-              className="bg-white dark:bg-[#131B2E] border border-[#EEF2F6] dark:border-[#1E293B] rounded-[16px] p-3.5 flex items-center justify-between shadow-card hover:shadow-card-hover transition-all"
+              className="bg-white dark:bg-[#131B2E] border border-[#EEF2F6] dark:border-[#1E293B] rounded-[16px] p-3.5 flex items-center justify-between shadow-card hover:shadow-card-hover apple-card"
             >
               {/* Left: Time Block */}
               <div className="w-[52px] shrink-0 text-center">
@@ -397,8 +397,8 @@ export default function StudentDashboard() {
       {/* MODAL 1: Notes Modal */}
       {/* ======================================================== */}
       {activeModal === 'notes' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
@@ -450,8 +450,8 @@ export default function StudentDashboard() {
       {/* MODAL 2: Syllabus Modal */}
       {/* ======================================================== */}
       {activeModal === 'syllabus' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
@@ -503,8 +503,8 @@ export default function StudentDashboard() {
       {/* MODAL 3: Important Topics Modal */}
       {/* ======================================================== */}
       {activeModal === 'important' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-3.5">
               <div>
                 <h3 className="text-[19px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC]">Important Topics</h3>
@@ -592,8 +592,8 @@ export default function StudentDashboard() {
       {/* MODAL 4: Lecture History Modal */}
       {/* ======================================================== */}
       {activeModal === 'history' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
@@ -641,8 +641,8 @@ export default function StudentDashboard() {
       {/* MODAL 6: Student Profile Modal */}
       {/* ======================================================== */}
       {activeModal === 'profile' && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Student Profile</h3>
               <button

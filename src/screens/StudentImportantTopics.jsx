@@ -191,7 +191,7 @@ export default function StudentImportantTopics() {
           <div
             key={item.id}
             onClick={() => setSelectedSubject(item)}
-            className="p-4 bg-white dark:bg-[#131B2E] border border-[#E2E8F0]/80 dark:border-[#1E293B] rounded-[22px] shadow-xs hover:border-[#CBD5E1] dark:hover:border-[#2B3B59] active:scale-[0.99] transition-all cursor-pointer"
+            className="p-4 bg-white dark:bg-[#131B2E] border border-[#E2E8F0]/80 dark:border-[#1E293B] rounded-[22px] shadow-xs hover:border-[#CBD5E1] dark:hover:border-[#2B3B59] apple-card cursor-pointer"
           >
             <div className="flex items-start gap-3.5">
               {/* Avatar Chip */}
@@ -247,8 +247,8 @@ export default function StudentImportantTopics() {
       {/* DETAIL MODAL: Selected Subject Marked Topics Sheet */}
       {/* ======================================================== */}
       {selectedSubject && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[85vh] overflow-y-auto animate-slideUp border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
+        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
             {/* Sheet Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
               <div className="flex items-center gap-2.5 min-w-0 pr-2">

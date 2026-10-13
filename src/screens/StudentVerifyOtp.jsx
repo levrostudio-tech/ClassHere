@@ -150,7 +150,7 @@ export default function StudentVerifyOtp() {
                     onChange={(e) => handleChange(idx, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(idx, e)}
                     onPaste={handlePaste}
-                    className={`w-11 h-13.5 sm:w-12 sm:h-14 text-center text-2xl font-bold rounded-[16px] transition-all duration-150 focus:outline-none ${
+                    className={`w-11 h-13.5 sm:w-12 sm:h-14 text-center text-2xl font-bold rounded-[16px] transition-all duration-200 ease-out focus:scale-[1.04] focus:outline-none ${
                       isCurrent
                         ? 'border-2 border-[#0075FF] dark:border-[#3894FF] bg-white dark:bg-[#162036] text-[#0F172A] dark:text-[#F8FAFC] shadow-[0_0_0_3px_rgba(0,117,255,0.18)]'
                         : digit
@@ -182,7 +182,7 @@ export default function StudentVerifyOtp() {
               <button
                 type="button"
                 onClick={handleResend}
-                className="text-[14px] font-bold text-[#0075FF] hover:underline cursor-pointer"
+                className="text-[14px] font-bold text-[#0075FF] hover:underline cursor-pointer apple-btn"
               >
                 Resend OTP
               </button>
@@ -193,7 +193,7 @@ export default function StudentVerifyOtp() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-[52px] sm:h-[54px] rounded-[18px] sm:rounded-[20px] bg-[#0075FF] hover:bg-blue-600 active:scale-[0.98] text-white font-bold text-[16px] flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all cursor-pointer disabled:opacity-75"
+            className="w-full h-[52px] sm:h-[54px] rounded-[18px] sm:rounded-[20px] bg-[#0075FF] hover:bg-blue-600 apple-btn text-white font-bold text-[16px] flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 cursor-pointer disabled:opacity-75 disabled:transform-none"
           >
             <span>{loading ? 'Verifying...' : 'Continue'}</span>
             {!loading && <ArrowRight className="w-5 h-5 stroke-[2.5]" />}

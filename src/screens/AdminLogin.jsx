@@ -142,7 +142,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-[48px] rounded-[12px] bg-[#0075FF] hover:bg-[#0066E0] text-white font-medium text-[16px] transition-all active:scale-[0.99] shadow-sm hover:shadow flex items-center justify-center cursor-pointer disabled:opacity-60"
+              className="w-full h-[48px] rounded-[12px] bg-[#0075FF] hover:bg-[#0066E0] apple-btn text-white font-medium text-[16px] shadow-sm hover:shadow flex items-center justify-center cursor-pointer disabled:opacity-60 disabled:transform-none"
             >
               {isLoading ? 'Signing in...' : 'Login'}
             </button>

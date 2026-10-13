@@ -68,11 +68,11 @@ export default function RoleSelect() {
                 onClick={() => setIsMenuOpen(false)}
               />
 
-              <div className="absolute top-9 right-0 z-50 bg-white dark:bg-[#131B2E] rounded-[18px] shadow-[0_12px_32px_rgba(0,0,0,0.14)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.6)] border border-[#E2E8F0] dark:border-[#223354] p-1.5 min-w-[195px] animate-fadeIn">
+              <div className="absolute top-9 right-0 z-50 bg-white dark:bg-[#131B2E] rounded-[18px] shadow-[0_12px_32px_rgba(0,0,0,0.14)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.6)] border border-[#E2E8F0] dark:border-[#223354] p-1.5 min-w-[195px] apple-dropdown">
                 <button
                   type="button"
                   onClick={handleAdminAccessClick}
-                  className="w-full flex items-center justify-between p-2 rounded-[14px] hover:bg-[#F8FAFC] dark:hover:bg-[#1A2640] active:scale-[0.98] transition-all cursor-pointer group"
+                  className="w-full flex items-center justify-between p-2 rounded-[14px] hover:bg-[#F8FAFC] dark:hover:bg-[#1A2640] apple-btn cursor-pointer group"
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0">
@@ -110,7 +110,7 @@ export default function RoleSelect() {
           <button
             type="button"
             onClick={() => handleRoleClick('teacher')}
-            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white dark:bg-[#131B2E] border border-[#DCE8FC] dark:border-[#223354] hover:border-[#0075FF]/60 dark:hover:border-[#3894FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
+            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-white dark:bg-[#131B2E] border border-[#DCE8FC] dark:border-[#223354] hover:border-[#0075FF]/60 dark:hover:border-[#3894FF]/60 rounded-[22px] shadow-[0_2px_10px_rgba(0,117,255,0.03)] hover:shadow-[0_8px_20px_rgba(0,117,255,0.08)] apple-card cursor-pointer group"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-14 h-14 rounded-[18px] bg-[#EAF3FF] dark:bg-[#1A2640] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -140,7 +140,7 @@ export default function RoleSelect() {
           <button
             type="button"
             onClick={() => handleRoleClick('student')}
-            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-[#0075FF] dark:bg-[#0066FF] hover:bg-[#0066E0] rounded-[22px] shadow-[0_10px_25px_rgba(0,117,255,0.35)] hover:shadow-[0_14px_30px_rgba(0,117,255,0.45)] transition-all duration-150 active:scale-[0.98] cursor-pointer group"
+            className="w-full flex items-center justify-between p-4 sm:p-4.5 bg-[#0075FF] dark:bg-[#0066FF] hover:bg-[#0066E0] rounded-[22px] shadow-[0_10px_25px_rgba(0,117,255,0.35)] hover:shadow-[0_14px_30px_rgba(0,117,255,0.45)] apple-card cursor-pointer group"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-14 h-14 rounded-[18px] bg-white/20 dark:bg-white/15 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform text-white">
@@ -157,8 +157,8 @@ export default function RoleSelect() {
 
       {/* Desktop-Only Notice Dialog for Mobile Viewports (< 1024px) */}
       {showDesktopNotice && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[340px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] text-center animate-slideUp">
+        <div className="fixed inset-0 bg-slate-900/50 apple-backdrop z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[340px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] text-center apple-dialog">
             <div className="w-12 h-12 rounded-[16px] bg-[#EAF3FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] mx-auto mb-3.5">
               <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
             </div>
@@ -171,7 +171,7 @@ export default function RoleSelect() {
             <button
               type="button"
               onClick={() => setShowDesktopNotice(false)}
-              className="w-full h-11 rounded-[14px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[14px] font-semibold transition-all active:scale-95 shadow-md shadow-blue-500/20 cursor-pointer"
+              className="w-full h-11 rounded-[14px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[14px] font-semibold apple-btn shadow-md shadow-blue-500/20 cursor-pointer"
             >
               Understood
             </button>

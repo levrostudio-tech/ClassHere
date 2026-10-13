@@ -115,7 +115,7 @@ export default function Timetable() {
                 key={item.id}
                 type="button"
                 onClick={() => setSelectedDay(item.id)}
-                className={`flex flex-col items-center justify-center min-w-[56px] py-2.5 px-2 rounded-[13px] transition-all duration-150 active:scale-95 cursor-pointer ${
+                className={`flex flex-col items-center justify-center min-w-[56px] py-2.5 px-2 rounded-[13px] apple-tab cursor-pointer ${
                   isSelected
                     ? 'bg-[#0075FF] text-white shadow-md shadow-blue-500/25 font-bold'
                     : 'bg-[#F1F5F9] dark:bg-[#162036] text-[#0F172A] dark:text-[#F8FAFC] hover:bg-slate-200/70 dark:hover:bg-[#1C2C47] font-semibold'
@@ -144,14 +144,14 @@ export default function Timetable() {
         <div className="space-y-2.5 pt-1">
           {/* Ongoing Class Card (if selected day is today and a class is active) */}
           {isSelectedToday && ongoingClass && (
-            <div className="relative bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[16px] p-4 shadow-sm overflow-hidden">
+            <div className="relative bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[16px] p-4 shadow-sm overflow-hidden apple-card">
               {/* Vibrant green left vertical accent bar */}
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#10B981] rounded-l-[16px]" />
 
               {/* Status Header: Ongoing dot & Room badge */}
               <div className="flex items-center justify-between mb-2.5 pl-1">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse" />
                   <span className="text-[12.5px] font-bold text-[#15803D] dark:text-[#4ADE80]">
                     Ongoing
                   </span>
@@ -219,7 +219,7 @@ export default function Timetable() {
               return (
                 <div
                   key={item.id}
-                  className={`bg-white dark:bg-[#131B2E] border rounded-[15px] p-3.5 flex items-center gap-3 shadow-card hover:shadow-card-hover transition-all ${
+                  className={`bg-white dark:bg-[#131B2E] border rounded-[15px] p-3.5 flex items-center gap-3 shadow-card hover:shadow-card-hover apple-card ${
                     isFinished ? 'border-[#F1F5F9] dark:border-[#1A2234] opacity-80 dark:opacity-75' : 'border-[#EEF2F6] dark:border-[#1E293B]'
                   }`}
                 >

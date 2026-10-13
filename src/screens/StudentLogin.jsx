@@ -118,7 +118,7 @@ export default function StudentLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-[52px] sm:h-[54px] rounded-[18px] sm:rounded-[20px] bg-[#0075FF] hover:bg-blue-600 active:scale-[0.98] text-white font-bold text-[16px] flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all cursor-pointer disabled:opacity-75"
+            className="w-full h-[52px] sm:h-[54px] rounded-[18px] sm:rounded-[20px] bg-[#0075FF] hover:bg-blue-600 apple-btn text-white font-bold text-[16px] flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 cursor-pointer disabled:opacity-75 disabled:transform-none"
           >
             <span>{loading ? 'Verifying...' : 'Continue'}</span>
             {!loading && <ArrowRight className="w-5 h-5 stroke-[2.5]" />}

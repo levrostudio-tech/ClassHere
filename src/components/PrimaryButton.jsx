@@ -15,7 +15,7 @@ export default function PrimaryButton({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`w-full h-14 rounded-[16px] bg-[#0075FF] hover:bg-[#0066E0] active:scale-[0.985] text-white font-bold text-[16.5px] tracking-[-0.01em] flex items-center justify-center gap-2 transition-all duration-150 shadow-brand-btn disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 ${className}`}
+      className={`w-full h-14 rounded-[16px] bg-[#0075FF] hover:bg-[#0066E0] apple-btn text-white font-bold text-[16.5px] tracking-[-0.01em] flex items-center justify-center gap-2 shadow-brand-btn disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${className}`}
     >
       {loading ? (
         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

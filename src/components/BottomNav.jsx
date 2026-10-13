@@ -52,17 +52,17 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
                   navigate(item.path);
                 }
               }}
-              className={`w-full max-w-[78px] h-[48px] flex flex-col items-center justify-center transition-all duration-150 cursor-pointer rounded-[12px] ${
+              className={`w-full max-w-[78px] h-[48px] flex flex-col items-center justify-center apple-tab cursor-pointer rounded-[14px] ${
                 isActive
-                  ? 'bg-[#EAF3FF] dark:bg-[#1A2640] text-[#0075FF] dark:text-[#3894FF]'
+                  ? 'bg-[#EAF3FF] dark:bg-[#1A2640] text-[#0075FF] dark:text-[#3894FF] shadow-sm'
                   : 'text-[#64748B] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F8FAFC] hover:bg-slate-50 dark:hover:bg-[#162036]'
               }`}
             >
               {/* Crisp vector icon */}
               <Icon
-                className={`w-5 h-5 transition-transform ${
+                className={`w-5 h-5 transition-transform duration-200 ease-out ${
                   isActive
-                    ? 'stroke-[2.4] text-[#0075FF] dark:text-[#3894FF] scale-105'
+                    ? 'stroke-[2.4] text-[#0075FF] dark:text-[#3894FF] scale-110'
                     : 'stroke-[1.9] text-[#64748B] dark:text-[#94A3B8]'
                 }`}
               />

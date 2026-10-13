@@ -131,7 +131,7 @@ export default function Subjects() {
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F5F9] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[12px] text-[12.5px] font-semibold text-[#475569] dark:text-[#CBD5E1] hover:bg-slate-200/70 dark:hover:bg-[#1E2E4A] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F5F9] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[12px] text-[12.5px] font-semibold text-[#475569] dark:text-[#CBD5E1] hover:bg-slate-200/70 dark:hover:bg-[#1E2E4A] apple-tab cursor-pointer"
             >
               <GraduationCap className="w-3.5 h-3.5 text-[#64748B] dark:text-[#94A3B8]" />
               <span className="truncate max-w-[130px]">{selectedBatch}</span>
@@ -140,7 +140,7 @@ export default function Subjects() {
 
             {/* Dropdown Menu */}
             {isDropdownOpen && (
-              <div className="absolute right-0 top-9 w-48 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-[#1E293B] rounded-xl shadow-lg py-1 z-30 animate-fadeIn">
+              <div className="absolute right-0 top-9 w-48 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-[#1E293B] rounded-xl shadow-lg py-1 z-30 apple-dropdown">
                 {batches.map((b) => (
                   <button
                     key={b}
@@ -168,7 +168,7 @@ export default function Subjects() {
           <button
             type="button"
             onClick={() => setActiveTab('current')}
-            className={`px-4 py-1.5 rounded-full text-[13.5px] transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-full text-[13.5px] apple-tab cursor-pointer ${
               activeTab === 'current'
                 ? 'bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] font-bold shadow-xs'
                 : 'text-[#64748B] dark:text-[#94A3B8] font-medium hover:text-[#0F172A] dark:hover:text-[#F8FAFC]'
@@ -179,7 +179,7 @@ export default function Subjects() {
           <button
             type="button"
             onClick={() => setActiveTab('all')}
-            className={`px-4 py-1.5 rounded-full text-[13.5px] transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-full text-[13.5px] apple-tab cursor-pointer ${
               activeTab === 'all'
                 ? 'bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] font-bold shadow-xs'
                 : 'text-[#64748B] dark:text-[#94A3B8] font-medium hover:text-[#0F172A] dark:hover:text-[#F8FAFC]'
@@ -199,7 +199,7 @@ export default function Subjects() {
             return (
               <div
                 key={sub.id}
-                className="bg-white dark:bg-[#131B2E] border border-[#EEF2F6] dark:border-[#1E293B] rounded-[18px] p-3.5 flex items-center gap-3.5 shadow-card hover:shadow-card-hover transition-all cursor-pointer group"
+                className="bg-white dark:bg-[#131B2E] border border-[#EEF2F6] dark:border-[#1E293B] rounded-[18px] p-3.5 flex items-center gap-3.5 shadow-card hover:shadow-card-hover apple-card cursor-pointer group"
               >
                 {/* Avatar Badge with Subject Initials */}
                 <div

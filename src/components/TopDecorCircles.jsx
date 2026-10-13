@@ -16,7 +16,7 @@ export default function TopDecorCircles() {
 
       {/* Top-right soft accent bubble */}
       <div 
-        className="absolute top-16 -right-12 w-36 h-36 rounded-full bg-[#EBF3FE]/70 dark:bg-[#182338]/40 blur-[1px]"
+        className="absolute top-16 -right-12 w-36 h-36 rounded-full bg-[#EBF3FE]/70 dark:bg-[#182338]/40 blur-[1px] apple-live-pulse"
       />
     </div>
   );

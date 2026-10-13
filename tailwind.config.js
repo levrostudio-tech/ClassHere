@@ -34,7 +34,56 @@ export default {
       },
       spacing: {
         '4.5': '1.125rem',
-      }
+      },
+      transitionTimingFunction: {
+        'apple-spring': 'cubic-bezier(0.16, 1, 0.3, 1)',
+        'apple-sheet': 'cubic-bezier(0.32, 0.72, 0, 1)',
+        'apple-pop': 'cubic-bezier(0.34, 1.35, 0.64, 1)',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        pageEnter: {
+          '0%': { opacity: '0', transform: 'translateY(6px) scale(0.996)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+        sheetUp: {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        dialogPop: {
+          '0%': { opacity: '0', transform: 'scale(0.94)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        dropdownPop: {
+          '0%': { opacity: '0', transform: 'scale(0.92) translateY(-4px)' },
+          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+        },
+        breathe: {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.6', transform: 'scale(0.96)' },
+        },
+        pulseSoft: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.4' },
+        },
+      },
+      animation: {
+        'fadeIn': 'fadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'slideUp': 'slideUp 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'page-enter': 'pageEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'sheet-up': 'sheetUp 320ms cubic-bezier(0.32, 0.72, 0, 1) forwards',
+        'dialog-pop': 'dialogPop 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'dropdown-pop': 'dropdownPop 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'apple-breathe': 'breathe 2.4s ease-in-out infinite',
+        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],

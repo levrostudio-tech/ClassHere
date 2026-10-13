@@ -153,7 +153,7 @@ export default function AdminDashboard() {
             <span>Main University Campus</span>
             <span className="mx-1">•</span>
             <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 apple-live-pulse" />
               Fall 2026 Session Live
             </span>
           </div>
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
           <button
             type="button"
             onClick={toggleDarkMode}
-            className="w-9 h-9 rounded-xl border border-slate-200 dark:border-[#223354] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-100 dark:hover:bg-[#1A2640] transition-colors"
+            className="w-9 h-9 rounded-xl border border-slate-200 dark:border-[#223354] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-100 dark:hover:bg-[#1A2640] apple-btn"
             title="Toggle Theme"
           >
             {isDark ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5" />}
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
           <button
             type="button"
             onClick={handleLogout}
-            className="flex items-center gap-2 px-3.5 py-1.5 h-9 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-[13px] font-semibold border border-red-200 dark:border-red-900/60 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-1.5 h-9 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-[13px] font-semibold border border-red-200 dark:border-red-900/60 apple-btn cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Sign Out</span>
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
             <button
               type="button"
               onClick={() => alert('Attendance report export initiated.')}
-              className="px-4 py-2 rounded-xl border border-slate-200 dark:border-[#223354] bg-white dark:bg-[#131B2E] text-[13.5px] font-semibold text-[#0F172A] dark:text-[#F8FAFC] hover:bg-slate-50 dark:hover:bg-[#1A2640] transition-colors flex items-center gap-2 shadow-sm"
+              className="px-4 py-2 rounded-xl border border-slate-200 dark:border-[#223354] bg-white dark:bg-[#131B2E] text-[13.5px] font-semibold text-[#0F172A] dark:text-[#F8FAFC] hover:bg-slate-50 dark:hover:bg-[#1A2640] apple-btn flex items-center gap-2 shadow-sm"
             >
               <FileSpreadsheet className="w-4 h-4 text-[#0075FF]" />
               Export Records
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
             return (
               <div
                 key={idx}
-                className="p-5 rounded-[20px] bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#1E293B] shadow-[0_4px_16px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all hover:border-[#0075FF]/40"
+                className="p-5 rounded-[20px] bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#1E293B] shadow-[0_4px_16px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] apple-card hover:border-[#0075FF]/40"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[13px] font-medium text-[#64748B] dark:text-[#94A3B8]">
@@ -253,7 +253,7 @@ export default function AdminDashboard() {
               <button
                 type="button"
                 onClick={() => setActiveTab('classes')}
-                className={`px-4 py-2 rounded-xl text-[13.5px] font-bold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-[13.5px] font-bold apple-tab cursor-pointer ${
                   activeTab === 'classes'
                     ? 'bg-[#0075FF] text-white shadow-md shadow-blue-500/25'
                     : 'text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-100 dark:hover:bg-[#1A2640]'
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
               <button
                 type="button"
                 onClick={() => setActiveTab('faculty')}
-                className={`px-4 py-2 rounded-xl text-[13.5px] font-bold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-[13.5px] font-bold apple-tab cursor-pointer ${
                   activeTab === 'faculty'
                     ? 'bg-[#0075FF] text-white shadow-md shadow-blue-500/25'
                     : 'text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-100 dark:hover:bg-[#1A2640]'
