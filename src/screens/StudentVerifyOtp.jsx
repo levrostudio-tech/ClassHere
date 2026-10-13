@@ -17,7 +17,7 @@ export default function StudentVerifyOtp() {
   const location = useLocation();
 
   const state = location.state || {};
-  const rollNumber = state.rollNumber || '22BCA015';
+  const rollNumber = state.rollNumber || localStorage.getItem('classhere_roll_number') || '104821';
   const phone = state.phone || '9876543210';
   const lastFour = phone.length >= 4 ? phone.slice(-4) : '3210';
 

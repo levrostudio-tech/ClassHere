@@ -38,6 +38,7 @@ export default function StudentDashboard() {
 
   // Handle student name passed in navigation state, default to "Prof. Mehta" matching the reference mockup
   const studentName = location.state?.studentName || location.state?.name || 'Prof. Mehta';
+  const studentRollNumber = location.state?.rollNumber || localStorage.getItem('classhere_roll_number') || '104821';
 
   // Real-time IST timetable hook for Thursday / current weekday
   const {
@@ -658,7 +659,7 @@ export default function StudentDashboard() {
                 PM
               </div>
               <h4 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">{studentName}</h4>
-              <p className="text-[13px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">Roll No: 22BCA015</p>
+              <p className="text-[13px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">Roll No: {studentRollNumber}</p>
               <span className="text-[11px] font-bold bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] px-2.5 py-1 rounded-full mt-2">
                 B.Sc AI/ML – 1st Year
               </span>

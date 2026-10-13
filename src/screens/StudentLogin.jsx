@@ -16,17 +16,18 @@ export default function StudentLogin() {
     if (e) e.preventDefault();
     const trimmed = rollNumber.trim();
     if (!trimmed) {
-      setError('Please enter your roll number to continue');
+      setError('Please enter your 6-digit roll number to continue');
       return;
     }
-    if (trimmed.length < 3) {
-      setError('Please enter a valid roll number');
+    if (trimmed.length !== 6) {
+      setError('Roll number must be exactly 6 digits');
       return;
     }
 
     setError('');
     setLoading(true);
     localStorage.setItem('classhere_role', 'student');
+    localStorage.setItem('classhere_roll_number', trimmed);
 
     setTimeout(() => {
       setLoading(false);
@@ -63,7 +64,7 @@ export default function StudentLogin() {
             Student Login
           </h1>
           <p className="text-[14.5px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-snug">
-            Enter your roll number to continue.
+            Enter your 6-digit roll number to continue.
           </p>
         </div>
 
@@ -90,14 +91,17 @@ export default function StudentLogin() {
                 </label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={6}
                   value={rollNumber}
                   onChange={(e) => {
-                    setRollNumber(e.target.value.toUpperCase());
+                    const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 6);
+                    setRollNumber(digitsOnly);
                     if (error) setError('');
                   }}
-                  placeholder="e.g. 22BCA015"
-                  className="w-full bg-transparent text-[16px] font-semibold text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-[#93C5FD] dark:placeholder:text-[#475569] focus:outline-none tracking-wide uppercase"
-                  autoCapitalize="characters"
+                  placeholder="e.g. 104821"
+                  className="w-full bg-transparent text-[16px] font-semibold text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-[#93C5FD] dark:placeholder:text-[#475569] focus:outline-none tracking-wider"
                   autoFocus
                 />
               </div>
