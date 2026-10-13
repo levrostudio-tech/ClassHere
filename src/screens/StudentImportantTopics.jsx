@@ -4,18 +4,14 @@ import {
   ChevronLeft,
   ChevronRight,
   FileText,
-  Sun,
-  Moon,
   X,
   Star,
   Download,
   BookOpen,
 } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
 
 export default function StudentImportantTopics() {
   const navigate = useNavigate();
-  const { isDark, toggleTheme } = useTheme();
 
   // Selected subject for detail sheet
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -156,22 +152,9 @@ export default function StudentImportantTopics() {
           type="button"
           onClick={() => navigate(-1)}
           aria-label="Back to dashboard"
-          className="w-9 h-9 rounded-[12px] bg-slate-100 dark:bg-[#162036] border border-slate-200 dark:border-[#223354] flex items-center justify-center text-[#0F172A] dark:text-[#F8FAFC] active:scale-95 transition-transform cursor-pointer"
+          className="w-9 h-9 rounded-[12px] bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0F172A] active:scale-95 transition-transform cursor-pointer"
         >
           <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
-        </button>
-
-        <button
-          type="button"
-          onClick={toggleTheme}
-          aria-label="Toggle dark mode"
-          className="w-9 h-9 rounded-[12px] bg-slate-100 dark:bg-[#162036] border border-slate-200 dark:border-[#223354] flex items-center justify-center text-[#475569] dark:text-[#94A3B8] active:scale-95 transition-transform cursor-pointer"
-        >
-          {isDark ? (
-            <Sun className="w-4.5 h-4.5 text-amber-400 stroke-[2.2]" />
-          ) : (
-            <Moon className="w-4.5 h-4.5 text-[#475569] stroke-[2.2]" />
-          )}
         </button>
       </header>
 

@@ -24,15 +24,11 @@ import {
   CheckCircle2,
   X,
   Upload,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import { adminLogout, getAdminUser } from '../lib/adminAuth';
-import { useTheme } from '../context/ThemeContext';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const { isDark, toggleDarkMode } = useTheme();
   const adminUser = getAdminUser();
 
   // Navigation State
@@ -270,26 +266,15 @@ export default function AdminDashboard() {
             <ChevronRight className="w-4 h-4 text-slate-400 dark:text-slate-500" />
           </div>
 
-          {/* Theme Mode & Log Out Row */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={toggleDarkMode}
-              className="w-10 h-10 rounded-[12px] border border-slate-200 dark:border-[#223354] bg-[#F8FAFC] dark:bg-[#0B0F19] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] hover:text-[#0075FF] apple-btn cursor-pointer shrink-0"
-              title="Toggle theme"
-            >
-              {isDark ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="flex-1 h-10 rounded-[12px] flex items-center justify-center gap-2 text-[13px] font-bold text-[#64748B] dark:text-[#94A3B8] hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 border border-transparent hover:border-red-200 dark:hover:border-red-900 transition-all apple-btn cursor-pointer"
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Log out</span>
-            </button>
-          </div>
+          {/* Log Out Action */}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="w-full h-10 rounded-[12px] flex items-center justify-center gap-2 text-[13px] font-bold text-[#64748B] hover:text-red-600 hover:bg-red-50 border border-slate-200 hover:border-red-200 bg-white transition-all apple-btn cursor-pointer"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Log out</span>
+          </button>
         </div>
       </aside>
 

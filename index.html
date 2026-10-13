@@ -23,21 +23,14 @@
     <script>
       (function() {
         try {
-          var saved = localStorage.getItem('classhere_theme');
-          var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = saved === 'dark' || (saved === 'system' && systemDark) || (!saved && false);
-          if (isDark) {
-            document.documentElement.classList.add('dark');
-            document.documentElement.setAttribute('data-theme', 'dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.setAttribute('data-theme', 'light');
-          }
+          localStorage.removeItem('classhere_theme');
+          document.documentElement.classList.remove('dark');
+          document.documentElement.setAttribute('data-theme', 'light');
         } catch (e) {}
       })();
     </script>
   </head>
-  <body class="bg-slate-100 dark:bg-slate-950 font-sans antialiased text-slate-900 dark:text-slate-100 overflow-x-hidden select-none transition-colors duration-200">
+  <body class="bg-slate-100 font-sans antialiased text-slate-900 overflow-x-hidden select-none transition-colors duration-200">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script>

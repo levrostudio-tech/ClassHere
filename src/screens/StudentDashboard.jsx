@@ -13,24 +13,21 @@ import {
   Download,
   BookMarked,
   Sparkles,
-  Sun,
-  Moon,
+  LogOut,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 import { useRealtimeTimetable } from '../hooks/useRealtimeTimetable';
 import { getISTNow } from '../lib/timetableService';
-import { useTheme } from '../context/ThemeContext';
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isDark, toggleTheme } = useTheme();
 
   // Scroll visibility for bottom nav
   const [isNavVisible, setIsNavVisible] = useState(true);
   const lastScrollTopRef = useRef(0);
 
-  // Active modal state: 'notes' | 'syllabus' | 'important' | 'history' | 'students' | 'profile' | null
+  // Active modal state: 'notes' | 'syllabus' | 'important' | 'history' | 'students' | null
   const [activeModal, setActiveModal] = useState(null);
 
   // Search query within modals
@@ -201,19 +198,16 @@ export default function StudentDashboard() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={toggleTheme}
-              className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#162238] border border-slate-200 dark:border-[#223354] flex items-center justify-center text-slate-700 dark:text-[#F8FAFC] shadow-xs apple-btn cursor-pointer"
-              aria-label="Toggle theme"
+              onClick={() => {
+                localStorage.removeItem('classhere_role');
+                localStorage.removeItem('classhere_roll_number');
+                navigate('/');
+              }}
+              className="w-10 h-10 rounded-full bg-slate-100 hover:bg-red-50 border border-slate-200 hover:border-red-200 flex items-center justify-center text-slate-600 hover:text-red-500 shadow-xs apple-btn cursor-pointer transition-all"
+              aria-label="Sign out"
+              title="Sign out"
             >
-              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveModal('profile')}
-              className="w-10 h-10 rounded-full bg-[#F1F5F9] dark:bg-[#162238] border border-[#E2E8F0] dark:border-[#223354] flex items-center justify-center text-[#0F172A] dark:text-[#F8FAFC] font-bold text-[13.5px] hover:bg-slate-200/70 dark:hover:bg-[#1E2E4A] apple-btn cursor-pointer shadow-xs"
-              aria-label="Student Profile"
-            >
-              PM
+              <LogOut className="w-4.5 h-4.5" />
             </button>
           </div>
         </header>
@@ -637,62 +631,6 @@ export default function StudentDashboard() {
         </div>
       )}
 
-      {/* ======================================================== */}
-      {/* MODAL 6: Student Profile Modal */}
-      {/* ======================================================== */}
-      {activeModal === 'profile' && (
-        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Student Profile</h3>
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="flex flex-col items-center text-center py-2 mb-4">
-              <div className="w-16 h-16 rounded-full bg-[#EBF3FE] dark:bg-[#162238] border-2 border-[#0075FF] dark:border-[#3894FF] text-[#0075FF] dark:text-[#3894FF] font-black text-[22px] flex items-center justify-center mb-2 shadow-sm">
-                PM
-              </div>
-              <h4 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">{studentName}</h4>
-              <p className="text-[13px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">Roll No: {studentRollNumber}</p>
-              <span className="text-[11px] font-bold bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] px-2.5 py-1 rounded-full mt-2">
-                B.Sc AI/ML – 1st Year
-              </span>
-            </div>
-
-            <div className="space-y-2 mb-5">
-              <div className="p-3 bg-[#F8FAFC] dark:bg-[#162036] rounded-[12px] flex justify-between text-[13px]">
-                <span className="text-[#64748B] dark:text-[#94A3B8]">Department</span>
-                <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">Computer Science</span>
-              </div>
-              <div className="p-3 bg-[#F8FAFC] dark:bg-[#162036] rounded-[12px] flex justify-between text-[13px]">
-                <span className="text-[#64748B] dark:text-[#94A3B8]">College</span>
-                <span className="font-bold text-[#0F172A] dark:text-[#F8FAFC]">DAV College, Amritsar</span>
-              </div>
-              <div className="p-3 bg-[#F8FAFC] dark:bg-[#162036] rounded-[12px] flex justify-between text-[13px]">
-                <span className="text-[#64748B] dark:text-[#94A3B8]">Attendance Rate</span>
-                <span className="font-bold text-[#16A34A] dark:text-[#4ADE80]">91.5%</span>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActiveModal(null);
-                navigate('/');
-              }}
-              className="w-full py-3 bg-[#FEF2F2] dark:bg-[#451010]/30 hover:bg-[#FEE2E2] dark:hover:bg-[#451010]/50 text-[#EF4444] dark:text-[#F87171] font-bold rounded-[14px] text-[14px] transition-colors cursor-pointer"
-            >
-              Sign Out
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

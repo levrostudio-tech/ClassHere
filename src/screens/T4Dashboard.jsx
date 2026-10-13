@@ -12,17 +12,13 @@ import {
   Clock,
   CheckCircle2,
   User,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 import { useRealtimeTimetable } from '../hooks/useRealtimeTimetable';
-import { useTheme } from '../context/ThemeContext';
 
 export default function T4Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isDark, toggleTheme } = useTheme();
   const isStudent = location.state?.role === 'student' || !!location.state?.rollNumber;
   const displayName = isStudent ? (location.state?.rollNumber || 'Student') : 'Prof. Mehta';
 
@@ -78,16 +74,8 @@ export default function T4Dashboard() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={toggleTheme}
-              className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#162238] border border-slate-200 dark:border-[#223354] flex items-center justify-center text-slate-700 dark:text-[#F8FAFC] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
-            </button>
-            <button
-              type="button"
               onClick={() => navigate('/profile')}
-              className="w-10 h-10 rounded-full bg-[#EBF3FE] dark:bg-[#162238] border border-[#D0E2FB] dark:border-[#223354] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              className="w-10 h-10 rounded-full bg-[#EBF3FE] border border-[#D0E2FB] flex items-center justify-center text-[#0075FF] shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer"
               aria-label="View Profile"
             >
               <User className="w-5 h-5 fill-current" />

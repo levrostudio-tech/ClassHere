@@ -1,82 +1,39 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  // Theme can be 'light', 'dark', or 'system'
-  const [theme, setThemeState] = useState(() => {
-    try {
-      const saved = localStorage.getItem('classhere_theme');
-      if (saved === 'dark' || saved === 'light' || saved === 'system') {
-        return saved;
-      }
-    } catch (e) {
-      // Fallback
-    }
-    return 'light';
-  });
-
-  const [systemIsDark, setSystemIsDark] = useState(() => {
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return false;
-  });
-
-  // Listen for OS system theme changes
+  // Enforce Light Mode permanently across the entire application
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e) => setSystemIsDark(e.matches);
-
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, []);
-
-  // Compute active dark mode state
-  const isDark = useMemo(() => {
-    if (theme === 'dark') return true;
-    if (theme === 'light') return false;
-    return systemIsDark;
-  }, [theme, systemIsDark]);
-
-  // Synchronize 'dark' class on HTML root element, body, and browser theme color
-  useEffect(() => {
-    const root = document.documentElement;
-    const body = document.body;
-    
-    if (isDark) {
-      root.classList.add('dark');
-      if (body) body.classList.add('dark');
-      root.setAttribute('data-theme', 'dark');
-    } else {
-      root.classList.remove('dark');
-      if (body) body.classList.remove('dark');
-      root.setAttribute('data-theme', 'light');
-    }
-
-    // Update browser status bar / chrome color
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
-      metaThemeColor.setAttribute('content', isDark ? '#0B0F19' : '#0075FF');
-    }
-  }, [isDark]);
-
-  const setTheme = (newTheme) => {
-    setThemeState(newTheme);
     try {
-      localStorage.setItem('classhere_theme', newTheme);
+      localStorage.removeItem('classhere_theme');
     } catch (e) {
       // Ignore
     }
-  };
 
-  const toggleTheme = () => {
-    setTheme(isDark ? 'light' : 'dark');
+    const root = document.documentElement;
+    const body = document.body;
+
+    root.classList.remove('dark');
+    if (body) body.classList.remove('dark');
+    root.setAttribute('data-theme', 'light');
+
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', '#0075FF');
+    }
+  }, []);
+
+  const value = {
+    theme: 'light',
+    setTheme: () => {},
+    isDark: false,
+    toggleTheme: () => {},
+    toggleDarkMode: () => {},
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, isDark, toggleTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );
@@ -85,7 +42,13 @@ export function ThemeProvider({ children }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    return {
+      theme: 'light',
+      setTheme: () => {},
+      isDark: false,
+      toggleTheme: () => {},
+      toggleDarkMode: () => {},
+    };
   }
   return context;
 }

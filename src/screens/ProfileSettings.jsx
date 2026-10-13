@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Bell,
   User,
   GraduationCap,
   Building2,
-  Palette,
   Info,
   LogOut,
   ChevronRight,
@@ -17,16 +16,18 @@ import {
   ShieldCheck,
   ExternalLink,
   Sparkles,
-  Sun,
-  Moon,
-  Laptop,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
-import { useTheme } from '../context/ThemeContext';
 
 export default function ProfileSettings() {
   const navigate = useNavigate();
-  const { theme, setTheme, isDark, toggleTheme } = useTheme();
+
+  // If a student somehow accesses profile settings, redirect them immediately to student dashboard
+  useEffect(() => {
+    if (localStorage.getItem('classhere_role') === 'student') {
+      navigate('/student-dashboard', { replace: true });
+    }
+  }, [navigate]);
 
   // Scroll visibility for bottom nav
   const [isNavVisible, setIsNavVisible] = useState(true);
@@ -59,7 +60,7 @@ export default function ProfileSettings() {
   });
 
   // Modals state
-  const [activeModal, setActiveModal] = useState(null); // 'edit' | 'personal' | 'notifications' | 'appearance' | 'about' | 'logout' | null
+  const [activeModal, setActiveModal] = useState(null); // 'edit' | 'personal' | 'notifications' | 'about' | 'logout' | null
 
   // Notification toggles
   const [notifications, setNotifications] = useState({
@@ -103,20 +104,6 @@ export default function ProfileSettings() {
 
           {/* Right Header Icons */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Quick Dark Mode Sun/Moon Toggle */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label="Toggle dark mode"
-              className="w-10 h-10 rounded-[14px] bg-[#F1F5F9] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#26354D] flex items-center justify-center text-[#475569] dark:text-[#94A3B8] hover:text-[#0075FF] dark:hover:text-[#3894FF] active:scale-95 transition-all cursor-pointer shadow-xs"
-            >
-              {isDark ? (
-                <Sun className="w-5 h-5 text-amber-400 stroke-[2.2]" />
-              ) : (
-                <Moon className="w-5 h-5 text-[#475569] stroke-[2.2]" />
-              )}
-            </button>
-
             {/* Notification Bell with Active Indicator Dot */}
             <button
               type="button"
@@ -251,32 +238,10 @@ export default function ProfileSettings() {
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#94A3B8] dark:text-[#64748B] stroke-[2.2] shrink-0 ml-2" />
+            <ChevronRight className="w-5 h-5 text-[#94A3B8] stroke-[2.2] shrink-0 ml-2" />
           </button>
 
-          {/* 3. Appearance */}
-          <button
-            type="button"
-            onClick={() => setActiveModal('appearance')}
-            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50/80 dark:hover:bg-[#162036] active:bg-slate-100/70 dark:active:bg-[#1A2540] transition-colors text-left cursor-pointer group"
-          >
-            <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] dark:bg-[#162238] flex items-center justify-center text-[#0075FF] dark:text-[#3894FF] shrink-0 group-hover:scale-105 transition-transform">
-                <Palette className="w-5 h-5 stroke-[2]" />
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-tight">
-                  Appearance
-                </h3>
-                <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-tight capitalize truncate">
-                  {theme} mode
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-[#94A3B8] dark:text-[#64748B] stroke-[2.2] shrink-0 ml-2" />
-          </button>
-
-          {/* 4. About ClassHere */}
+          {/* 3. About ClassHere */}
           <button
             type="button"
             onClick={() => setActiveModal('about')}
@@ -535,93 +500,7 @@ export default function ProfileSettings() {
         </div>
       )}
 
-      {/* ======================================================== */}
-      {/* MODAL 4: Appearance Settings */}
-      {/* ======================================================== */}
-      {activeModal === 'appearance' && (
-        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[28px] p-6 max-h-[85vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
-              <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Appearance</h3>
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
 
-            <div className="space-y-3">
-              {[
-                {
-                  id: 'light',
-                  label: 'Light Mode',
-                  sub: 'Standard crisp high-contrast theme',
-                  icon: Sun,
-                  iconColor: 'text-amber-500 bg-amber-50 dark:bg-amber-950/40',
-                },
-                {
-                  id: 'dark',
-                  label: 'Dark Mode',
-                  sub: 'Deep charcoal & obsidian aesthetic for low-light comfort',
-                  icon: Moon,
-                  iconColor: 'text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40',
-                },
-                {
-                  id: 'system',
-                  label: 'System Default',
-                  sub: 'Match your operating system preferences',
-                  icon: Laptop,
-                  iconColor: 'text-[#0075FF] dark:text-[#3894FF] bg-[#EBF5FF] dark:bg-[#162238]',
-                },
-              ].map((opt) => {
-                const IconComponent = opt.icon;
-                const isSelected = theme === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => setTheme(opt.id)}
-                    className={`w-full p-3.5 sm:p-4 rounded-[18px] border text-left flex items-center justify-between transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border-[#0075FF] bg-[#F0F6FE] dark:bg-[#162238] dark:border-[#3894FF] shadow-xs'
-                        : 'border-[#E2E8F0] dark:border-[#1E293B] bg-white dark:bg-[#131B2E] hover:bg-slate-50 dark:hover:bg-[#162036]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0 pr-2">
-                      <div className={`w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0 ${opt.iconColor}`}>
-                        <IconComponent className="w-5 h-5 stroke-[2.2]" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[15px] font-bold text-[#0F172A] dark:text-[#F8FAFC] block">
-                          {opt.label}
-                        </span>
-                        <p className="text-[12px] text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-snug">
-                          {opt.sub}
-                        </p>
-                      </div>
-                    </div>
-                    {isSelected && (
-                      <div className="w-6 h-6 rounded-full bg-[#0075FF] text-white flex items-center justify-center shrink-0">
-                        <Check className="w-3.5 h-3.5 stroke-[3]" />
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setActiveModal(null)}
-              className="w-full mt-5 h-12 rounded-[14px] bg-[#0075FF] hover:bg-[#0066E0] text-white font-bold text-[14.5px] cursor-pointer"
-            >
-              Done
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* ======================================================== */}
       {/* MODAL 5: About ClassHere */}
