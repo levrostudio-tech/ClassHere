@@ -14,6 +14,7 @@ import {
   BookMarked,
   Sparkles,
   LogOut,
+  CheckCircle2,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 import { useRealtimeTimetable } from '../hooks/useRealtimeTimetable';
@@ -37,11 +38,12 @@ export default function StudentDashboard() {
   const studentName = location.state?.studentName || location.state?.name || 'Prof. Mehta';
   const studentRollNumber = location.state?.rollNumber || localStorage.getItem('classhere_roll_number') || '104821';
 
-  // Real-time IST timetable hook for Thursday / current weekday
+  // Real-time IST timetable hook for current weekday
   const {
     istTime,
     ongoingClass,
     upcomingClasses,
+    finishedClasses,
     allClasses,
     isLoading,
   } = useRealtimeTimetable();
@@ -151,22 +153,6 @@ export default function StudentDashboard() {
     { id: 4, title: 'Phonetics & Pronunciation Workshop', subject: 'English Communication', time: '06 Oct, 9:00 AM', room: 'Room 101', faculty: 'Mrs. Simran Kaur' },
   ];
 
-  const studentOngoingClass = ongoingClass || {
-    subject: 'English Communication',
-    grade: 'B.Sc AI/ML – 1st Year',
-    room: 'Room 101',
-    startTime: '9:00',
-    endTime: '9:55',
-    progress: 42,
-    remainingLabel: '32 min left',
-  };
-
-  const studentUpcomingClasses = (upcomingClasses && upcomingClasses.length > 0) ? upcomingClasses : [
-    { id: 'sub-1', startTime: '10:00', endTime: '10:55', subject: 'Python', grade: 'B.Sc AI/ML – 1st Year', room: 'Room 204' },
-    { id: 'sub-2', startTime: '11:00', endTime: '11:55', subject: 'Mathematics', grade: 'B.Sc AI/ML – 1st Year', room: 'Room 108' },
-    { id: 'sub-3', startTime: '12:00', endTime: '12:55', subject: 'Computer Fundamentals', grade: 'B.Sc AI/ML – 1st Year', room: 'Room 108' },
-    { id: 'sub-4', startTime: '2:00', endTime: '4:00', subject: 'Lab', grade: 'B.Sc AI/ML – 1st Year', room: 'Lab 2' },
-  ];
 
   return (
     <div className="relative h-full flex flex-col bg-[#FDFDFE] dark:bg-[#0B0F19] transition-colors duration-200 select-none overflow-hidden font-sans">
@@ -271,107 +257,167 @@ export default function StudentDashboard() {
         {/* TODAY'S CLASSES HEADER */}
         {/* ======================================================== */}
         <div className="flex items-center justify-between pt-1">
-          <h2 className="text-[19px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight">
-            Today’s Classes
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-[19px] font-extrabold text-[#0F172A] tracking-tight">
+              Today’s Classes
+            </h2>
+            <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+              {istTime?.weekdayName || 'Today'}
+            </span>
+          </div>
           <button
             type="button"
             onClick={() => navigate('/timetable', { state: { role: 'student' } })}
-            className="flex items-center gap-0.5 px-3 py-1 bg-[#EFF6FF] dark:bg-[#162238] rounded-full text-[#0075FF] dark:text-[#3894FF] text-[12px] font-bold hover:bg-blue-100 dark:hover:bg-[#1E2E4A] transition-colors cursor-pointer"
+            className="flex items-center gap-0.5 px-3 py-1 bg-[#EFF6FF] rounded-full text-[#0075FF] text-[12px] font-bold hover:bg-blue-100 transition-colors cursor-pointer"
           >
             <span>View Timetable</span>
           </button>
         </div>
 
-        {/* ======================================================== */}
-        {/* ONGOING CLASS CARD (English Communication) */}
-        {/* ======================================================== */}
-        <div className="bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[18px] p-4 shadow-sm relative overflow-hidden apple-card">
-          {/* Status Row */}
-          <div className="flex items-center justify-between mb-2.5">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse" />
-              <span className="text-[13px] font-bold text-[#15803D] dark:text-[#4ADE80]">Ongoing</span>
-              <span className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8]">
-                · {studentOngoingClass.startTime} to {studentOngoingClass.endTime}
+        {/* Dynamic Real-Time Class Status */}
+        {ongoingClass ? (
+          /* ONGOING CLASS CARD */
+          <div className="bg-[#EEFAF2] border border-[#CEEFDB] rounded-[18px] p-4 shadow-sm relative overflow-hidden apple-card">
+            {/* Status Row */}
+            <div className="flex items-center justify-between mb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse" />
+                <span className="text-[13px] font-bold text-[#15803D]">Ongoing</span>
+                <span className="text-[12.5px] font-medium text-[#64748B]">
+                  · {ongoingClass.startTime} to {ongoingClass.endTime}
+                </span>
+              </div>
+              <span className="bg-[#DCFCE7] text-[#166534] text-[11px] font-bold px-2.5 py-0.5 rounded-[7px]">
+                {ongoingClass.room}
               </span>
             </div>
-            <span className="bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#86EFAC] text-[11px] font-bold px-2.5 py-0.5 rounded-[7px]">
-              {studentOngoingClass.room}
-            </span>
-          </div>
 
-          {/* Subject & Grade */}
-          <div className="mb-3">
-            <h3 className="text-[17px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight leading-snug">
-              {studentOngoingClass.subject}
-            </h3>
-            <p className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5">
-              {studentOngoingClass.grade}
+            {/* Subject & Grade */}
+            <div className="mb-3">
+              <h3 className="text-[17px] font-extrabold text-[#0F172A] tracking-tight leading-snug">
+                {ongoingClass.subject}
+              </h3>
+              <p className="text-[12.5px] font-medium text-[#64748B] mt-0.5">
+                {ongoingClass.grade || 'B.Sc AI/ML – 1st Year'}
+              </p>
+            </div>
+
+            {/* Progress Bar & Time Left */}
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-1.5 bg-[#D3EEDC] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-[#16A34A] rounded-full transition-all duration-1000 ease-linear"
+                  style={{ width: `${ongoingClass.progress || 0}%` }}
+                />
+              </div>
+              <span className="text-[12px] font-bold text-[#16A34A] shrink-0 text-right tabular-nums">
+                {ongoingClass.remainingLabel || `${ongoingClass.minutesLeft} min left`}
+              </span>
+            </div>
+          </div>
+        ) : upcomingClasses && upcomingClasses.length > 0 ? (
+          /* BREAK / NEXT CLASS UP BANNER */
+          <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-[18px] p-4 shadow-xs relative overflow-hidden apple-card">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0075FF] animate-pulse" />
+                <span className="text-[13px] font-bold text-[#0075FF]">Next Up</span>
+                <span className="text-[12.5px] font-medium text-[#64748B]">
+                  · Starts at {upcomingClasses[0].startTime}
+                </span>
+              </div>
+              <span className="bg-[#EFF6FF] text-[#0075FF] text-[11px] font-bold px-2.5 py-0.5 rounded-[7px] border border-[#DBEAFE]">
+                {upcomingClasses[0].room}
+              </span>
+            </div>
+            <div className="mb-2">
+              <h3 className="text-[16px] font-extrabold text-[#0F172A] tracking-tight leading-snug">
+                {upcomingClasses[0].subject}
+              </h3>
+              <p className="text-[12px] font-medium text-[#64748B] mt-0.5">
+                {upcomingClasses[0].grade || 'B.Sc AI/ML – 1st Year'}
+              </p>
+            </div>
+            <div className="flex items-center justify-between pt-2 border-t border-[#F1F5F9] text-[12px]">
+              <span className="font-medium text-[#64748B] flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#0075FF]" /> Time until start
+              </span>
+              <span className="font-bold text-[#0075FF] tabular-nums">
+                {upcomingClasses[0].remainingLabel || 'Starting soon'}
+              </span>
+            </div>
+          </div>
+        ) : allClasses && allClasses.length > 0 ? (
+          /* ALL CLASSES FINISHED FOR TODAY */
+          <div className="bg-[#F0FDF4] border border-[#DCFCE7] rounded-[18px] p-4.5 text-center shadow-xs apple-card">
+            <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A]">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <h3 className="text-[15px] font-bold text-[#166534]">All Classes Finished Today</h3>
+            <p className="text-[12px] text-[#15803D] mt-0.5">
+              Great job! All scheduled lectures for today have concluded.
             </p>
           </div>
-
-          {/* Progress Bar & Time Left */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-1.5 bg-[#D3EEDC] dark:bg-[#133E27] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#16A34A] dark:bg-[#22C55E] rounded-full transition-all duration-1000 ease-linear"
-                style={{ width: `${studentOngoingClass.progress || 42}%` }}
-              />
-            </div>
-            <span className="text-[12px] font-bold text-[#16A34A] dark:text-[#4ADE80] shrink-0 text-right tabular-nums">
-              {studentOngoingClass.remainingLabel || '32 min left'}
-            </span>
+        ) : (
+          /* NO CLASSES SCHEDULED TODAY */
+          <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-[18px] p-4.5 text-center shadow-xs apple-card">
+            <p className="text-[14px] font-bold text-[#0F172A]">No Classes Scheduled Today</p>
+            <p className="text-[12px] text-[#64748B] mt-0.5">
+              Enjoy your holiday or revise topics from the Subjects tab.
+            </p>
           </div>
-        </div>
+        )}
 
-        {/* ======================================================== */}
         {/* UPCOMING CLASSES LIST */}
-        {/* ======================================================== */}
-        <div className="space-y-2.5 pt-0.5">
-          {studentUpcomingClasses.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white dark:bg-[#131B2E] border border-[#EEF2F6] dark:border-[#1E293B] rounded-[16px] p-3.5 flex items-center justify-between shadow-card hover:shadow-card-hover apple-card"
-            >
-              {/* Left: Time Block */}
-              <div className="w-[52px] shrink-0 text-center">
-                <p className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-tight">
-                  {item.startTime}
-                </p>
-                <p className="text-[11px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-tight mt-0.5">
-                  to {item.endTime}
-                </p>
-              </div>
+        {upcomingClasses && upcomingClasses.length > (ongoingClass ? 0 : 1) && (
+          <div className="space-y-2.5 pt-1">
+            <p className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider px-0.5">
+              Upcoming Schedule
+            </p>
+            {(ongoingClass ? upcomingClasses : upcomingClasses.slice(1)).map((item) => (
+              <div
+                key={item.id}
+                className="bg-white border border-[#EEF2F6] rounded-[16px] p-3.5 flex items-center justify-between shadow-card hover:shadow-card-hover apple-card"
+              >
+                {/* Left: Time Block */}
+                <div className="w-[52px] shrink-0 text-center">
+                  <p className="text-[14px] font-bold text-[#0F172A] leading-tight">
+                    {item.startTime}
+                  </p>
+                  <p className="text-[11px] font-medium text-[#64748B] leading-tight mt-0.5">
+                    to {item.endTime}
+                  </p>
+                </div>
 
-              {/* Vertical subtle divider */}
-              <div className="w-[1px] h-9 bg-[#E2E8F0] dark:bg-[#1E293B] shrink-0 mx-2" />
+                {/* Vertical subtle divider */}
+                <div className="w-[1px] h-9 bg-[#E2E8F0] shrink-0 mx-2" />
 
-              {/* Middle: Subject & Grade */}
-              <div className="flex-1 min-w-0 pr-2">
-                <h4 className="text-[14.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug truncate">
-                  {item.subject}
-                </h4>
-                <p className="text-[12px] font-normal text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5">
-                  {item.grade}
-                </p>
-              </div>
+                {/* Middle: Subject & Grade */}
+                <div className="flex-1 min-w-0 pr-2">
+                  <h4 className="text-[14.5px] font-bold text-[#0F172A] leading-snug truncate">
+                    {item.subject}
+                  </h4>
+                  <p className="text-[12px] font-normal text-[#64748B] truncate mt-0.5">
+                    {item.grade || 'B.Sc AI/ML – 1st Year'}
+                  </p>
+                </div>
 
-              {/* Right: Room & Upcoming Badge */}
-              <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className="bg-[#F1F5F9] dark:bg-[#162036] text-[#475569] dark:text-[#94A3B8] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
-                  {item.room}
-                </span>
-                <div className="flex items-center gap-1 bg-[#F8FAFC] dark:bg-[#162036] px-1.5 py-0.5 rounded-[6px]">
-                  <Clock className="w-3 h-3 text-[#94A3B8] dark:text-[#64748B]" />
-                  <span className="text-[10px] font-medium text-[#64748B] dark:text-[#94A3B8]">
-                    Upcoming
+                {/* Right: Room & Upcoming Badge */}
+                <div className="flex flex-col items-end gap-1 shrink-0">
+                  <span className="bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold px-2 py-0.5 rounded-[6px]">
+                    {item.room}
                   </span>
+                  <div className="flex items-center gap-1 bg-[#F8FAFC] px-1.5 py-0.5 rounded-[6px]">
+                    <Clock className="w-3 h-3 text-[#94A3B8]" />
+                    <span className="text-[10px] font-medium text-[#64748B] tabular-nums">
+                      {item.remainingLabel || 'Upcoming'}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ======================================================== */}

@@ -60,9 +60,9 @@ export function useRealtimeTimetable(targetDay = null) {
     }
   }, [loadSchedule]);
 
-  // Timer: Tick every 30 seconds
+  // Timer: Tick every 1 second for live real-time progress and status updates
   useEffect(() => {
-    const interval = setInterval(updateTick, 30000);
+    const interval = setInterval(updateTick, 1000);
     return () => clearInterval(interval);
   }, [updateTick]);
 
