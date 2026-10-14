@@ -37,6 +37,8 @@ export default function StudentDashboard() {
   // Handle student name passed in navigation state, default to "Prof. Mehta" matching the reference mockup
   const studentName = location.state?.studentName || location.state?.name || 'Prof. Mehta';
   const studentRollNumber = location.state?.rollNumber || localStorage.getItem('classhere_roll_number') || '104821';
+  const userRole = location.state?.role || localStorage.getItem('classhere_role') || 'student';
+  const isTeacher = userRole === 'teacher';
 
   // Real-time IST timetable hook for current weekday
   const {
@@ -257,17 +259,12 @@ export default function StudentDashboard() {
         {/* TODAY'S CLASSES HEADER */}
         {/* ======================================================== */}
         <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-2">
-            <h2 className="text-[19px] font-extrabold text-[#0F172A] tracking-tight">
-              Today’s Classes
-            </h2>
-            <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-              {istTime?.weekdayName || 'Today'}
-            </span>
-          </div>
+          <h2 className="text-[19px] sm:text-[20px] font-extrabold text-[#0F172A] tracking-tight">
+            Today’s Classes
+          </h2>
           <button
             type="button"
-            onClick={() => navigate('/timetable', { state: { role: 'student' } })}
+            onClick={() => navigate('/timetable', { state: { role: isTeacher ? 'teacher' : 'student' } })}
             className="flex items-center gap-0.5 px-3 py-1 bg-[#EFF6FF] rounded-full text-[#0075FF] text-[12px] font-bold hover:bg-blue-100 transition-colors cursor-pointer"
           >
             <span>View Timetable</span>
@@ -276,41 +273,64 @@ export default function StudentDashboard() {
 
         {/* Dynamic Real-Time Class Status */}
         {ongoingClass ? (
-          /* ONGOING CLASS CARD */
-          <div className="bg-[#EEFAF2] border border-[#CEEFDB] rounded-[18px] p-4 shadow-sm relative overflow-hidden apple-card">
+          /* ONGOING CLASS CARD - Matches Reference Mockup Exactly */
+          <div className="bg-[#EEFAF2] border border-[#CEEFDB] rounded-[20px] p-4 sm:p-4.5 shadow-sm relative overflow-hidden apple-card">
             {/* Status Row */}
             <div className="flex items-center justify-between mb-2.5">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse shrink-0" />
                 <span className="text-[13px] font-bold text-[#15803D]">Ongoing</span>
                 <span className="text-[12.5px] font-medium text-[#64748B]">
                   · {ongoingClass.startTime} to {ongoingClass.endTime}
                 </span>
               </div>
-              <span className="bg-[#DCFCE7] text-[#166534] text-[11px] font-bold px-2.5 py-0.5 rounded-[7px]">
+              <span className="bg-[#DCFCE7] text-[#166534] text-[11px] font-bold px-3 py-1 rounded-full">
                 {ongoingClass.room}
               </span>
             </div>
 
-            {/* Subject & Grade */}
-            <div className="mb-3">
-              <h3 className="text-[17px] font-extrabold text-[#0F172A] tracking-tight leading-snug">
-                {ongoingClass.subject}
-              </h3>
-              <p className="text-[12.5px] font-medium text-[#64748B] mt-0.5">
-                {ongoingClass.grade || 'B.Sc AI/ML – 1st Year'}
-              </p>
+            {/* Subject, Grade & Teacher-only Record Button */}
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-[18px] sm:text-[19px] font-black text-[#0F172A] tracking-tight leading-snug truncate">
+                  {ongoingClass.subject}
+                </h3>
+                <p className="text-[13px] font-medium text-[#64748B] mt-0.5 truncate">
+                  {ongoingClass.grade || 'B.Sc AI/ML – 1st Year'}
+                </p>
+              </div>
+
+              {/* Record Button: ONLY visible to teachers when their class is currently ongoing */}
+              {isTeacher && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate('/record-class', {
+                      state: {
+                        subject: ongoingClass.subject,
+                        grade: ongoingClass.grade,
+                        room: ongoingClass.room,
+                        time: `${ongoingClass.startTime} to ${ongoingClass.endTime}`,
+                      },
+                    })
+                  }
+                  className="shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-[10px] text-white text-[12px] font-bold shadow-record-btn active:scale-95 transition-all bg-[#EA3829] hover:bg-[#D93022] cursor-pointer"
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Record Class</span>
+                </button>
+              )}
             </div>
 
             {/* Progress Bar & Time Left */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3.5 mt-3.5">
               <div className="flex-1 h-1.5 bg-[#D3EEDC] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[#16A34A] rounded-full transition-all duration-1000 ease-linear"
                   style={{ width: `${ongoingClass.progress || 0}%` }}
                 />
               </div>
-              <span className="text-[12px] font-bold text-[#16A34A] shrink-0 text-right tabular-nums">
+              <span className="text-[12.5px] font-bold text-[#15803D] shrink-0 text-right tabular-nums">
                 {ongoingClass.remainingLabel || `${ongoingClass.minutesLeft} min left`}
               </span>
             </div>

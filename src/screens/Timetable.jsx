@@ -144,34 +144,31 @@ export default function Timetable() {
         <div className="space-y-2.5 pt-1">
           {/* Ongoing Class Card (if selected day is today and a class is active) */}
           {isSelectedToday && ongoingClass && (
-            <div className="relative bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[16px] p-4 shadow-sm overflow-hidden apple-card">
-              {/* Vibrant green left vertical accent bar */}
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#10B981] rounded-l-[16px]" />
-
+            <div className="relative bg-[#EEFAF2] border border-[#CEEFDB] rounded-[20px] p-4 sm:p-4.5 shadow-sm overflow-hidden apple-card">
               {/* Status Header: Ongoing dot & Room badge */}
-              <div className="flex items-center justify-between mb-2.5 pl-1">
+              <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse" />
-                  <span className="text-[12.5px] font-bold text-[#15803D] dark:text-[#4ADE80]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse shrink-0" />
+                  <span className="text-[13px] font-bold text-[#15803D]">
                     Ongoing
                   </span>
-                  <span className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8]">
+                  <span className="text-[12.5px] font-medium text-[#64748B]">
                     · {ongoingClass.startTime} to {ongoingClass.endTime}
                   </span>
                 </div>
-                <span className="bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#86EFAC] text-[11px] font-semibold px-2.5 py-0.5 rounded-[6px]">
+                <span className="bg-[#DCFCE7] text-[#166534] text-[11px] font-bold px-3 py-1 rounded-full">
                   {ongoingClass.room}
                 </span>
               </div>
 
-              {/* Subject & Grade */}
-              <div className="flex items-center justify-between gap-3 mb-3 pl-1">
+              {/* Subject, Grade & Record Class Button */}
+              <div className="flex items-center justify-between gap-3 mb-2">
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-[16px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] truncate tracking-tight">
+                  <h4 className="text-[18px] sm:text-[19px] font-black text-[#0F172A] truncate tracking-tight leading-snug">
                     {ongoingClass.subject}
                   </h4>
-                  <p className="text-[12px] font-medium text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5">
-                    {ongoingClass.grade}
+                  <p className="text-[13px] font-medium text-[#64748B] truncate mt-0.5">
+                    {ongoingClass.grade || 'B.Sc AI/ML – 1st Year'}
                   </p>
                 </div>
 
@@ -188,7 +185,7 @@ export default function Timetable() {
                         },
                       })
                     }
-                    className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] text-white text-[12px] font-bold shadow-record-btn active:scale-95 transition-all bg-[#EA3829] hover:bg-[#D93022] cursor-pointer"
+                    className="shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-[10px] text-white text-[12px] font-bold shadow-record-btn active:scale-95 transition-all bg-[#EA3829] hover:bg-[#D93022] cursor-pointer"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Record Class</span>
@@ -197,15 +194,15 @@ export default function Timetable() {
               </div>
 
               {/* Progress Bar & Time Left */}
-              <div className="flex items-center gap-3 pl-1">
-                <div className="flex-1 h-1.5 bg-[#D3EEDC] dark:bg-[#133E27] rounded-full overflow-hidden">
+              <div className="flex items-center gap-3.5 mt-3.5">
+                <div className="flex-1 h-1.5 bg-[#D3EEDC] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#16A34A] dark:bg-[#22C55E] rounded-full transition-all duration-1000 ease-linear"
+                    className="h-full bg-[#16A34A] rounded-full transition-all duration-1000 ease-linear"
                     style={{ width: `${ongoingClass.progress}%` }}
                   />
                 </div>
-                <span className="text-[12px] font-bold text-[#16A34A] dark:text-[#4ADE80] shrink-0 min-w-[70px] text-right tabular-nums">
-                  {ongoingClass.remainingLabel}
+                <span className="text-[12.5px] font-bold text-[#15803D] shrink-0 text-right tabular-nums">
+                  {ongoingClass.remainingLabel || `${ongoingClass.minutesLeft} min left`}
                 </span>
               </div>
             </div>

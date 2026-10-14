@@ -18,8 +18,9 @@ import { useRealtimeTimetable } from '../hooks/useRealtimeTimetable';
 
 export default function T4Dashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isStudent = location.state?.role === 'student' || !!location.state?.rollNumber;
+  const storedRole = localStorage.getItem('classhere_role');
+  const isStudent = location.state?.role === 'student' || storedRole === 'student' || !!location.state?.rollNumber;
+  const isTeacher = !isStudent;
   const displayName = isStudent ? (location.state?.rollNumber || 'Student') : 'Prof. Mehta';
 
   const [isNavVisible, setIsNavVisible] = useState(true);
@@ -135,78 +136,80 @@ export default function T4Dashboard() {
 
         {/* Today's Classes Header */}
         <div className="flex items-center justify-between pt-1">
-          <h3 className="text-[18.5px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight">
+          <h3 className="text-[19px] sm:text-[20px] font-extrabold text-[#0F172A] tracking-tight">
             Today’s Classes
           </h3>
           <button
             type="button"
-            onClick={() => navigate('/timetable')}
-            className="flex items-center gap-0.5 px-2.5 py-1 bg-[#EFF6FF] dark:bg-[#162238] rounded-full text-[#0075FF] dark:text-[#3894FF] text-[12px] font-bold hover:bg-blue-100 dark:hover:bg-[#1E2E4A] transition-colors cursor-pointer"
+            onClick={() => navigate('/timetable', { state: { role: isTeacher ? 'teacher' : 'student' } })}
+            className="flex items-center gap-0.5 px-3 py-1 bg-[#EFF6FF] rounded-full text-[#0075FF] text-[12px] font-bold hover:bg-blue-100 transition-colors cursor-pointer"
           >
             <span>View Timetable</span>
-            <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
           </button>
         </div>
 
         {/* 1. ONGOING CLASS CARD (Rendered if currently in session) */}
         {ongoingClass ? (
-          <div className="bg-[#EEFAF2] dark:bg-[#0A2619] border border-[#CEEFDB] dark:border-[#165335] rounded-[16px] p-4 shadow-sm transition-all duration-300">
+          <div className="bg-[#EEFAF2] border border-[#CEEFDB] rounded-[20px] p-4 sm:p-4.5 shadow-sm relative overflow-hidden apple-card">
             {/* Top Status */}
             <div className="flex items-center justify-between mb-2.5">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse" />
-                <span className="text-[12.5px] font-bold text-[#15803D] dark:text-[#4ADE80]">Ongoing</span>
-                <span className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8]">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] apple-live-pulse shrink-0" />
+                <span className="text-[13px] font-bold text-[#15803D]">Ongoing</span>
+                <span className="text-[12.5px] font-medium text-[#64748B]">
                   · {ongoingClass.startTime} to {ongoingClass.endTime}
                 </span>
               </div>
-              <span className="bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#86EFAC] text-[11px] font-semibold px-2 py-0.5 rounded-[6px]">
+              <span className="bg-[#DCFCE7] text-[#166534] text-[11px] font-bold px-3 py-1 rounded-full">
                 {ongoingClass.room}
               </span>
             </div>
 
-            {/* Subject & Record Button */}
-            <div className="flex items-center justify-between gap-3 mb-3.5">
+            {/* Subject, Grade & Record Button */}
+            <div className="flex items-center justify-between gap-3 mb-2">
               <div className="min-w-0 flex-1">
-                <h4 className="text-[17px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight truncate">
+                <h4 className="text-[18px] sm:text-[19px] font-black text-[#0F172A] tracking-tight leading-snug truncate">
                   {ongoingClass.subject}
                 </h4>
-                <p className="text-[12.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5 truncate">
-                  {ongoingClass.grade}
+                <p className="text-[13px] font-medium text-[#64748B] mt-0.5 truncate">
+                  {ongoingClass.grade || 'B.Sc AI/ML – 1st Year'}
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={() =>
-                  navigate('/record-class', {
-                    state: {
-                      subject: ongoingClass.subject,
-                      grade: ongoingClass.grade,
-                      room: ongoingClass.room,
-                      time: `${ongoingClass.startTime} to ${ongoingClass.endTime}`,
-                    },
-                  })
-                }
-                className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] text-white text-[12px] font-bold shadow-record-btn active:scale-95 transition-all bg-[#EA3829] hover:bg-[#D93022] cursor-pointer"
-              >
-                <BookOpen className="w-3.5 h-3.5" />
-                <span>Record Class</span>
-              </button>
+              {/* Record Button: ONLY visible to teachers when class is currently ongoing based on timetable */}
+              {isTeacher && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate('/record-class', {
+                      state: {
+                        subject: ongoingClass.subject,
+                        grade: ongoingClass.grade,
+                        room: ongoingClass.room,
+                        time: `${ongoingClass.startTime} to ${ongoingClass.endTime}`,
+                      },
+                    })
+                  }
+                  className="shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-[10px] text-white text-[12px] font-bold shadow-record-btn active:scale-95 transition-all bg-[#EA3829] hover:bg-[#D93022] cursor-pointer"
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Record Class</span>
+                </button>
+              )}
             </div>
 
             {/* Automatic Real-Time Progress Bar & Time Left */}
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-1.5 bg-[#D3EEDC] dark:bg-[#133E27] rounded-full overflow-hidden">
+            <div className="flex items-center gap-3.5 mt-3.5">
+              <div className="flex-1 h-1.5 bg-[#D3EEDC] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#16A34A] dark:bg-[#22C55E] rounded-full transition-all duration-1000 ease-linear"
+                  className="h-full bg-[#16A34A] rounded-full transition-all duration-1000 ease-linear"
                   style={{ width: `${ongoingClass.progress}%` }}
                 />
               </div>
 
               {/* Time Left Text */}
-              <span className="text-[12px] font-bold text-[#16A34A] dark:text-[#4ADE80] shrink-0 min-w-[70px] text-right tabular-nums">
-                {ongoingClass.remainingLabel}
+              <span className="text-[12.5px] font-bold text-[#15803D] shrink-0 min-w-[70px] text-right tabular-nums">
+                {ongoingClass.remainingLabel || `${ongoingClass.minutesLeft} min left`}
               </span>
             </div>
           </div>
