@@ -10,6 +10,7 @@ import {
   Database,
   MessageCircle,
   BookOpen,
+  Check,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 
@@ -54,6 +55,14 @@ const SUBJECT_DETAILS = {
         progress: 83,
         barColor: 'bg-[#16A34A]',
         textColor: 'text-[#16A34A]',
+        topics: [
+          { id: 'py_01_01', number: '01', title: 'What is Python?', completed: true },
+          { id: 'py_01_02', number: '02', title: 'Installing Python', completed: true },
+          { id: 'py_01_03', number: '03', title: 'Python IDEs and Setup', completed: true },
+          { id: 'py_01_04', number: '04', title: 'Your First Python Program', completed: true },
+          { id: 'py_01_05', number: '05', title: 'Python Syntax and Indentation', completed: true },
+          { id: 'py_01_06', number: '06', title: 'Comments and Variables Preview', completed: false },
+        ],
       },
       {
         number: '02',
@@ -62,6 +71,16 @@ const SUBJECT_DETAILS = {
         progress: 50,
         barColor: 'bg-[#0075FF]',
         textColor: 'text-[#0075FF]',
+        topics: [
+          { id: 'py_02_01', number: '01', title: 'Understanding Variables & Memory', completed: true },
+          { id: 'py_02_02', number: '02', title: 'Primitive Data Types (int, float, bool)', completed: true },
+          { id: 'py_02_03', number: '03', title: 'Strings & Character Slicing', completed: true },
+          { id: 'py_02_04', number: '04', title: 'Type Casting and Conversion', completed: true },
+          { id: 'py_02_05', number: '05', title: 'Dynamic Typing in Python', completed: false },
+          { id: 'py_02_06', number: '06', title: 'User Input with input() Function', completed: false },
+          { id: 'py_02_07', number: '07', title: 'String Formatting with f-strings', completed: false },
+          { id: 'py_02_08', number: '08', title: 'Immutability in Python Types', completed: false },
+        ],
       },
       {
         number: '03',
@@ -70,6 +89,14 @@ const SUBJECT_DETAILS = {
         progress: 50,
         barColor: 'bg-[#0075FF]',
         textColor: 'text-[#0075FF]',
+        topics: [
+          { id: 'py_03_01', number: '01', title: 'Arithmetic Operators & Precedence', completed: true },
+          { id: 'py_03_02', number: '02', title: 'Comparison and Relational Operators', completed: true },
+          { id: 'py_03_03', number: '03', title: 'Logical Operators (and, or, not)', completed: true },
+          { id: 'py_03_04', number: '04', title: 'Bitwise Operators & Shift Operations', completed: false },
+          { id: 'py_03_05', number: '05', title: 'Assignment & Augmented Operators', completed: false },
+          { id: 'py_03_06', number: '06', title: 'Identity & Membership (is, in)', completed: false },
+        ],
       },
       {
         number: '04',
@@ -78,6 +105,16 @@ const SUBJECT_DETAILS = {
         progress: 75,
         barColor: 'bg-[#16A34A]',
         textColor: 'text-[#16A34A]',
+        topics: [
+          { id: 'py_04_01', number: '01', title: 'Conditional Statements (if, elif, else)', completed: true },
+          { id: 'py_04_02', number: '02', title: 'Nested Conditions & Ternary Expressions', completed: true },
+          { id: 'py_04_03', number: '03', title: 'While Loops & Sentinel Values', completed: true },
+          { id: 'py_04_04', number: '04', title: 'For Loops with range() and iterables', completed: true },
+          { id: 'py_04_05', number: '05', title: 'Break and Continue Loop Controls', completed: true },
+          { id: 'py_04_06', number: '06', title: 'Loop else Clause Behaviour', completed: true },
+          { id: 'py_04_07', number: '07', title: 'Nested Loops & Pattern Printing', completed: false },
+          { id: 'py_04_08', number: '08', title: 'Pass Statement & Structural Code', completed: false },
+        ],
       },
       {
         number: '05',
@@ -86,6 +123,15 @@ const SUBJECT_DETAILS = {
         progress: 57,
         barColor: 'bg-[#0075FF]',
         textColor: 'text-[#0075FF]',
+        topics: [
+          { id: 'py_05_01', number: '01', title: 'Function Definition with def & Return Values', completed: true },
+          { id: 'py_05_02', number: '02', title: 'Positional and Keyword Arguments', completed: true },
+          { id: 'py_05_03', number: '03', title: 'Default Argument Values & Gotchas', completed: true },
+          { id: 'py_05_04', number: '04', title: 'Arbitrary Arguments (*args, **kwargs)', completed: true },
+          { id: 'py_05_05', number: '05', title: 'Variable Scope: Local, Enclosing, Global', completed: false },
+          { id: 'py_05_06', number: '06', title: 'Lambda Anonymous Functions', completed: false },
+          { id: 'py_05_07', number: '07', title: 'Recursion and Base Cases', completed: false },
+        ],
       },
       {
         number: '06',
@@ -94,6 +140,13 @@ const SUBJECT_DETAILS = {
         progress: 40,
         barColor: 'bg-[#F59E0B]',
         textColor: 'text-[#D97706]',
+        topics: [
+          { id: 'py_06_01', number: '01', title: 'List Creation, Indexing & Slicing', completed: true },
+          { id: 'py_06_02', number: '02', title: 'List Comprehension & In-place Methods', completed: true },
+          { id: 'py_06_03', number: '03', title: 'Tuples & Packing / Unpacking', completed: false },
+          { id: 'py_06_04', number: '04', title: 'Dictionaries: Hash Tables & Methods', completed: false },
+          { id: 'py_06_05', number: '05', title: 'Sets, Uniqueness & Set Operations', completed: false },
+        ],
       },
     ],
     importantTopics: [
@@ -522,7 +575,42 @@ const SUBJECT_DETAILS = {
   },
 };
 
-export default function Subjects() {
+// Helper function to resolve or dynamically generate realistic topics for any unit
+function getDefaultUnitTopics(unit) {
+  if (unit?.topics && unit.topics.length > 0) {
+    return unit.topics;
+  }
+
+  // Parse completed count and total from completedText, e.g. "5 of 6 topics completed"
+  const match = unit?.completedText ? unit.completedText.match(/(\d+)\s+of\s+(\d+)/) : null;
+  const completedCount = match ? parseInt(match[1], 10) : Math.round(((unit?.progress || 50) / 100) * 6);
+  const totalCount = match ? parseInt(match[2], 10) : 6;
+
+  const topicTitles = [
+    `Foundations & Core Principles of ${unit?.title || 'Topic'}`,
+    `Theoretical Framework & Architecture`,
+    `Standard Models & Syntax Rules`,
+    `Implementation & Practical Techniques`,
+    `System Integration & Real-world Usage`,
+    `Advanced Optimization & Analysis`,
+    `Troubleshooting & Common Edge Cases`,
+    `Summary & Practical Review Questions`,
+  ];
+
+  const generated = [];
+  for (let i = 0; i < totalCount; i++) {
+    const num = String(i + 1).padStart(2, '0');
+    generated.push({
+      id: `${unit?.number || '01'}_topic_${i + 1}`,
+      number: num,
+      title: topicTitles[i % topicTitles.length],
+      completed: i < completedCount,
+    });
+  }
+  return generated;
+}
+
+export default function Subjects({ defaultTitle = null, showBottomNav = true }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -532,13 +620,24 @@ export default function Subjects() {
     location.pathname.includes('student') ||
     localStorage.getItem('classhere_role') !== 'teacher';
 
+  const pageTitle = defaultTitle || (isStudent ? 'Subjects' : 'My Subjects');
+
   const [activeTab, setActiveTab] = useState('current');
   const [selectedBatch, setSelectedBatch] = useState('B.Sc AI/ML – 1st Year');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedSemester, setSelectedSemester] = useState('Semester 1');
+  const [selectedUnit, setSelectedUnit] = useState(null);
+  const [completedMap, setCompletedMap] = useState({});
   const lastScrollTopRef = useRef(0);
+
+  const toggleTopic = (topicId, currentStatus) => {
+    setCompletedMap((prev) => ({
+      ...prev,
+      [topicId]: !currentStatus,
+    }));
+  };
 
   const semesters = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4'];
 
@@ -776,6 +875,8 @@ export default function Subjects() {
       }
     : null;
 
+  const currentUnitTopics = selectedUnit ? getDefaultUnitTopics(selectedUnit) : [];
+
   return (
     <div className="relative h-full flex flex-col bg-[#F8FAFC] select-none overflow-hidden font-sans">
       {/* Scrollable Container */}
@@ -783,7 +884,90 @@ export default function Subjects() {
         onScroll={handleScroll}
         className="flex-1 overflow-y-auto no-scrollbar px-5 sm:px-6 pt-4 pb-24 space-y-4"
       >
-        {selectedSubject && detailData ? (
+        {selectedSubject && detailData && selectedUnit ? (
+          /* ======================================================== */
+          /* UNIT TOPICS VIEW: EXACT MATCH TO USER MOCKUP */
+          /* ======================================================== */
+          <div className="space-y-4 animate-dropdown-pop">
+            {/* Top Header: Back Arrow, Unit Title, Unit Pill */}
+            <header className="pt-1">
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2 min-w-0 pr-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedUnit(null)}
+                    className="p-1 -ml-1 text-[#0F172A] hover:bg-slate-200/60 active:scale-95 rounded-full transition-all cursor-pointer shrink-0"
+                    aria-label="Back to units"
+                  >
+                    <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+                  </button>
+                  <h1 className="text-[20px] sm:text-[22px] font-black text-[#0F172A] tracking-tight truncate leading-tight">
+                    {selectedUnit.title}
+                  </h1>
+                </div>
+
+                <span className="bg-[#EAF3FF] text-[#0075FF] text-[12px] font-bold px-3 py-1 rounded-full shrink-0 tracking-wider uppercase">
+                  UNIT {selectedUnit.number}
+                </span>
+              </div>
+            </header>
+
+            {/* Section Header: Topics Count */}
+            <div className="flex items-center justify-between pt-1">
+              <h2 className="text-[21px] sm:text-[22px] font-black text-[#0F172A] tracking-tight leading-none">
+                Topics
+              </h2>
+              <span className="bg-[#EAF3FF] text-[#0075FF] text-[12px] font-bold px-3 py-1 rounded-full shrink-0">
+                {currentUnitTopics.length} Topics
+              </span>
+            </div>
+
+            {/* Topics Checklist Cards */}
+            <div className="space-y-3 pt-0.5">
+              {currentUnitTopics.map((topic) => {
+                const isCompleted =
+                  completedMap[topic.id] !== undefined
+                    ? completedMap[topic.id]
+                    : topic.completed;
+
+                return (
+                  <div
+                    key={topic.id}
+                    onClick={() => toggleTopic(topic.id, isCompleted)}
+                    className="bg-white border border-[#EEF2F6] rounded-[22px] p-4 sm:p-4.5 flex items-center justify-between gap-3.5 shadow-card hover:shadow-card-hover apple-card transition-all cursor-pointer group active:scale-[0.99]"
+                  >
+                    {/* Left Container: Topic Number Badge */}
+                    <div className="w-[50px] h-[50px] rounded-[15px] bg-[#EAF3FF] text-[#0075FF] font-black text-[16px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      {topic.number}
+                    </div>
+
+                    {/* Middle: Topic Title */}
+                    <div className="flex-1 min-w-0 pr-1">
+                      <h3 className="text-[15.5px] sm:text-[16px] font-bold text-[#0F172A] leading-snug">
+                        {topic.title}
+                      </h3>
+                    </div>
+
+                    {/* Right: Completion Circle & Chevron Arrow */}
+                    <div className="flex items-center gap-3 shrink-0">
+                      {isCompleted ? (
+                        <div className="w-6 h-6 rounded-full bg-[#16A34A] flex items-center justify-center text-white shrink-0 shadow-xs">
+                          <Check className="w-3.5 h-3.5 stroke-[3]" />
+                        </div>
+                      ) : (
+                        <div className="w-6 h-6 rounded-full border-2 border-[#CBD5E1] bg-white shrink-0 group-hover:border-[#94A3B8] transition-colors" />
+                      )}
+
+                      <div className="text-[#94A3B8] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all">
+                        <ChevronRight className="w-4.5 h-4.5 stroke-[2.2]" />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : selectedSubject && detailData ? (
           /* ======================================================== */
           /* EXACT SUBJECT DETAIL DESIGN MATCHING USER REFERENCE MOCKUP */
           /* ======================================================== */
@@ -793,7 +977,10 @@ export default function Subjects() {
               <div className="flex items-center gap-2.5 min-w-0">
                 <button
                   type="button"
-                  onClick={() => setSelectedSubject(null)}
+                  onClick={() => {
+                    setSelectedSubject(null);
+                    setSelectedUnit(null);
+                  }}
                   className="p-1 -ml-1 text-[#0F172A] hover:bg-slate-200/60 active:scale-95 rounded-full transition-all cursor-pointer shrink-0"
                   aria-label="Go back"
                 >
@@ -871,16 +1058,17 @@ export default function Subjects() {
               {detailData.units.map((unit) => (
                 <div
                   key={unit.number}
-                  className="bg-white border border-[#EEF2F6] rounded-[20px] p-3.5 sm:p-4 flex items-center justify-between gap-3 shadow-card hover:shadow-card-hover transition-all apple-card"
+                  onClick={() => setSelectedUnit(unit)}
+                  className="bg-white border border-[#EEF2F6] rounded-[20px] p-3.5 sm:p-4 flex items-center justify-between gap-3 shadow-card hover:shadow-card-hover transition-all apple-card cursor-pointer group active:scale-[0.99]"
                 >
                   {/* Unit Number Box */}
-                  <div className="w-11 h-11 rounded-[14px] bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center font-black text-[15px] shrink-0">
+                  <div className="w-11 h-11 rounded-[14px] bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center font-black text-[15px] shrink-0 group-hover:scale-105 transition-transform">
                     {unit.number}
                   </div>
 
                   {/* Title & Completed topics */}
                   <div className="flex-1 min-w-0 pr-1.5">
-                    <h3 className="text-[14.5px] font-bold text-[#0F172A] leading-snug truncate">
+                    <h3 className="text-[14.5px] font-bold text-[#0F172A] leading-snug truncate group-hover:text-[#0075FF] transition-colors">
                       {unit.title}
                     </h3>
                     <p className="text-[12px] font-medium text-[#64748B] mt-0.5 truncate">
@@ -901,7 +1089,7 @@ export default function Subjects() {
                     >
                       {unit.progress}%
                     </span>
-                    <ChevronRight className="w-4 h-4 text-[#94A3B8] stroke-[2.2]" />
+                    <ChevronRight className="w-4 h-4 text-[#94A3B8] stroke-[2.2] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all" />
                   </div>
                 </div>
               ))}
@@ -956,7 +1144,7 @@ export default function Subjects() {
                     <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
                   </button>
                   <h1 className="text-[26px] sm:text-[28px] font-black text-[#0F172A] tracking-tight leading-none">
-                    Subjects
+                    {pageTitle}
                   </h1>
                 </div>
 
@@ -1156,7 +1344,9 @@ export default function Subjects() {
       </div>
 
       {/* Bottom Navigation Bar */}
-      <BottomNav activeTab="subjects" isVisible={isNavVisible} />
+      {showBottomNav && (
+        <BottomNav activeTab="subjects" isVisible={isNavVisible} />
+      )}
     </div>
   );
 }
