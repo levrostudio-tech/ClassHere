@@ -238,6 +238,8 @@ export default function StudentDashboard() {
                     navigate('/important-topics', { state: { role: 'student' } });
                   } else if (action.id === 'notes') {
                     navigate('/notes', { state: { role: 'student' } });
+                  } else if (action.id === 'syllabus') {
+                    navigate('/syllabus', { state: { role: 'student' } });
                   } else {
                     setActiveModal(action.id);
                   }
@@ -450,58 +452,6 @@ export default function StudentDashboard() {
 
 
 
-      {/* ======================================================== */}
-      {/* MODAL 2: Syllabus Modal */}
-      {/* ======================================================== */}
-      {activeModal === 'syllabus' && (
-        <div className="absolute inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-end sm:items-center justify-center">
-          <div className="bg-white dark:bg-[#131B2E] w-full rounded-t-[28px] sm:rounded-[24px] p-5 max-h-[82vh] overflow-y-auto apple-sheet border border-slate-100 dark:border-[#1E293B] shadow-2xl transition-colors">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[10px] bg-[#EAF3FF] dark:bg-[#162238] text-[#0075FF] dark:text-[#3894FF] flex items-center justify-center">
-                  <BookOpen className="w-4.5 h-4.5" />
-                </div>
-                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">Course Syllabus</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 dark:text-[#94A3B8] hover:text-slate-800 dark:hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              {syllabusData.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px]"
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">
-                      {item.subject}
-                    </span>
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-[6px] bg-slate-200/60 dark:bg-[#223354] text-slate-700 dark:text-[#94A3B8]">
-                      {item.code}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[11.5px] text-[#64748B] dark:text-[#94A3B8] mb-2">
-                    <span>{item.units} Units Total</span>
-                    <span className="font-bold text-[#0075FF] dark:text-[#3894FF]">{item.completed}% Completed</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-[#E2E8F0] dark:bg-[#223354] rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={{ width: `${item.completed}%`, backgroundColor: item.color }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ======================================================== */}
       {/* MODAL 3: Important Topics Modal */}

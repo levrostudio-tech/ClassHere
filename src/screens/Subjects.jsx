@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   GraduationCap,
   ChevronDown,
@@ -449,12 +449,24 @@ const SUBJECT_DETAILS = {
 
 export default function Subjects() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('current');
   const [selectedBatch, setSelectedBatch] = useState('B.Sc AI/ML – 1st Year');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const lastScrollTopRef = useRef(0);
+
+  useEffect(() => {
+    if (location.state?.subjectId) {
+      const match = subjectsList.find((s) => s.id === location.state.subjectId);
+      if (match) {
+        setSelectedSubject(match);
+      } else {
+        setSelectedSubject({ id: location.state.subjectId, name: 'Python Programming' });
+      }
+    }
+  }, [location.state?.subjectId]);
 
   const batches = [
     'B.Sc AI/ML – 1st Year',

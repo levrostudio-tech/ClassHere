@@ -20,6 +20,7 @@ import RecordClassSuccess from './screens/RecordClassSuccess';
 import StudentDashboard from './screens/StudentDashboard';
 import StudentImportantTopics from './screens/StudentImportantTopics';
 import StudentNotes from './screens/StudentNotes';
+import StudentSyllabus from './screens/StudentSyllabus';
 import AdminLogin from './screens/AdminLogin';
 import AdminDashboard from './screens/AdminDashboard';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
@@ -66,6 +67,9 @@ function AnimatedRoutes() {
         <Route path="/student-notes" element={<StudentNotes />} />
         <Route path="/important-topics" element={<StudentImportantTopics />} />
         <Route path="/student/important-topics" element={<StudentImportantTopics />} />
+        <Route path="/syllabus" element={<StudentSyllabus />} />
+        <Route path="/student/syllabus" element={<StudentSyllabus />} />
+        <Route path="/student-syllabus" element={<StudentSyllabus />} />
         <Route path="/record-class" element={<RecordClass />} />
         <Route path="/record-class-success" element={<RecordClassSuccess />} />
 
