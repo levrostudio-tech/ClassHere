@@ -55,6 +55,8 @@ function AnimatedRoutes() {
         <Route path="/student/dashboard" element={<StudentDashboard />} />
         <Route path="/timetable" element={<Timetable />} />
         <Route path="/subjects" element={<Subjects />} />
+        <Route path="/student/subjects" element={<Subjects />} />
+        <Route path="/student-subjects" element={<Subjects />} />
         <Route path="/profile" element={<ProfileSettings />} />
         <Route path="/settings" element={<ProfileSettings />} />
         <Route path="/founder-story" element={<FounderStory />} />

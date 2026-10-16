@@ -13,7 +13,9 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
 
   const isStudent =
     location.pathname.includes('student') ||
-    localStorage.getItem('classhere_role') === 'student';
+    location.state?.role === 'student' ||
+    localStorage.getItem('classhere_role') === 'student' ||
+    localStorage.getItem('classhere_role') !== 'teacher';
 
   // Student Navigation: Home, Classes, Subjects (No Profile section)
   // Faculty Navigation: Home, Classes, Subjects, Profile
@@ -65,7 +67,7 @@ export default function BottomNav({ activeTab = 'home', isVisible = true }) {
               type="button"
               onClick={() => {
                 if (item.path) {
-                  navigate(item.path);
+                  navigate(item.path, { state: { role: isStudent ? 'student' : 'teacher' } });
                 }
               }}
               className={`w-full ${
