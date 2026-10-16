@@ -5,7 +5,6 @@ import {
   ChevronDown,
   ChevronRight,
   ChevronLeft,
-  Star,
   Monitor,
   Database,
   MessageCircle,
@@ -99,7 +98,7 @@ const SUBJECT_DETAILS = {
       },
       {
         number: '04',
-        title: 'Control Flow (If-Else, Loops)',
+        title: 'Control Flow',
         completedText: '6 of 8 topics completed',
         progress: 75,
         barColor: 'bg-[#16A34A]',
@@ -975,132 +974,84 @@ export default function Subjects({ defaultTitle = null, showBottomNav = true }) 
             {/* Overall Progress Card */}
             <div className="bg-white border border-[#EEF2F6] rounded-[22px] p-5 shadow-card flex items-center gap-5 apple-card">
               {/* Circular Progress Ring Gauge */}
-              <div className="relative w-[76px] h-[76px] flex items-center justify-center shrink-0">
-                <svg className="w-[76px] h-[76px] -rotate-90 shrink-0" viewBox="0 0 76 76">
+              <div className="relative w-[78px] h-[78px] flex items-center justify-center shrink-0">
+                <svg className="w-[78px] h-[78px] -rotate-90 shrink-0" viewBox="0 0 78 78">
                   <circle
-                    cx="38"
-                    cy="38"
-                    r={30}
+                    cx="39"
+                    cy="39"
+                    r={31}
                     stroke="#EAF3FF"
                     strokeWidth="6.5"
                     fill="transparent"
                   />
                   <circle
-                    cx="38"
-                    cy="38"
-                    r={30}
+                    cx="39"
+                    cy="39"
+                    r={31}
                     stroke="#0075FF"
                     strokeWidth="6.5"
-                    strokeDasharray={2 * Math.PI * 30}
-                    strokeDashoffset={2 * Math.PI * 30 * (1 - (detailData.progress || 60) / 100)}
+                    strokeDasharray={2 * Math.PI * 31}
+                    strokeDashoffset={2 * Math.PI * 31 * (1 - (detailData.progress || 60) / 100)}
                     strokeLinecap="round"
                     fill="transparent"
                     className="transition-all duration-700 ease-out"
                   />
                 </svg>
-                <span className="absolute text-[17px] font-black text-[#0F172A] tracking-tight">
+                <span className="absolute text-[18px] font-black text-[#0F172A] tracking-tight">
                   {detailData.progress || 60}%
                 </span>
               </div>
 
-              {/* Progress Text & Horizontal Bar */}
+              {/* Progress Text */}
               <div className="flex-1 min-w-0">
-                <h2 className="text-[17px] font-extrabold text-[#0F172A] tracking-tight leading-snug">
+                <h2 className="text-[18px] sm:text-[19px] font-extrabold text-[#0F172A] tracking-tight leading-snug">
                   Overall Progress
                 </h2>
-                <p className="text-[13px] font-medium text-[#64748B] mt-0.5 mb-2.5">
+                <p className="text-[13.5px] font-medium text-[#64748B] mt-1">
                   {detailData.completedTopics} of {detailData.totalTopics} topics completed
                 </p>
-                <div className="w-full h-2 bg-[#EAF3FF] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#0075FF] rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${detailData.progress || 60}%` }}
-                  />
-                </div>
               </div>
             </div>
 
             {/* Section Header: Syllabus Overview */}
             <div className="flex items-center justify-between pt-1">
-              <h2 className="text-[18px] font-extrabold text-[#0F172A] tracking-tight">
+              <h2 className="text-[20px] sm:text-[21px] font-extrabold text-[#0F172A] tracking-tight">
                 Syllabus Overview
               </h2>
-              <span className="bg-[#EAF3FF] text-[#0075FF] text-[12px] font-bold px-3 py-1 rounded-full">
+              <span className="bg-[#EAF3FF] text-[#0075FF] text-[12px] font-bold px-3 py-1 rounded-full shrink-0">
                 {detailData.units.length} Units
               </span>
             </div>
 
             {/* Syllabus Units Cards */}
-            <div className="space-y-2.5">
+            <div className="space-y-3 pt-0.5">
               {detailData.units.map((unit) => (
                 <div
                   key={unit.number}
                   onClick={() => setSelectedUnit(unit)}
-                  className="bg-white border border-[#EEF2F6] rounded-[20px] p-3.5 sm:p-4 flex items-center justify-between gap-3 shadow-card hover:shadow-card-hover transition-all apple-card cursor-pointer group active:scale-[0.99]"
+                  className="bg-white border border-[#EEF2F6] rounded-[22px] p-4 sm:p-4.5 flex items-center justify-between gap-3.5 shadow-card hover:shadow-card-hover transition-all apple-card cursor-pointer group active:scale-[0.99]"
                 >
                   {/* Unit Number Box */}
-                  <div className="w-11 h-11 rounded-[14px] bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center font-black text-[15px] shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="w-[52px] h-[52px] rounded-[16px] bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center font-black text-[17px] shrink-0 group-hover:scale-105 transition-transform">
                     {unit.number}
                   </div>
 
                   {/* Title & Completed topics */}
-                  <div className="flex-1 min-w-0 pr-1.5">
-                    <h3 className="text-[14.5px] font-bold text-[#0F172A] leading-snug truncate group-hover:text-[#0075FF] transition-colors">
+                  <div className="flex-1 min-w-0 pr-1">
+                    <h3 className="text-[16px] sm:text-[16.5px] font-bold text-[#0F172A] leading-snug truncate group-hover:text-[#0075FF] transition-colors">
                       {unit.title}
                     </h3>
-                    <p className="text-[12px] font-medium text-[#64748B] mt-0.5 truncate">
+                    <p className="text-[13px] font-medium text-[#64748B] mt-0.5 truncate">
                       {unit.completedText}
                     </p>
                   </div>
 
-                  {/* Progress Bar & Percentage & Chevron */}
-                  <div className="flex items-center gap-2.5 shrink-0">
-                    <div className="w-16 sm:w-20 h-2 bg-[#F1F5F9] rounded-full overflow-hidden">
-                      <div
-                        className={`h-full ${unit.barColor} rounded-full transition-all duration-500`}
-                        style={{ width: `${unit.progress}%` }}
-                      />
-                    </div>
-                    <span
-                      className={`text-[12.5px] font-bold ${unit.textColor} tabular-nums min-w-[32px] text-right`}
-                    >
-                      {unit.progress}%
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-[#94A3B8] stroke-[2.2] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all" />
+                  {/* Right: Chevron Arrow */}
+                  <div className="text-[#94A3B8] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all shrink-0">
+                    <ChevronRight className="w-5 h-5 stroke-[2.2]" />
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Important Topics Card */}
-            <div className="bg-white border border-[#EEF2F6] rounded-[22px] p-4.5 sm:p-5 shadow-card apple-card">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 fill-[#F59E0B] text-[#F59E0B] shrink-0" />
-                  <h3 className="text-[16.5px] font-extrabold text-[#0F172A] tracking-tight">
-                    Important Topics
-                  </h3>
-                </div>
-                <span className="bg-[#EAF3FF] text-[#0075FF] text-[11.5px] font-bold px-3 py-1 rounded-full">
-                  {detailData.importantTopics.length} Marked
-                </span>
-              </div>
-
-              <div>
-                {detailData.importantTopics.map((topic, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex items-center gap-3 py-2.5 ${
-                      idx < detailData.importantTopics.length - 1 ? 'border-b border-[#F1F5F9]' : ''
-                    }`}
-                  >
-                    <Star className="w-4 h-4 fill-[#0075FF] text-[#0075FF] shrink-0" />
-                    <span className="text-[13.5px] font-semibold text-[#0F172A] leading-snug">
-                      {topic}
-                    </span>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         ) : isStudent ? (
