@@ -10,7 +10,6 @@ import {
   Database,
   MessageCircle,
   BookOpen,
-  Check,
 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 
@@ -629,15 +628,7 @@ export default function Subjects({ defaultTitle = null, showBottomNav = true }) 
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedSemester, setSelectedSemester] = useState('Semester 1');
   const [selectedUnit, setSelectedUnit] = useState(null);
-  const [completedMap, setCompletedMap] = useState({});
   const lastScrollTopRef = useRef(0);
-
-  const toggleTopic = (topicId, currentStatus) => {
-    setCompletedMap((prev) => ({
-      ...prev,
-      [topicId]: !currentStatus,
-    }));
-  };
 
   const semesters = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4'];
 
@@ -922,49 +913,35 @@ export default function Subjects({ defaultTitle = null, showBottomNav = true }) 
               </span>
             </div>
 
-            {/* Topics Checklist Cards */}
+            {/* Topics Cards */}
             <div className="space-y-3 pt-0.5">
-              {currentUnitTopics.map((topic) => {
-                const isCompleted =
-                  completedMap[topic.id] !== undefined
-                    ? completedMap[topic.id]
-                    : topic.completed;
+              {currentUnitTopics.map((topic) => (
+                <div
+                  key={topic.id}
+                  className="bg-white border border-[#EEF2F6] rounded-[22px] p-4 sm:p-4.5 flex items-center justify-between gap-3.5 shadow-card hover:shadow-card-hover apple-card transition-all cursor-pointer group active:scale-[0.99]"
+                >
+                  {/* Left Container: Topic Number Badge */}
+                  <div className="w-[50px] h-[50px] rounded-[15px] bg-[#EAF3FF] text-[#0075FF] font-black text-[16px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    {topic.number}
+                  </div>
 
-                return (
-                  <div
-                    key={topic.id}
-                    onClick={() => toggleTopic(topic.id, isCompleted)}
-                    className="bg-white border border-[#EEF2F6] rounded-[22px] p-4 sm:p-4.5 flex items-center justify-between gap-3.5 shadow-card hover:shadow-card-hover apple-card transition-all cursor-pointer group active:scale-[0.99]"
-                  >
-                    {/* Left Container: Topic Number Badge */}
-                    <div className="w-[50px] h-[50px] rounded-[15px] bg-[#EAF3FF] text-[#0075FF] font-black text-[16px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      {topic.number}
-                    </div>
+                  {/* Middle: Topic Title */}
+                  <div className="flex-1 min-w-0 pr-1">
+                    <h3 className="text-[15.5px] sm:text-[16px] font-bold text-[#0F172A] leading-snug">
+                      {topic.title}
+                    </h3>
+                  </div>
 
-                    {/* Middle: Topic Title */}
-                    <div className="flex-1 min-w-0 pr-1">
-                      <h3 className="text-[15.5px] sm:text-[16px] font-bold text-[#0F172A] leading-snug">
-                        {topic.title}
-                      </h3>
-                    </div>
+                  {/* Right: Blank Circle & Chevron Arrow */}
+                  <div className="flex items-center gap-3 shrink-0">
+                    <div className="w-6 h-6 rounded-full border-2 border-[#CBD5E1] bg-white shrink-0 group-hover:border-[#94A3B8] transition-colors" />
 
-                    {/* Right: Completion Circle & Chevron Arrow */}
-                    <div className="flex items-center gap-3 shrink-0">
-                      {isCompleted ? (
-                        <div className="w-6 h-6 rounded-full bg-[#16A34A] flex items-center justify-center text-white shrink-0 shadow-xs">
-                          <Check className="w-3.5 h-3.5 stroke-[3]" />
-                        </div>
-                      ) : (
-                        <div className="w-6 h-6 rounded-full border-2 border-[#CBD5E1] bg-white shrink-0 group-hover:border-[#94A3B8] transition-colors" />
-                      )}
-
-                      <div className="text-[#94A3B8] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all">
-                        <ChevronRight className="w-4.5 h-4.5 stroke-[2.2]" />
-                      </div>
+                    <div className="text-[#94A3B8] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all">
+                      <ChevronRight className="w-4.5 h-4.5 stroke-[2.2]" />
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
         ) : selectedSubject && detailData ? (
