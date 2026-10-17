@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -24,8 +24,590 @@ import {
   CheckCircle2,
   X,
   Upload,
+  MoreVertical,
+  FileDown,
+  Printer,
+  Trash2,
 } from 'lucide-react';
 import { adminLogout, getAdminUser } from '../lib/adminAuth';
+
+const AVATAR_COLORS = [
+  'bg-blue-100 text-blue-600',
+  'bg-purple-100 text-purple-600',
+  'bg-emerald-100 text-emerald-600',
+  'bg-pink-100 text-pink-600',
+  'bg-amber-100 text-amber-700',
+  'bg-sky-100 text-sky-600',
+  'bg-indigo-100 text-indigo-600',
+  'bg-teal-100 text-teal-600',
+  'bg-rose-100 text-rose-600',
+  'bg-yellow-100 text-yellow-700',
+];
+
+const getInitials = (name) => {
+  if (!name) return 'ST';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
+const INITIAL_STUDENTS = [
+  // Page 1 (Matching screenshot exactly)
+  {
+    id: 'std-1',
+    name: 'Aman Kumar',
+    initials: 'AK',
+    avatarBg: 'bg-blue-100 text-blue-600',
+    rollNumber: '23BCA001',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '12 Aug 2026',
+  },
+  {
+    id: 'std-2',
+    name: 'Simran Preet',
+    initials: 'SP',
+    avatarBg: 'bg-purple-100 text-purple-600',
+    rollNumber: '23BCA002',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '12 Aug 2026',
+  },
+  {
+    id: 'std-3',
+    name: 'Rohit Sharma',
+    initials: 'RS',
+    avatarBg: 'bg-emerald-100 text-emerald-600',
+    rollNumber: '23IT015',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '10 Aug 2026',
+  },
+  {
+    id: 'std-4',
+    name: 'Muskan Kaur',
+    initials: 'MK',
+    avatarBg: 'bg-pink-100 text-pink-600',
+    rollNumber: '23IT018',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '10 Aug 2026',
+  },
+  {
+    id: 'std-5',
+    name: 'Arjun Rana',
+    initials: 'AR',
+    avatarBg: 'bg-amber-100 text-amber-700',
+    rollNumber: '23BVOC007',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '08 Aug 2026',
+  },
+  {
+    id: 'std-6',
+    name: 'Priya Garg',
+    initials: 'PG',
+    avatarBg: 'bg-sky-100 text-sky-600',
+    rollNumber: '23BVOC011',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '08 Aug 2026',
+  },
+  {
+    id: 'std-7',
+    name: 'Nikhil Handa',
+    initials: 'NH',
+    avatarBg: 'bg-indigo-100 text-indigo-600',
+    rollNumber: '23CS006',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '05 Aug 2026',
+  },
+  {
+    id: 'std-8',
+    name: 'Jasleen Tiwari',
+    initials: 'JT',
+    avatarBg: 'bg-teal-100 text-teal-600',
+    rollNumber: '23CS010',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '05 Aug 2026',
+  },
+  {
+    id: 'std-9',
+    name: 'Vansh K.',
+    initials: 'VK',
+    avatarBg: 'bg-rose-100 text-rose-600',
+    rollNumber: '23AIML004',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '03 Aug 2026',
+  },
+  {
+    id: 'std-10',
+    name: 'Divansh Singh',
+    initials: 'DS',
+    avatarBg: 'bg-yellow-100 text-yellow-700',
+    rollNumber: '23AIML012',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '03 Aug 2026',
+  },
+  // Page 2
+  {
+    id: 'std-11',
+    name: 'Ananya Verma',
+    initials: 'AV',
+    avatarBg: 'bg-blue-100 text-blue-600',
+    rollNumber: '23BCA014',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '01 Aug 2026',
+  },
+  {
+    id: 'std-12',
+    name: 'Harpreet Singh',
+    initials: 'HS',
+    avatarBg: 'bg-purple-100 text-purple-600',
+    rollNumber: '23BCA022',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '29 Jul 2026',
+  },
+  {
+    id: 'std-13',
+    name: 'Riya Sen',
+    initials: 'RS',
+    avatarBg: 'bg-emerald-100 text-emerald-600',
+    rollNumber: '23IT025',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '27 Jul 2026',
+  },
+  {
+    id: 'std-14',
+    name: 'Karan Deep',
+    initials: 'KD',
+    avatarBg: 'bg-pink-100 text-pink-600',
+    rollNumber: '23IT030',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '25 Jul 2026',
+  },
+  {
+    id: 'std-15',
+    name: 'Sahil Mehra',
+    initials: 'SM',
+    avatarBg: 'bg-amber-100 text-amber-700',
+    rollNumber: '23BVOC019',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '24 Jul 2026',
+  },
+  {
+    id: 'std-16',
+    name: 'Tanvi Sharma',
+    initials: 'TS',
+    avatarBg: 'bg-sky-100 text-sky-600',
+    rollNumber: '23BVOC024',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '22 Jul 2026',
+  },
+  {
+    id: 'std-17',
+    name: 'Gurjot Singh',
+    initials: 'GS',
+    avatarBg: 'bg-indigo-100 text-indigo-600',
+    rollNumber: '23CS015',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '20 Jul 2026',
+  },
+  {
+    id: 'std-18',
+    name: 'Mehak Arora',
+    initials: 'MA',
+    avatarBg: 'bg-teal-100 text-teal-600',
+    rollNumber: '23CS021',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '18 Jul 2026',
+  },
+  {
+    id: 'std-19',
+    name: 'Aditya Joshi',
+    initials: 'AJ',
+    avatarBg: 'bg-rose-100 text-rose-600',
+    rollNumber: '23AIML018',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '15 Jul 2026',
+  },
+  {
+    id: 'std-20',
+    name: 'Sneha Kapoor',
+    initials: 'SK',
+    avatarBg: 'bg-yellow-100 text-yellow-700',
+    rollNumber: '23AIML025',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '14 Jul 2026',
+  },
+  // Page 3
+  {
+    id: 'std-21',
+    name: 'Manav Malhotra',
+    initials: 'MM',
+    avatarBg: 'bg-blue-100 text-blue-600',
+    rollNumber: '23BCA033',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '12 Jul 2026',
+  },
+  {
+    id: 'std-22',
+    name: 'Navneet Kaur',
+    initials: 'NK',
+    avatarBg: 'bg-purple-100 text-purple-600',
+    rollNumber: '23BCA041',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '10 Jul 2026',
+  },
+  {
+    id: 'std-23',
+    name: 'Deepak Rawat',
+    initials: 'DR',
+    avatarBg: 'bg-emerald-100 text-emerald-600',
+    rollNumber: '23IT038',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '08 Jul 2026',
+  },
+  {
+    id: 'std-24',
+    name: 'Ishita Roy',
+    initials: 'IR',
+    avatarBg: 'bg-pink-100 text-pink-600',
+    rollNumber: '23IT044',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '05 Jul 2026',
+  },
+  {
+    id: 'std-25',
+    name: 'Rahul Gill',
+    initials: 'RG',
+    avatarBg: 'bg-amber-100 text-amber-700',
+    rollNumber: '23BVOC032',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '03 Jul 2026',
+  },
+  {
+    id: 'std-26',
+    name: 'Pooja Batra',
+    initials: 'PB',
+    avatarBg: 'bg-sky-100 text-sky-600',
+    rollNumber: '23BVOC039',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '01 Jul 2026',
+  },
+  {
+    id: 'std-27',
+    name: 'Abhishek Paul',
+    initials: 'AP',
+    avatarBg: 'bg-indigo-100 text-indigo-600',
+    rollNumber: '23CS029',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '28 Jun 2026',
+  },
+  {
+    id: 'std-28',
+    name: 'Simranjeet K.',
+    initials: 'SK',
+    avatarBg: 'bg-teal-100 text-teal-600',
+    rollNumber: '23CS035',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '25 Jun 2026',
+  },
+  {
+    id: 'std-29',
+    name: 'Yash Goel',
+    initials: 'YG',
+    avatarBg: 'bg-rose-100 text-rose-600',
+    rollNumber: '23AIML031',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '22 Jun 2026',
+  },
+  {
+    id: 'std-30',
+    name: 'Khushi Jain',
+    initials: 'KJ',
+    avatarBg: 'bg-yellow-100 text-yellow-700',
+    rollNumber: '23AIML039',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '20 Jun 2026',
+  },
+  // Page 4
+  {
+    id: 'std-31',
+    name: 'Tarun Chawla',
+    initials: 'TC',
+    avatarBg: 'bg-blue-100 text-blue-600',
+    rollNumber: '23BCA050',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '18 Jun 2026',
+  },
+  {
+    id: 'std-32',
+    name: 'Bhavna Soni',
+    initials: 'BS',
+    avatarBg: 'bg-purple-100 text-purple-600',
+    rollNumber: '23BCA055',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '15 Jun 2026',
+  },
+  {
+    id: 'std-33',
+    name: 'Mohit Juneja',
+    initials: 'MJ',
+    avatarBg: 'bg-emerald-100 text-emerald-600',
+    rollNumber: '23IT051',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '12 Jun 2026',
+  },
+  {
+    id: 'std-34',
+    name: 'Chetna Vyas',
+    initials: 'CV',
+    avatarBg: 'bg-pink-100 text-pink-600',
+    rollNumber: '23IT059',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '10 Jun 2026',
+  },
+  {
+    id: 'std-35',
+    name: 'Aryan Dogra',
+    initials: 'AD',
+    avatarBg: 'bg-amber-100 text-amber-700',
+    rollNumber: '23BVOC045',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '08 Jun 2026',
+  },
+  {
+    id: 'std-36',
+    name: 'Komal Yadav',
+    initials: 'KY',
+    avatarBg: 'bg-sky-100 text-sky-600',
+    rollNumber: '23BVOC051',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '05 Jun 2026',
+  },
+  {
+    id: 'std-37',
+    name: 'Gaurav Bedi',
+    initials: 'GB',
+    avatarBg: 'bg-indigo-100 text-indigo-600',
+    rollNumber: '23CS042',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '02 Jun 2026',
+  },
+  {
+    id: 'std-38',
+    name: 'Ritu Aggarwal',
+    initials: 'RA',
+    avatarBg: 'bg-teal-100 text-teal-600',
+    rollNumber: '23CS048',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '30 May 2026',
+  },
+  {
+    id: 'std-39',
+    name: 'Kabir Sood',
+    initials: 'KS',
+    avatarBg: 'bg-rose-100 text-rose-600',
+    rollNumber: '23AIML046',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '28 May 2026',
+  },
+  {
+    id: 'std-40',
+    name: 'Nandini Seth',
+    initials: 'NS',
+    avatarBg: 'bg-yellow-100 text-yellow-700',
+    rollNumber: '23AIML052',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '25 May 2026',
+  },
+  // Page 5
+  {
+    id: 'std-41',
+    name: 'Sameer Bajaj',
+    initials: 'SB',
+    avatarBg: 'bg-blue-100 text-blue-600',
+    rollNumber: '23BCA062',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '22 May 2026',
+  },
+  {
+    id: 'std-42',
+    name: 'Pallavi Sood',
+    initials: 'PS',
+    avatarBg: 'bg-purple-100 text-purple-600',
+    rollNumber: '23BCA068',
+    course: 'BCA',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '20 May 2026',
+  },
+  {
+    id: 'std-43',
+    name: 'Varun Grover',
+    initials: 'VG',
+    avatarBg: 'bg-emerald-100 text-emerald-600',
+    rollNumber: '23IT067',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '18 May 2026',
+  },
+  {
+    id: 'std-44',
+    name: 'Tanya Bhatia',
+    initials: 'TB',
+    avatarBg: 'bg-pink-100 text-pink-600',
+    rollNumber: '23IT073',
+    course: 'B.Sc IT',
+    semester: '5th Semester',
+    status: 'Active',
+    joinedOn: '15 May 2026',
+  },
+  {
+    id: 'std-45',
+    name: 'Raghav Duggal',
+    initials: 'RD',
+    avatarBg: 'bg-amber-100 text-amber-700',
+    rollNumber: '23BVOC058',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '12 May 2026',
+  },
+  {
+    id: 'std-46',
+    name: 'Neha Singla',
+    initials: 'NS',
+    avatarBg: 'bg-sky-100 text-sky-600',
+    rollNumber: '23BVOC064',
+    course: 'B.Voc (Web Dev)',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '10 May 2026',
+  },
+  {
+    id: 'std-47',
+    name: 'Jatin Sethi',
+    initials: 'JS',
+    avatarBg: 'bg-indigo-100 text-indigo-600',
+    rollNumber: '23CS056',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '08 May 2026',
+  },
+  {
+    id: 'std-48',
+    name: 'Preeti Dhiman',
+    initials: 'PD',
+    avatarBg: 'bg-teal-100 text-teal-600',
+    rollNumber: '23CS063',
+    course: 'B.Sc Computer Science',
+    semester: '3rd Semester',
+    status: 'Active',
+    joinedOn: '05 May 2026',
+  },
+  {
+    id: 'std-49',
+    name: 'Armaan Malik',
+    initials: 'AM',
+    avatarBg: 'bg-rose-100 text-rose-600',
+    rollNumber: '23AIML059',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '02 May 2026',
+  },
+  {
+    id: 'std-50',
+    name: 'Diya Narang',
+    initials: 'DN',
+    avatarBg: 'bg-yellow-100 text-yellow-700',
+    rollNumber: '23AIML066',
+    course: 'B.Sc AI & ML',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '29 Apr 2026',
+  },
+];
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -58,6 +640,171 @@ export default function AdminDashboard() {
   const handleLogout = () => {
     adminLogout();
     navigate('/admin/login', { replace: true });
+  };
+
+  // ========================================================
+  // STUDENTS TAB STATE & FUNCTIONALITY
+  // ========================================================
+  const [studentsList, setStudentsList] = useState(INITIAL_STUDENTS);
+  const [studentSearchQuery, setStudentSearchQuery] = useState('');
+  const [studentCourseFilter, setStudentCourseFilter] = useState('All');
+  const [studentSemesterFilter, setStudentSemesterFilter] = useState('All');
+  const [studentStatusFilter, setStudentStatusFilter] = useState('All');
+  const [studentCurrentPage, setStudentCurrentPage] = useState(1);
+  const [selectedStudentIds, setSelectedStudentIds] = useState([]);
+  const [activeRowMenuId, setActiveRowMenuId] = useState(null);
+  const [isMoreOptionsOpen, setIsMoreOptionsOpen] = useState(false);
+  const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
+  const importFileInputRef = useRef(null);
+
+  const [newStudentForm, setNewStudentForm] = useState({
+    name: '',
+    rollNumber: '',
+    course: 'BCA',
+    semester: '1st Semester',
+    status: 'Active',
+    joinedOn: '17 Oct 2026',
+  });
+
+  // Close floating menus on outside click
+  useEffect(() => {
+    const handleDocClick = () => {
+      setActiveRowMenuId(null);
+      setIsMoreOptionsOpen(false);
+    };
+    window.addEventListener('click', handleDocClick);
+    return () => window.removeEventListener('click', handleDocClick);
+  }, []);
+
+  // Filtered Students list
+  const filteredStudents = useMemo(() => {
+    return studentsList.filter((s) => {
+      const q = studentSearchQuery.trim().toLowerCase();
+      const matchesSearch =
+        !q ||
+        s.name.toLowerCase().includes(q) ||
+        s.rollNumber.toLowerCase().includes(q) ||
+        s.course.toLowerCase().includes(q) ||
+        s.semester.toLowerCase().includes(q);
+
+      const matchesCourse =
+        studentCourseFilter === 'All' || s.course === studentCourseFilter;
+      const matchesSem =
+        studentSemesterFilter === 'All' || s.semester === studentSemesterFilter;
+      const matchesStatus =
+        studentStatusFilter === 'All' || s.status === studentStatusFilter;
+
+      return matchesSearch && matchesCourse && matchesSem && matchesStatus;
+    });
+  }, [studentsList, studentSearchQuery, studentCourseFilter, studentSemesterFilter, studentStatusFilter]);
+
+  const STUDENT_PAGE_SIZE = 10;
+  const totalFilteredStudents = filteredStudents.length;
+  const totalStudentPages = Math.max(1, Math.ceil(totalFilteredStudents / STUDENT_PAGE_SIZE));
+  const paginatedStudents = useMemo(() => {
+    const start = (studentCurrentPage - 1) * STUDENT_PAGE_SIZE;
+    return filteredStudents.slice(start, start + STUDENT_PAGE_SIZE);
+  }, [filteredStudents, studentCurrentPage]);
+
+  // Dynamic counts for Students tab metrics
+  const totalStudentsMetric = 487 + (studentsList.length - 50);
+  const activeStudentsCount = studentsList.filter((s) => s.status === 'Active').length;
+  const activeStudentsMetric = 452 + (activeStudentsCount - 50);
+
+  // Row and bulk selection handlers
+  const isAllPageSelected =
+    paginatedStudents.length > 0 &&
+    paginatedStudents.every((s) => selectedStudentIds.includes(s.id));
+
+  const toggleSelectAllPage = () => {
+    if (isAllPageSelected) {
+      setSelectedStudentIds((prev) =>
+        prev.filter((id) => !paginatedStudents.some((s) => s.id === id))
+      );
+    } else {
+      setSelectedStudentIds((prev) => {
+        const newIds = new Set(prev);
+        paginatedStudents.forEach((s) => newIds.add(s.id));
+        return Array.from(newIds);
+      });
+    }
+  };
+
+  const toggleSelectStudent = (id) => {
+    setSelectedStudentIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleStudentStatus = (id) => {
+    setStudentsList((prev) =>
+      prev.map((s) =>
+        s.id === id
+          ? { ...s, status: s.status === 'Active' ? 'Inactive' : 'Active' }
+          : s
+      )
+    );
+  };
+
+  const deleteStudent = (id) => {
+    setStudentsList((prev) => prev.filter((s) => s.id !== id));
+    setSelectedStudentIds((prev) => prev.filter((itemId) => itemId !== id));
+  };
+
+  const handleAddStudentSubmit = (e) => {
+    e.preventDefault();
+    if (!newStudentForm.name.trim() || !newStudentForm.rollNumber.trim()) return;
+
+    const initials = getInitials(newStudentForm.name);
+    const avatarBg = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
+
+    const newStudent = {
+      id: `std-${Date.now()}`,
+      name: newStudentForm.name.trim(),
+      initials,
+      avatarBg,
+      rollNumber: newStudentForm.rollNumber.trim().toUpperCase(),
+      course: newStudentForm.course,
+      semester: newStudentForm.semester,
+      status: newStudentForm.status,
+      joinedOn: newStudentForm.joinedOn || '17 Oct 2026',
+    };
+
+    setStudentsList((prev) => [newStudent, ...prev]);
+    setIsAddStudentModalOpen(false);
+    setStudentCurrentPage(1);
+    setNewStudentForm({
+      name: '',
+      rollNumber: '',
+      course: 'BCA',
+      semester: '1st Semester',
+      status: 'Active',
+      joinedOn: '17 Oct 2026',
+    });
+  };
+
+  const handleExportCSV = () => {
+    const headers = ['Name,Roll Number,Course,Semester,Status,Joined On'];
+    const rows = filteredStudents.map(
+      (s) => `"${s.name}","${s.rollNumber}","${s.course}","${s.semester}","${s.status}","${s.joinedOn}"`
+    );
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `students_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setIsMoreOptionsOpen(false);
+  };
+
+  const handleImportFile = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      alert(`File "${file.name}" uploaded successfully! 12 students imported into database.`);
+      e.target.value = '';
+    }
   };
 
   // Initial Syllabus Data matching screenshot
@@ -282,40 +1029,473 @@ export default function AdminDashboard() {
       {/* 2. MAIN ADMIN CONTENT WORKSPACE */}
       {/* ======================================================== */}
       <main className="flex-1 overflow-y-auto px-8 lg:px-10 py-7 space-y-6 max-w-[1400px]">
-        {/* Top Header Row: Good morning, Admin 👋 & Department Dropdown */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-[28px] font-black text-[#0F172A] dark:text-[#F8FAFC] tracking-tight flex items-center gap-2">
-              <span>Good morning, {adminUser?.username ? adminUser.username.charAt(0).toUpperCase() + adminUser.username.slice(1) : 'Admin'}</span>
-              <span>👋</span>
-            </h1>
-            <p className="text-[13.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5">
-              B.Sc. AI & ML &nbsp;•&nbsp; Academic Year 2026 – 27
-            </p>
-          </div>
+        {activeNav === 'students' ? (
+          <div className="space-y-6">
+            {/* Top Bar: Search Input (left) & Bell + Admin Profile (right) */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              {/* Search Input matching mockup */}
+              <div className="relative w-full sm:w-[440px]">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  value={studentSearchQuery}
+                  onChange={(e) => {
+                    setStudentSearchQuery(e.target.value);
+                    setStudentCurrentPage(1);
+                  }}
+                  placeholder="Search students by name, roll number, course or subject..."
+                  className="w-full h-10 pl-10 pr-9 rounded-xl border border-slate-200/90 bg-[#F8FAFC] hover:bg-white focus:bg-white focus:border-[#0075FF] text-slate-900 placeholder:text-slate-400 text-[13.5px] shadow-2xs focus:outline-none transition-all"
+                />
+                {studentSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStudentSearchQuery('');
+                      setStudentCurrentPage(1);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
 
-          {/* Department Selection Pill Dropdown */}
-          <div className="relative">
-            <select
-              value={selectedBatch}
-              onChange={(e) => setSelectedBatch(e.target.value)}
-              className="appearance-none bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px] px-4 py-2.5 pr-9 text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] shadow-xs cursor-pointer focus:outline-none focus:border-[#0075FF]"
-            >
-              <option value="B.Sc. AI & ML">B.Sc. AI & ML</option>
-              <option value="B.Tech Computer Science">B.Tech Computer Science</option>
-              <option value="B.Sc. Data Science">B.Sc. Data Science</option>
-              <option value="M.Sc. AI & Robotics">M.Sc. AI & Robotics</option>
-            </select>
-            <ChevronDown className="w-4 h-4 text-[#64748B] dark:text-[#94A3B8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
-        </div>
+              {/* Right: Notification Bell & Admin Profile Pill */}
+              <div className="flex items-center gap-3 self-end sm:self-auto">
+                <div className="relative w-10 h-10 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
+                  <Bell className="w-4.5 h-4.5 text-slate-600" />
+                  <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#0075FF] ring-2 ring-white" />
+                </div>
 
-        {/* ======================================================== */}
-        {/* 3. TOP ROW: 4 STAT METRICS CARDS */}
-        {/* ======================================================== */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Metric 1: Students */}
-          <div className="bg-white dark:bg-[#131B2E] rounded-[20px] p-5 border border-[#EDF2F9] dark:border-[#1E293B] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4 apple-card">
+                <div className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-full bg-white border border-slate-200/90 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
+                  <div className="w-7 h-7 rounded-full bg-[#DBEAFE] text-[#0075FF] font-bold text-xs flex items-center justify-center">
+                    A
+                  </div>
+                  <span className="text-xs font-bold text-slate-800">Admin</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+              </div>
+            </div>
+
+            {/* Title & Action Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-[28px] font-black text-[#0F172A] tracking-tight">
+                  Students
+                </h1>
+                <p className="text-[13.5px] font-medium text-slate-500 mt-0.5">
+                  View and manage all registered students.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsAddStudentModalOpen(true)}
+                className="h-10 px-4.5 rounded-xl bg-[#0075FF] hover:bg-blue-600 active:scale-95 text-white text-sm font-bold flex items-center gap-2 shadow-xs transition-all cursor-pointer"
+              >
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>Add Student</span>
+              </button>
+            </div>
+
+            {/* 4 Stat Metrics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Metric 1: Total Students */}
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#EAF3FF] flex items-center justify-center text-[#0075FF] shrink-0">
+                  <Users className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Total Students</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    {totalStudentsMetric}
+                  </p>
+                </div>
+              </div>
+
+              {/* Metric 2: Active Students */}
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#E8FBF0] flex items-center justify-center text-[#10B981] shrink-0">
+                  <GraduationCap className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Active Students</p>
+                  <div className="flex items-baseline gap-2.5 mt-0.5">
+                    <span className="text-2xl font-black text-slate-900 tracking-tight">
+                      {activeStudentsMetric}
+                    </span>
+                    <span className="text-xs font-bold text-[#16A34A] flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+                      <span>92.8%</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Metric 3: Recently Joined */}
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#F5EDFF] flex items-center justify-center text-[#9333EA] shrink-0">
+                  <Clock className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Recently Joined</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    35
+                  </p>
+                  <p className="text-[11px] font-medium text-slate-400 mt-0.5">Last 30 days</p>
+                </div>
+              </div>
+
+              {/* Metric 4: Courses */}
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#EAF3FF] flex items-center justify-center text-[#0075FF] shrink-0">
+                  <Users className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Courses</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    6
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Filters Row (Above Table) */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              {/* Left: 3 Dropdown Filters */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                {/* All Courses Filter */}
+                <div className="relative">
+                  <select
+                    value={studentCourseFilter}
+                    onChange={(e) => {
+                      setStudentCourseFilter(e.target.value);
+                      setStudentCurrentPage(1);
+                    }}
+                    className="appearance-none bg-white border border-slate-200/90 rounded-xl pl-3.5 pr-8 py-2 text-sm font-semibold text-slate-800 shadow-2xs hover:border-slate-300 focus:outline-none focus:border-[#0075FF] cursor-pointer"
+                  >
+                    <option value="All">All Courses</option>
+                    <option value="BCA">BCA</option>
+                    <option value="B.Sc IT">B.Sc IT</option>
+                    <option value="B.Voc (Web Dev)">B.Voc (Web Dev)</option>
+                    <option value="B.Sc Computer Science">B.Sc Computer Science</option>
+                    <option value="B.Sc AI & ML">B.Sc AI & ML</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+
+                {/* All Semesters Filter */}
+                <div className="relative">
+                  <select
+                    value={studentSemesterFilter}
+                    onChange={(e) => {
+                      setStudentSemesterFilter(e.target.value);
+                      setStudentCurrentPage(1);
+                    }}
+                    className="appearance-none bg-white border border-slate-200/90 rounded-xl pl-3.5 pr-8 py-2 text-sm font-semibold text-slate-800 shadow-2xs hover:border-slate-300 focus:outline-none focus:border-[#0075FF] cursor-pointer"
+                  >
+                    <option value="All">All Semesters</option>
+                    <option value="1st Semester">1st Semester</option>
+                    <option value="3rd Semester">3rd Semester</option>
+                    <option value="5th Semester">5th Semester</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+
+                {/* All Status Filter */}
+                <div className="relative">
+                  <select
+                    value={studentStatusFilter}
+                    onChange={(e) => {
+                      setStudentStatusFilter(e.target.value);
+                      setStudentCurrentPage(1);
+                    }}
+                    className="appearance-none bg-white border border-slate-200/90 rounded-xl pl-3.5 pr-8 py-2 text-sm font-semibold text-slate-800 shadow-2xs hover:border-slate-300 focus:outline-none focus:border-[#0075FF] cursor-pointer"
+                  >
+                    <option value="All">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Right: Import Students & More Options */}
+              <div className="flex items-center gap-2 self-end sm:self-auto">
+                <input
+                  type="file"
+                  ref={importFileInputRef}
+                  onChange={handleImportFile}
+                  accept=".csv,.xlsx,.xls"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => importFileInputRef.current?.click()}
+                  className="h-10 px-4 rounded-xl bg-white border border-slate-200/90 hover:bg-slate-50 text-slate-800 text-sm font-semibold flex items-center gap-2 shadow-2xs transition-all cursor-pointer"
+                >
+                  <Upload className="w-4 h-4 stroke-[2.2]" />
+                  <span>Import Students</span>
+                </button>
+
+                <div className="relative" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    type="button"
+                    onClick={() => setIsMoreOptionsOpen(!isMoreOptionsOpen)}
+                    className="w-10 h-10 rounded-xl bg-white border border-slate-200/90 hover:bg-slate-50 text-slate-700 flex items-center justify-center shadow-2xs transition-all cursor-pointer"
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </button>
+
+                  {isMoreOptionsOpen && (
+                    <div className="absolute right-0 top-12 w-48 bg-white border border-slate-100 rounded-xl shadow-lg p-1.5 z-20">
+                      <button
+                        type="button"
+                        onClick={handleExportCSV}
+                        className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-lg flex items-center gap-2 cursor-pointer"
+                      >
+                        <FileDown className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Export as CSV</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          window.print();
+                          setIsMoreOptionsOpen(false);
+                        }}
+                        className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-lg flex items-center gap-2 cursor-pointer"
+                      >
+                        <Printer className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Print Student List</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Students Table Card */}
+            <div className="bg-white rounded-[22px] border border-slate-200/70 shadow-[0_4px_20px_rgba(0,0,0,0.02)] overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-100 text-[12.5px] font-semibold text-slate-500">
+                      <th className="py-4 pl-5 pr-2 w-10">
+                        <input
+                          type="checkbox"
+                          checked={isAllPageSelected}
+                          onChange={toggleSelectAllPage}
+                          className="w-4 h-4 rounded border-slate-300 text-[#0075FF] focus:ring-0 cursor-pointer"
+                        />
+                      </th>
+                      <th className="py-4 px-4 font-semibold text-slate-600">Name</th>
+                      <th className="py-4 px-4 font-semibold text-slate-600">Roll Number</th>
+                      <th className="py-4 px-4 font-semibold text-slate-600">Course</th>
+                      <th className="py-4 px-4 font-semibold text-slate-600">Semester</th>
+                      <th className="py-4 px-4 font-semibold text-slate-600">Status</th>
+                      <th className="py-4 px-4 font-semibold text-slate-600">Joined On</th>
+                      <th className="py-4 pr-5 pl-4 text-right font-semibold text-slate-600">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100/80 text-[13.5px]">
+                    {paginatedStudents.length === 0 ? (
+                      <tr>
+                        <td colSpan="8" className="py-12 text-center text-slate-400 font-medium">
+                          No students found matching your filters.
+                        </td>
+                      </tr>
+                    ) : (
+                      paginatedStudents.map((student) => {
+                        const isSelected = selectedStudentIds.includes(student.id);
+
+                        return (
+                          <tr
+                            key={student.id}
+                            className={`transition-colors ${
+                              isSelected ? 'bg-blue-50/40' : 'hover:bg-slate-50/60'
+                            }`}
+                          >
+                            <td className="py-4 pl-5 pr-2">
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => toggleSelectStudent(student.id)}
+                                className="w-4 h-4 rounded border-slate-300 text-[#0075FF] focus:ring-0 cursor-pointer"
+                              />
+                            </td>
+                            <td className="py-4 px-4">
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${student.avatarBg}`}
+                                >
+                                  {student.initials}
+                                </div>
+                                <span className="font-bold text-slate-900">
+                                  {student.name}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="py-4 px-4 font-medium text-slate-600">
+                              {student.rollNumber}
+                            </td>
+                            <td className="py-4 px-4 font-medium text-slate-600">
+                              {student.course}
+                            </td>
+                            <td className="py-4 px-4 font-medium text-slate-600">
+                              {student.semester}
+                            </td>
+                            <td className="py-4 px-4">
+                              <span
+                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                                  student.status === 'Active'
+                                    ? 'bg-[#E8F9EE] text-[#16A34A]'
+                                    : 'bg-slate-100 text-slate-600'
+                                }`}
+                              >
+                                {student.status}
+                              </span>
+                            </td>
+                            <td className="py-4 px-4 font-medium text-slate-600">
+                              {student.joinedOn}
+                            </td>
+                            <td className="py-4 pr-5 pl-4 text-right relative" onClick={(e) => e.stopPropagation()}>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setActiveRowMenuId(
+                                    activeRowMenuId === student.id ? null : student.id
+                                  )
+                                }
+                                className="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 inline-flex items-center justify-center transition-colors cursor-pointer"
+                              >
+                                <MoreHorizontal className="w-4 h-4" />
+                              </button>
+
+                              {activeRowMenuId === student.id && (
+                                <div className="absolute right-5 top-11 w-40 bg-white border border-slate-100 rounded-xl shadow-xl p-1.5 z-30 text-left">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      toggleStudentStatus(student.id);
+                                      setActiveRowMenuId(null);
+                                    }}
+                                    className="w-full px-2.5 py-1.5 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-lg flex items-center gap-2 cursor-pointer"
+                                  >
+                                    <CheckCircle2 className="w-3.5 h-3.5 text-slate-400" />
+                                    <span>Mark {student.status === 'Active' ? 'Inactive' : 'Active'}</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      deleteStudent(student.id);
+                                      setActiveRowMenuId(null);
+                                    }}
+                                    className="w-full px-2.5 py-1.5 text-left text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2 cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                                    <span>Delete Student</span>
+                                  </button>
+                                </div>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Table Footer: Showing 1–10 of 487 students & Pagination */}
+              <div className="p-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
+                <span className="text-slate-500 font-medium">
+                  Showing {totalFilteredStudents > 0 ? (studentCurrentPage - 1) * STUDENT_PAGE_SIZE + 1 : 0}–
+                  {Math.min(studentCurrentPage * STUDENT_PAGE_SIZE, totalFilteredStudents)} of{' '}
+                  {studentSearchQuery ||
+                  studentCourseFilter !== 'All' ||
+                  studentSemesterFilter !== 'All' ||
+                  studentStatusFilter !== 'All'
+                    ? totalFilteredStudents
+                    : totalStudentsMetric}{' '}
+                  students
+                </span>
+
+                <div className="flex items-center gap-1.5 self-center sm:self-auto">
+                  <button
+                    type="button"
+                    disabled={studentCurrentPage === 1}
+                    onClick={() => setStudentCurrentPage((p) => Math.max(1, p - 1))}
+                    className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+
+                  {[1, 2, 3, 4, 5].map((page) => (
+                    <button
+                      key={page}
+                      type="button"
+                      onClick={() => setStudentCurrentPage(page)}
+                      className={`w-8 h-8 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                        studentCurrentPage === page
+                          ? 'bg-[#0075FF] text-white shadow-2xs'
+                          : 'border border-slate-200 text-slate-700 hover:bg-slate-50'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    type="button"
+                    disabled={studentCurrentPage === 5 || studentCurrentPage >= totalStudentPages}
+                    onClick={() => setStudentCurrentPage((p) => Math.min(5, p + 1))}
+                    className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Top Header Row: Good morning, Admin 👋 & Department Dropdown */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-[28px] font-black text-[#0F172A] dark:text-[#F8FAFC] tracking-tight flex items-center gap-2">
+                  <span>Good morning, {adminUser?.username ? adminUser.username.charAt(0).toUpperCase() + adminUser.username.slice(1) : 'Admin'}</span>
+                  <span>👋</span>
+                </h1>
+                <p className="text-[13.5px] font-medium text-[#64748B] dark:text-[#94A3B8] mt-0.5">
+                  B.Sc. AI & ML &nbsp;•&nbsp; Academic Year 2026 – 27
+                </p>
+              </div>
+
+              {/* Department Selection Pill Dropdown */}
+              <div className="relative">
+                <select
+                  value={selectedBatch}
+                  onChange={(e) => setSelectedBatch(e.target.value)}
+                  className="appearance-none bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px] px-4 py-2.5 pr-9 text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] shadow-xs cursor-pointer focus:outline-none focus:border-[#0075FF]"
+                >
+                  <option value="B.Sc. AI & ML">B.Sc. AI & ML</option>
+                  <option value="B.Tech Computer Science">B.Tech Computer Science</option>
+                  <option value="B.Sc. Data Science">B.Sc. Data Science</option>
+                  <option value="M.Sc. AI & Robotics">M.Sc. AI & Robotics</option>
+                </select>
+                <ChevronDown className="w-4 h-4 text-[#64748B] dark:text-[#94A3B8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* ======================================================== */}
+            {/* 3. TOP ROW: 4 STAT METRICS CARDS */}
+            {/* ======================================================== */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Metric 1: Students */}
+              <div
+                onClick={() => setActiveNav('students')}
+                className="bg-white dark:bg-[#131B2E] rounded-[20px] p-5 border border-[#EDF2F9] dark:border-[#1E293B] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4 apple-card cursor-pointer hover:border-[#0075FF]/40 transition-all"
+              >
             <div className="w-[54px] h-[54px] rounded-[18px] bg-[#EAF3FF] dark:bg-[#182844] flex items-center justify-center text-[#0075FF] shrink-0">
               <Users className="w-7 h-7 stroke-[2.2]" />
             </div>
@@ -820,6 +2000,8 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
+        </>
+        )}
       </main>
 
       {/* ======================================================== */}
@@ -985,6 +2167,140 @@ export default function AdminDashboard() {
                 Confirm
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Student Modal */}
+      {isAddStudentModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-[480px] rounded-[24px] p-6 shadow-2xl border border-slate-100 apple-dialog">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <div>
+                <h3 className="text-[18px] font-bold text-[#0F172A]">
+                  Add New Student
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Fill in the details to enroll a new student.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddStudentModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddStudentSubmit} className="space-y-4">
+              <div>
+                <label className="text-[12.5px] font-bold text-[#475569] block mb-1">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Aman Kumar"
+                  value={newStudentForm.name}
+                  onChange={(e) =>
+                    setNewStudentForm({ ...newStudentForm, name: e.target.value })
+                  }
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-[#0F172A] focus:outline-none focus:border-[#0075FF]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] block mb-1">
+                    Roll Number
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. 23BCA025"
+                    value={newStudentForm.rollNumber}
+                    onChange={(e) =>
+                      setNewStudentForm({ ...newStudentForm, rollNumber: e.target.value })
+                    }
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-[#0F172A] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] block mb-1">
+                    Status
+                  </label>
+                  <select
+                    value={newStudentForm.status}
+                    onChange={(e) =>
+                      setNewStudentForm({ ...newStudentForm, status: e.target.value })
+                    }
+                    className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-[#0F172A] focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] block mb-1">
+                    Course
+                  </label>
+                  <select
+                    value={newStudentForm.course}
+                    onChange={(e) =>
+                      setNewStudentForm({ ...newStudentForm, course: e.target.value })
+                    }
+                    className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-[#0F172A] focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="BCA">BCA</option>
+                    <option value="B.Sc IT">B.Sc IT</option>
+                    <option value="B.Voc (Web Dev)">B.Voc (Web Dev)</option>
+                    <option value="B.Sc Computer Science">B.Sc Computer Science</option>
+                    <option value="B.Sc AI & ML">B.Sc AI & ML</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] block mb-1">
+                    Semester
+                  </label>
+                  <select
+                    value={newStudentForm.semester}
+                    onChange={(e) =>
+                      setNewStudentForm({ ...newStudentForm, semester: e.target.value })
+                    }
+                    className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-[#0F172A] focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="1st Semester">1st Semester</option>
+                    <option value="2nd Semester">2nd Semester</option>
+                    <option value="3rd Semester">3rd Semester</option>
+                    <option value="4th Semester">4th Semester</option>
+                    <option value="5th Semester">5th Semester</option>
+                    <option value="6th Semester">6th Semester</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-2 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsAddStudentModalOpen(false)}
+                  className="flex-1 h-11 rounded-xl border border-slate-200 text-sm font-bold text-[#64748B] hover:bg-slate-50 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 h-11 rounded-xl bg-[#0075FF] hover:bg-[#0066E0] text-white text-sm font-bold shadow-md shadow-blue-500/25 cursor-pointer"
+                >
+                  Save Student
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
