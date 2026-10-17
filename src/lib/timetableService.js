@@ -602,9 +602,64 @@ export async function fetchDayTimetable(dayOfWeek) {
     }
   }
 
+  // Check local custom timetable in localStorage first
+  const custom = getCustomTimetable();
+  if (custom && custom.schedule && Array.isArray(custom.schedule[normalizedDay])) {
+    return custom.schedule[normalizedDay];
+  }
+
   // Fallback to local schedule
   const fallbackList = FALLBACK_SCHEDULE[normalizedDay] || FALLBACK_SCHEDULE.Thu;
   return fallbackList;
+}
+
+/**
+ * Saves uploaded timetable schedule to localStorage and dispatches a change event
+ */
+export function saveCustomTimetable(scheduleByDay, batchMeta = {}) {
+  try {
+    const payload = {
+      schedule: scheduleByDay,
+      batchMeta,
+      updatedAt: new Date().toISOString(),
+    };
+    localStorage.setItem('classhere_timetable', JSON.stringify(payload));
+    window.dispatchEvent(new CustomEvent('classhere_timetable_updated', { detail: payload }));
+    return true;
+  } catch (err) {
+    console.error('Failed to save custom timetable:', err);
+    return false;
+  }
+}
+
+/**
+ * Gets custom timetable schedule from localStorage
+ */
+export function getCustomTimetable() {
+  try {
+    const raw = typeof window !== 'undefined' ? localStorage.getItem('classhere_timetable') : null;
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error('Failed to get custom timetable:', err);
+    return null;
+  }
+}
+
+/**
+ * Clears custom timetable from localStorage and reverts to defaults
+ */
+export function resetCustomTimetable() {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('classhere_timetable');
+      window.dispatchEvent(new CustomEvent('classhere_timetable_updated', { detail: null }));
+    }
+    return true;
+  } catch (err) {
+    console.error('Failed to reset custom timetable:', err);
+    return false;
+  }
 }
 
 /**

@@ -33,6 +33,12 @@ import {
   Trash2,
 } from 'lucide-react';
 import { adminLogout, getAdminUser } from '../lib/adminAuth';
+import {
+  saveCustomTimetable,
+  getCustomTimetable,
+  resetCustomTimetable,
+  FALLBACK_SCHEDULE,
+} from '../lib/timetableService';
 
 const AVATAR_COLORS = [
   'bg-blue-100 text-blue-600',
@@ -656,6 +662,327 @@ export default function AdminDashboard() {
   const handleLogout = () => {
     adminLogout();
     navigate('/admin/login', { replace: true });
+  };
+
+  // ========================================================
+  // TIMETABLE UPLOAD STATE & FUNCTIONALITY
+  // ========================================================
+  const initialCustomTimetable = useMemo(() => getCustomTimetable(), []);
+  const [isTimetableUploaded, setIsTimetableUploaded] = useState(() => !!initialCustomTimetable);
+  const [uploadedTimetableMeta, setUploadedTimetableMeta] = useState(() => initialCustomTimetable || null);
+  const [timetableBatch, setTimetableBatch] = useState('B.Sc. AI & ML');
+  const [timetableSemester, setTimetableSemester] = useState('1st Semester');
+  const [timetableAcademicYear, setTimetableAcademicYear] = useState('2026 – 27');
+  const [timetablePreviewSlots, setTimetablePreviewSlots] = useState([]);
+  const [timetableActiveDayFilter, setTimetableActiveDayFilter] = useState('All');
+  const [timetableFileName, setTimetableFileName] = useState('');
+  const [timetableError, setTimetableError] = useState(null);
+  const [timetableSuccessNotification, setTimetableSuccessNotification] = useState(null);
+  const [isTimetableDragOver, setIsTimetableDragOver] = useState(false);
+  const [isAddSlotExpanded, setIsAddSlotExpanded] = useState(false);
+  const [newSlotForm, setNewSlotForm] = useState({
+    day: 'Mon',
+    startTime: '09:00 AM',
+    endTime: '09:55 AM',
+    subject: '',
+    room: 'Room 101',
+    classType: 'Theory',
+  });
+
+  const flattenScheduleToSlots = (scheduleObj, batchGrade = 'B.Sc. AI & ML') => {
+    if (!scheduleObj) return [];
+    const result = [];
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    days.forEach((dayKey) => {
+      const daySlots = scheduleObj[dayKey] || [];
+      daySlots.forEach((slot, idx) => {
+        result.push({
+          id: slot.id || `slot-${dayKey.toLowerCase()}-${Date.now()}-${idx}`,
+          day: dayKey,
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+          subject: slot.subject,
+          room: slot.room || 'Room 101',
+          classType: slot.classType || 'Theory',
+          grade: slot.grade || batchGrade,
+        });
+      });
+    });
+    return result;
+  };
+
+  const handleOpenUploadTimetableModal = () => {
+    if (timetablePreviewSlots.length === 0) {
+      const existing = getCustomTimetable();
+      const slots = flattenScheduleToSlots(existing?.schedule || FALLBACK_SCHEDULE, timetableBatch);
+      setTimetablePreviewSlots(slots);
+      setTimetableFileName(existing ? 'active_college_timetable.xlsx' : 'demo_weekly_schedule.xlsx');
+    }
+    setTimetableError(null);
+    setModalType('upload-timetable');
+  };
+
+  const handleDownloadTimetableExcelTemplate = () => {
+    const templateData = [
+      { Day: 'Mon', 'Start Time': '09:00 AM', 'End Time': '09:55 AM', Subject: 'Python Programming', Room: 'Room 101', Type: 'Theory' },
+      { Day: 'Mon', 'Start Time': '10:00 AM', 'End Time': '10:55 AM', Subject: 'English Communication', Room: 'Room 204', Type: 'Theory' },
+      { Day: 'Mon', 'Start Time': '11:00 AM', 'End Time': '11:55 AM', Subject: 'Mathematics', Room: 'Room 108', Type: 'Theory' },
+      { Day: 'Mon', 'Start Time': '12:00 PM', 'End Time': '12:55 PM', Subject: 'Computer Fundamentals', Room: 'Room 108', Type: 'Theory' },
+      { Day: 'Mon', 'Start Time': '02:00 PM', 'End Time': '03:30 PM', Subject: 'Python Programming Lab', Room: 'Lab 2', Type: 'Lab' },
+      { Day: 'Tue', 'Start Time': '09:00 AM', 'End Time': '09:55 AM', Subject: 'AI Principles & Ethics', Room: 'Room 102', Type: 'Theory' },
+      { Day: 'Tue', 'Start Time': '10:00 AM', 'End Time': '10:55 AM', Subject: 'Linear Algebra', Room: 'Room 108', Type: 'Theory' },
+      { Day: 'Tue', 'Start Time': '11:00 AM', 'End Time': '11:55 AM', Subject: 'Data Structures', Room: 'Room 101', Type: 'Theory' },
+      { Day: 'Wed', 'Start Time': '09:00 AM', 'End Time': '09:55 AM', Subject: 'Computer Networks', Room: 'Room 205', Type: 'Theory' },
+      { Day: 'Wed', 'Start Time': '10:00 AM', 'End Time': '10:55 AM', Subject: 'Python Programming', Room: 'Room 101', Type: 'Theory' },
+      { Day: 'Thu', 'Start Time': '09:00 AM', 'End Time': '09:55 AM', Subject: 'Mathematics', Room: 'Room 108', Type: 'Theory' },
+      { Day: 'Fri', 'Start Time': '09:00 AM', 'End Time': '09:55 AM', Subject: 'Environmental Science', Room: 'Room 105', Type: 'Theory' },
+      { Day: 'Sat', 'Start Time': '09:00 AM', 'End Time': '10:30 AM', Subject: 'Seminar & Workshop', Room: 'Auditorium', Type: 'Theory' },
+    ];
+    const worksheet = XLSX.utils.json_to_sheet(templateData);
+    worksheet['!cols'] = [
+      { wch: 10 },
+      { wch: 16 },
+      { wch: 16 },
+      { wch: 28 },
+      { wch: 16 },
+      { wch: 14 },
+    ];
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Timetable Template');
+    XLSX.writeFile(workbook, 'classhere_timetable_template.xlsx');
+  };
+
+  const handleDownloadTimetableCSVTemplate = () => {
+    const csvContent =
+      'Day,Start Time,End Time,Subject,Room,Type\n' +
+      'Mon,09:00 AM,09:55 AM,Python Programming,Room 101,Theory\n' +
+      'Mon,10:00 AM,10:55 AM,English Communication,Room 204,Theory\n' +
+      'Mon,11:00 AM,11:55 AM,Mathematics,Room 108,Theory\n' +
+      'Mon,12:00 PM,12:55 PM,Computer Fundamentals,Room 108,Theory\n' +
+      'Mon,02:00 PM,03:30 PM,Python Programming Lab,Lab 2,Lab\n' +
+      'Tue,09:00 AM,09:55 AM,AI Principles & Ethics,Room 102,Theory\n' +
+      'Tue,10:00 AM,10:55 AM,Linear Algebra,Room 108,Theory\n' +
+      'Tue,11:00 AM,11:55 AM,Data Structures,Room 101,Theory\n' +
+      'Wed,09:00 AM,09:55 AM,Computer Networks,Room 205,Theory\n' +
+      'Wed,10:00 AM,10:55 AM,Python Programming,Room 101,Theory\n' +
+      'Thu,09:00 AM,09:55 AM,Mathematics,Room 108,Theory\n' +
+      'Fri,09:00 AM,09:55 AM,Environmental Science,Room 105,Theory\n' +
+      'Sat,09:00 AM,10:30 AM,Seminar & Workshop,Auditorium,Theory\n';
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'classhere_timetable_template.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const processTimetableFile = (file) => {
+    if (!file) return;
+
+    const fileName = file.name;
+    const ext = fileName.split('.').pop()?.toLowerCase() || '';
+    setTimetableFileName(fileName);
+    setTimetableError(null);
+
+    const parseRows = (rows) => {
+      if (!rows || rows.length < 2) {
+        setTimetableError('The timetable file appears to be empty or has no schedule rows.');
+        return;
+      }
+
+      let headerIdx = 0;
+      for (let r = 0; r < Math.min(5, rows.length); r++) {
+        const rowStr = rows[r].map((c) => String(c || '').toLowerCase()).join(' ');
+        if (rowStr.includes('day') || rowStr.includes('subject') || rowStr.includes('time')) {
+          headerIdx = r;
+          break;
+        }
+      }
+
+      const headerRow = rows[headerIdx].map((h) => String(h || '').trim().toLowerCase());
+      const dayIdx = headerRow.findIndex((h) => h.includes('day') || h.includes('weekday'));
+      const startIdx = headerRow.findIndex((h) => h.includes('start') || h.includes('from') || h === 'time');
+      const endIdx = headerRow.findIndex((h) => h.includes('end') || h.includes('to'));
+      const subjectIdx = headerRow.findIndex((h) => h.includes('subject') || h.includes('course') || h.includes('title') || h.includes('class'));
+      const roomIdx = headerRow.findIndex((h) => h.includes('room') || h.includes('hall') || h.includes('loc'));
+      const typeIdx = headerRow.findIndex((h) => h.includes('type') || h.includes('mode'));
+
+      const normalizeDay = (val) => {
+        const s = String(val || '').trim().toLowerCase();
+        if (s.startsWith('mon')) return 'Mon';
+        if (s.startsWith('tue')) return 'Tue';
+        if (s.startsWith('wed')) return 'Wed';
+        if (s.startsWith('thu')) return 'Thu';
+        if (s.startsWith('fri')) return 'Fri';
+        if (s.startsWith('sat')) return 'Sat';
+        return 'Mon';
+      };
+
+      const parsed = [];
+      for (let i = headerIdx + 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row || row.length === 0) continue;
+
+        const subject = String(subjectIdx !== -1 ? row[subjectIdx] : row[3] || row[0] || '').trim();
+        if (!subject) continue;
+
+        const day = normalizeDay(dayIdx !== -1 ? row[dayIdx] : row[0]);
+        const startTime = String(startIdx !== -1 ? row[startIdx] : row[1] || '09:00 AM').trim();
+        const endTime = String(endIdx !== -1 ? row[endIdx] : row[2] || '09:55 AM').trim();
+        const room = String(roomIdx !== -1 ? row[roomIdx] : row[4] || 'Room 101').trim();
+        const rawType = String(typeIdx !== -1 ? row[typeIdx] : row[5] || 'Theory').trim();
+        const classType = rawType.toLowerCase().includes('lab') ? 'Lab' : rawType.toLowerCase().includes('tut') ? 'Tutorial' : 'Theory';
+
+        parsed.push({
+          id: `slot-${day.toLowerCase()}-${Date.now()}-${i}`,
+          day,
+          startTime,
+          endTime,
+          subject,
+          room: room || 'Room 101',
+          classType,
+          grade: `${timetableBatch} • ${timetableSemester}`,
+        });
+      }
+
+      if (parsed.length > 0) {
+        setTimetablePreviewSlots(parsed);
+      } else {
+        setTimetableError('Could not find valid timetable class slots in the file.');
+      }
+    };
+
+    if (ext === 'xlsx' || ext === 'xls') {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const buffer = event.target?.result;
+          const workbook = XLSX.read(buffer, { type: 'array' });
+          const firstSheet = workbook.SheetNames[0];
+          if (!firstSheet) {
+            setTimetableError('The Excel file has no worksheets.');
+            return;
+          }
+          const worksheet = workbook.Sheets[firstSheet];
+          const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+          parseRows(rawRows);
+        } catch (err) {
+          console.error('Error parsing timetable Excel:', err);
+          setTimetableError('Failed to read Excel timetable. Please verify file format.');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const text = event.target?.result;
+          if (typeof text === 'string') {
+            const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
+            const rawRows = lines.map((l) => l.split(',').map((c) => c.replace(/^["']|["']$/g, '').trim()));
+            parseRows(rawRows);
+          }
+        } catch (err) {
+          console.error('Error parsing timetable CSV:', err);
+          setTimetableError('Failed to parse CSV timetable.');
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const handleTimetableFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) processTimetableFile(file);
+    e.target.value = '';
+  };
+
+  const handleTimetableFileDrop = (e) => {
+    e.preventDefault();
+    setIsTimetableDragOver(false);
+    const file = e.dataTransfer?.files?.[0];
+    if (file) processTimetableFile(file);
+  };
+
+  const handleLoadDemoSchedule = () => {
+    const slots = flattenScheduleToSlots(FALLBACK_SCHEDULE, timetableBatch);
+    setTimetablePreviewSlots(slots);
+    setTimetableFileName('demo_weekly_schedule.xlsx');
+    setTimetableError(null);
+  };
+
+  const handleDeleteTimetableSlot = (slotId) => {
+    setTimetablePreviewSlots((prev) => prev.filter((s) => s.id !== slotId));
+  };
+
+  const handleAddManualSlot = (e) => {
+    e.preventDefault();
+    if (!newSlotForm.subject.trim()) return;
+
+    const newSlot = {
+      id: `slot-${newSlotForm.day.toLowerCase()}-${Date.now()}`,
+      day: newSlotForm.day,
+      startTime: newSlotForm.startTime,
+      endTime: newSlotForm.endTime,
+      subject: newSlotForm.subject.trim(),
+      room: newSlotForm.room.trim() || 'Room 101',
+      classType: newSlotForm.classType,
+      grade: `${timetableBatch} • ${timetableSemester}`,
+    };
+
+    setTimetablePreviewSlots((prev) => [...prev, newSlot]);
+    setNewSlotForm({
+      day: newSlotForm.day,
+      startTime: '09:00 AM',
+      endTime: '09:55 AM',
+      subject: '',
+      room: 'Room 101',
+      classType: 'Theory',
+    });
+    setIsAddSlotExpanded(false);
+  };
+
+  const handleConfirmTimetableUpload = () => {
+    if (timetablePreviewSlots.length === 0) return;
+
+    const totalCount = timetablePreviewSlots.length;
+    const scheduleByDay = { Mon: [], Tue: [], Wed: [], Thu: [], Fri: [], Sat: [] };
+    timetablePreviewSlots.forEach((slot) => {
+      const dayKey = slot.day || 'Mon';
+      if (!scheduleByDay[dayKey]) scheduleByDay[dayKey] = [];
+      scheduleByDay[dayKey].push(slot);
+    });
+
+    saveCustomTimetable(scheduleByDay, {
+      batch: timetableBatch,
+      semester: timetableSemester,
+      academicYear: timetableAcademicYear,
+      totalSlots: totalCount,
+    });
+
+    setIsTimetableUploaded(true);
+    setUploadedTimetableMeta({
+      batchMeta: { batch: timetableBatch, semester: timetableSemester },
+      totalSlots: totalCount,
+    });
+    setModalType(null);
+    setTimetableSuccessNotification(
+      `Timetable for ${timetableBatch} (${timetableSemester}) published successfully! (${totalCount} classes active across Mon–Sat)`
+    );
+  };
+
+  const handleResetTimetableToDefault = () => {
+    resetCustomTimetable();
+    setIsTimetableUploaded(false);
+    setUploadedTimetableMeta(null);
+    const defaultSlots = flattenScheduleToSlots(FALLBACK_SCHEDULE, timetableBatch);
+    setTimetablePreviewSlots(defaultSlots);
+    setTimetableFileName('');
+    setTimetableSuccessNotification('Timetable reset to college default schedule.');
   };
 
   // ========================================================
@@ -1873,6 +2200,23 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Timetable Success Banner */}
+        {timetableSuccessNotification && (
+          <div className="bg-[#E8F9EE] border border-[#A7F3D0] text-[#16A34A] px-4 py-3 rounded-2xl flex items-center justify-between text-sm font-semibold shadow-xs animate-fadeIn">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-[#16A34A] shrink-0" />
+              <span>{timetableSuccessNotification}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setTimetableSuccessNotification(null)}
+              className="text-[#16A34A] hover:text-[#15803D] cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         {/* ======================================================== */}
         {/* 4. ATTENTION NEEDED SECTION (3 Soft Warning Cards) */}
         {/* ======================================================== */}
@@ -1885,13 +2229,13 @@ export default function AdminDashboard() {
               <h2 className="text-[16px] font-extrabold text-[#0F172A] dark:text-[#F8FAFC] tracking-tight flex items-center gap-1.5">
                 <span>Attention Needed</span>
                 <span className="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/60 text-red-600 dark:text-red-400 text-[11px] font-bold flex items-center justify-center">
-                  3
+                  {isTimetableUploaded ? '2' : '3'}
                 </span>
               </h2>
             </div>
             <button
               type="button"
-              onClick={() => alert('Viewing all 3 pending attention alerts.')}
+              onClick={() => alert(`Viewing all ${isTimetableUploaded ? '2' : '3'} pending attention alerts.`)}
               className="text-[#0075FF] hover:underline text-[13px] font-bold flex items-center gap-1 cursor-pointer"
             >
               <span>View all</span>
@@ -1921,25 +2265,50 @@ export default function AdminDashboard() {
               <ChevronRight className="w-4.5 h-4.5 text-[#EF4444] shrink-0" />
             </div>
 
-            {/* Attention Card 2: Timetable not uploaded */}
+            {/* Attention Card 2: Timetable status */}
             <div
-              onClick={() => setModalType('upload-timetable')}
-              className="bg-[#FFFBEB] dark:bg-[#281D0D] border border-[#FDE68A] dark:border-[#523A12] rounded-[18px] p-4 flex items-center justify-between cursor-pointer hover:border-amber-400 transition-all apple-card"
+              onClick={handleOpenUploadTimetableModal}
+              className={`border rounded-[18px] p-4 flex items-center justify-between cursor-pointer transition-all apple-card ${
+                isTimetableUploaded
+                  ? 'bg-[#F0FDF4] dark:bg-[#0E2A18] border-[#BBF7D0] dark:border-[#1E4D2B] hover:border-emerald-400'
+                  : 'bg-[#FFFBEB] dark:bg-[#281D0D] border-[#FDE68A] dark:border-[#523A12] hover:border-amber-400'
+              }`}
             >
               <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-[14px] bg-[#FEF3C7] dark:bg-[#422C0A] flex items-center justify-center text-[#D97706] shrink-0">
-                  <Calendar className="w-5 h-5 stroke-[2.2]" />
+                <div
+                  className={`w-11 h-11 rounded-[14px] flex items-center justify-center shrink-0 ${
+                    isTimetableUploaded
+                      ? 'bg-[#DCFCE7] dark:bg-[#163820] text-[#16A34A]'
+                      : 'bg-[#FEF3C7] dark:bg-[#422C0A] text-[#D97706]'
+                  }`}
+                >
+                  {isTimetableUploaded ? (
+                    <CheckCircle2 className="w-5 h-5 stroke-[2.2]" />
+                  ) : (
+                    <Calendar className="w-5 h-5 stroke-[2.2]" />
+                  )}
                 </div>
                 <div>
-                  <h4 className="text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
-                    Timetable not uploaded
+                  <h4 className="text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug flex items-center gap-1.5">
+                    <span>{isTimetableUploaded ? 'Timetable Active' : 'Timetable not uploaded'}</span>
+                    {isTimetableUploaded && (
+                      <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                        Live
+                      </span>
+                    )}
                   </h4>
                   <p className="text-[11.5px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">
-                    Upload timetable for Semester 1.
+                    {isTimetableUploaded
+                      ? `${uploadedTimetableMeta?.batchMeta?.batch || timetableBatch} • ${uploadedTimetableMeta?.totalSlots || timetablePreviewSlots.length || 45} classes active`
+                      : 'Upload timetable for Semester 1.'}
                   </p>
                 </div>
               </div>
-              <ChevronRight className="w-4.5 h-4.5 text-[#D97706] shrink-0" />
+              <ChevronRight
+                className={`w-4.5 h-4.5 shrink-0 ${
+                  isTimetableUploaded ? 'text-[#16A34A]' : 'text-[#D97706]'
+                }`}
+              />
             </div>
 
             {/* Attention Card 3: 12 New student registrations */}
@@ -2016,7 +2385,7 @@ export default function AdminDashboard() {
             {/* Quick Access 4: Upload Timetable */}
             <button
               type="button"
-              onClick={() => setModalType('upload-timetable')}
+              onClick={handleOpenUploadTimetableModal}
               className="w-full h-[54px] rounded-[16px] bg-[#FFF7ED] dark:bg-[#341F11] border border-[#FED7AA] dark:border-[#5C3217] px-4.5 flex items-center justify-between text-[#EA580C] dark:text-[#FB923C] font-bold text-[13.5px] apple-card cursor-pointer hover:shadow-sm"
             >
               <div className="flex items-center gap-3">
@@ -2136,7 +2505,7 @@ export default function AdminDashboard() {
                 {/* Add Syllabus / Add Exam Button */}
                 <button
                   type="button"
-                  onClick={() => setModalType(activeTableTab === 'syllabus' ? 'add-syllabus' : 'upload-timetable')}
+                  onClick={() => setModalType(activeTableTab === 'syllabus' ? 'add-syllabus' : 'schedule-exam')}
                   className="h-10 px-4 rounded-[12px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[13px] font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -2429,31 +2798,453 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {/* Upload Timetable Modal */}
+      {modalType === 'upload-timetable' && (
+        <div className="fixed inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[760px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] apple-dialog max-h-[92vh] flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 stroke-[2.2]" />
+                </div>
+                <div>
+                  <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">
+                    Upload Timetable
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Upload an Excel (.xlsx/.xls) or CSV schedule matrix to publish college classes.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalType(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="space-y-4 overflow-y-auto flex-1 pr-1">
+              {/* Batch & Semester Selector Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-[#F8FAFC] dark:bg-[#0E1524] p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+                <div>
+                  <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+                    Department / Course
+                  </label>
+                  <select
+                    value={timetableBatch}
+                    onChange={(e) => setTimetableBatch(e.target.value)}
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#131B2E] text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="B.Sc. AI & ML">B.Sc. AI & ML</option>
+                    <option value="BCA">BCA</option>
+                    <option value="B.Sc IT">B.Sc IT</option>
+                    <option value="B.Voc (Web Dev)">B.Voc (Web Dev)</option>
+                    <option value="B.Sc Computer Science">B.Sc Computer Science</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+                    Semester
+                  </label>
+                  <select
+                    value={timetableSemester}
+                    onChange={(e) => setTimetableSemester(e.target.value)}
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#131B2E] text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="1st Semester">1st Semester</option>
+                    <option value="2nd Semester">2nd Semester</option>
+                    <option value="3rd Semester">3rd Semester</option>
+                    <option value="4th Semester">4th Semester</option>
+                    <option value="5th Semester">5th Semester</option>
+                    <option value="6th Semester">6th Semester</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+                    Academic Year
+                  </label>
+                  <div className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#131B2E] text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center">
+                    {timetableAcademicYear}
+                  </div>
+                </div>
+              </div>
+
+              {/* Error Notice */}
+              {timetableError && (
+                <div className="bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0" />
+                    <span>{timetableError}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setTimetableError(null)}
+                    className="text-rose-400 hover:text-rose-700 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
+              {/* File Upload / Drag & Drop Zone */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsTimetableDragOver(true);
+                }}
+                onDragLeave={() => setIsTimetableDragOver(false)}
+                onDrop={handleTimetableFileDrop}
+                className={`border-2 border-dashed rounded-2xl p-5 text-center transition-all ${
+                  isTimetableDragOver
+                    ? 'border-[#0075FF] bg-blue-50/60 ring-4 ring-blue-500/10'
+                    : 'border-slate-200 hover:border-orange-500 bg-[#F8FAFC] dark:bg-[#0E1524]'
+                }`}
+              >
+                {timetableFileName ? (
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-2 shadow-xs">
+                      <FileSpreadsheet className="w-6 h-6 stroke-[2.2]" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-orange-100 text-orange-700">
+                        {timetableFileName.endsWith('.xlsx')
+                          ? 'XLSX'
+                          : timetableFileName.endsWith('.xls')
+                          ? 'XLS'
+                          : 'CSV'}
+                      </span>
+                      <p className="text-sm font-bold text-slate-800 dark:text-slate-100 break-all max-w-xs">
+                        {timetableFileName}
+                      </p>
+                    </div>
+                    <p className="text-xs text-emerald-600 font-semibold mt-1 mb-3">
+                      ✓ {timetablePreviewSlots.length} schedule classes parsed across Mon–Sat
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto mb-2">
+                      <Calendar className="w-6 h-6 stroke-[2.2]" />
+                    </div>
+                    <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                      Select or Drag & Drop Timetable Schedule
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1 mb-3">
+                      Supports <span className="font-semibold text-slate-700 dark:text-slate-300">.xlsx, .xls, .csv</span> • Columns: Day, Start Time, End Time, Subject, Room, Type
+                    </p>
+                  </>
+                )}
+
+                {/* Upload & Template Buttons */}
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <label className="h-9 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95">
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>{timetableFileName ? 'Change File' : 'Browse Timetable'}</span>
+                    <input
+                      type="file"
+                      accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                      onChange={handleTimetableFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={handleDownloadTimetableExcelTemplate}
+                    className="h-9 px-3 rounded-xl bg-white dark:bg-[#1A2640] border border-slate-200 dark:border-slate-700 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Excel Template (.xlsx)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleDownloadTimetableCSVTemplate}
+                    className="h-9 px-3 rounded-xl bg-white dark:bg-[#1A2640] border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
+                  >
+                    <Download className="w-3.5 h-3.5 text-slate-500" />
+                    <span>CSV Template</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick 1-Click Demo Callout */}
+              <div className="bg-[#FFF7ED] dark:bg-[#341F11] border border-[#FED7AA] dark:border-[#5C3217] rounded-xl p-3 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-orange-500" />
+                    <p className="text-xs font-bold text-orange-900 dark:text-orange-200">
+                      Quick 1-Click Demo Schedule
+                    </p>
+                  </div>
+                  <p className="text-[11px] text-orange-700 dark:text-orange-300 mt-0.5">
+                    Instantly load official college schedule (45 classes scheduled Mon–Sat).
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleLoadDemoSchedule}
+                  className="h-8 px-3 rounded-lg bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shrink-0 cursor-pointer shadow-2xs active:scale-95 transition-all"
+                >
+                  Load Demo Schedule
+                </button>
+              </div>
+
+              {/* Day Filter Pills */}
+              <div className="flex items-center justify-between gap-2 pt-1">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                  Classes ({timetablePreviewSlots.length})
+                </span>
+
+                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
+                  {['All', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => {
+                    const count = d === 'All'
+                      ? timetablePreviewSlots.length
+                      : timetablePreviewSlots.filter((s) => s.day === d).length;
+                    const isActive = timetableActiveDayFilter === d;
+                    return (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => setTimetableActiveDayFilter(d)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isActive
+                            ? 'bg-[#0075FF] text-white shadow-2xs'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
+                        }`}
+                      >
+                        {d} ({count})
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Preview Table */}
+              {timetablePreviewSlots.length === 0 ? (
+                <div className="py-8 text-center text-slate-400 text-xs border border-slate-100 rounded-xl bg-slate-50 dark:bg-slate-900/40">
+                  No timetable slots loaded yet. Upload an Excel/CSV file or click &quot;Load Demo Schedule&quot; above.
+                </div>
+              ) : (
+                <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden max-h-56 overflow-y-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700 sticky top-0">
+                      <tr>
+                        <th className="py-2 px-3">Day</th>
+                        <th className="py-2 px-3">Time</th>
+                        <th className="py-2 px-3">Subject</th>
+                        <th className="py-2 px-3">Room</th>
+                        <th className="py-2 px-3">Type</th>
+                        <th className="py-2 px-3 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      {timetablePreviewSlots
+                        .filter(
+                          (s) =>
+                            timetableActiveDayFilter === 'All' ||
+                            s.day === timetableActiveDayFilter
+                        )
+                        .map((slot) => (
+                          <tr key={slot.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                            <td className="py-2 px-3">
+                              <span className="font-bold text-slate-800 dark:text-slate-200 px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800">
+                                {slot.day}
+                              </span>
+                            </td>
+                            <td className="py-2 px-3 text-slate-600 dark:text-slate-400 tabular-nums font-medium">
+                              {slot.startTime} – {slot.endTime}
+                            </td>
+                            <td className="py-2 px-3 font-bold text-slate-900 dark:text-slate-100">
+                              {slot.subject}
+                            </td>
+                            <td className="py-2 px-3 text-slate-600 dark:text-slate-400 font-medium">
+                              {slot.room}
+                            </td>
+                            <td className="py-2 px-3">
+                              <span
+                                className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                  slot.classType === 'Lab'
+                                    ? 'bg-purple-100 text-purple-700'
+                                    : slot.classType === 'Tutorial'
+                                    ? 'bg-amber-100 text-amber-700'
+                                    : 'bg-blue-100 text-blue-700'
+                                }`}
+                              >
+                                {slot.classType || 'Theory'}
+                              </span>
+                            </td>
+                            <td className="py-2 px-3 text-right">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteTimetableSlot(slot.id)}
+                                className="text-slate-400 hover:text-red-500 cursor-pointer transition-colors p-1"
+                                title="Remove slot"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Add Single Slot Manually Toggle & Form */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsAddSlotExpanded(!isAddSlotExpanded)}
+                  className="text-xs font-bold text-[#0075FF] hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{isAddSlotExpanded ? 'Hide manual entry' : '+ Add class slot manually'}</span>
+                </button>
+
+                {isAddSlotExpanded && (
+                  <form onSubmit={handleAddManualSlot} className="mt-2.5 p-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Day</label>
+                        <select
+                          value={newSlotForm.day}
+                          onChange={(e) => setNewSlotForm({ ...newSlotForm, day: e.target.value })}
+                          className="w-full h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold focus:outline-none focus:border-[#0075FF]"
+                        >
+                          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
+                            <option key={d} value={d}>{d}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Start Time</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. 09:00 AM"
+                          value={newSlotForm.startTime}
+                          onChange={(e) => setNewSlotForm({ ...newSlotForm, startTime: e.target.value })}
+                          className="w-full h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#0075FF]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">End Time</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. 09:55 AM"
+                          value={newSlotForm.endTime}
+                          onChange={(e) => setNewSlotForm({ ...newSlotForm, endTime: e.target.value })}
+                          className="w-full h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#0075FF]"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Subject</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. Python Programming"
+                          value={newSlotForm.subject}
+                          onChange={(e) => setNewSlotForm({ ...newSlotForm, subject: e.target.value })}
+                          className="w-full h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#0075FF]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Room</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Room 101"
+                          value={newSlotForm.room}
+                          onChange={(e) => setNewSlotForm({ ...newSlotForm, room: e.target.value })}
+                          className="w-full h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#0075FF]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setIsAddSlotExpanded(false)}
+                        className="h-8 px-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="h-8 px-3 rounded-lg bg-[#0075FF] hover:bg-blue-600 text-white text-xs font-bold cursor-pointer"
+                      >
+                        Add Slot
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="pt-4 mt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
+              {isTimetableUploaded && (
+                <button
+                  type="button"
+                  onClick={handleResetTimetableToDefault}
+                  className="h-11 px-3.5 rounded-xl border border-red-200 text-xs font-bold text-red-600 hover:bg-red-50 cursor-pointer transition-colors"
+                >
+                  Reset Default
+                </button>
+              )}
+
+              <div className="flex gap-2.5 flex-1 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setModalType(null)}
+                  className="h-11 px-5 rounded-xl border border-slate-200 text-sm font-bold text-[#64748B] hover:bg-slate-50 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={timetablePreviewSlots.length === 0}
+                  onClick={handleConfirmTimetableUpload}
+                  className="h-11 px-6 rounded-xl bg-orange-600 hover:bg-orange-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-sm font-bold shadow-md shadow-orange-500/20 cursor-pointer active:scale-95 transition-all"
+                >
+                  Publish Timetable ({timetablePreviewSlots.length} Classes)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Generic Modal for Quick Access Actions */}
-      {modalType && modalType !== 'add-syllabus' && (
+      {modalType && modalType !== 'add-syllabus' && modalType !== 'upload-timetable' && (
         <div className="fixed inset-0 bg-slate-900/50 apple-backdrop z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#131B2E] w-full max-w-[420px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] apple-dialog text-center">
             <div className="w-12 h-12 rounded-[16px] bg-[#EAF3FF] dark:bg-[#182844] flex items-center justify-center text-[#0075FF] mx-auto mb-3.5">
-              {modalType === 'upload-timetable' ? (
-                <Upload className="w-6 h-6 stroke-[2.2]" />
-              ) : (
-                <UserPlus className="w-6 h-6 stroke-[2.2]" />
-              )}
+              <UserPlus className="w-6 h-6 stroke-[2.2]" />
             </div>
 
             <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC] capitalize mb-1.5">
               {modalType.replace('-', ' ')}
             </h3>
             <p className="text-[13px] text-[#64748B] dark:text-[#94A3B8] mb-5 leading-relaxed">
-              {modalType === 'upload-timetable'
-                ? 'Upload an Excel or CSV schedule matrix for Semester 1 classes.'
-                : `Enter institutional credentials and enroll the new ${modalType.split('-')[1]} into the portal database.`}
+              Enter institutional credentials and enroll the new {modalType.split('-')[1]} into the portal database.
             </p>
 
             <div className="space-y-3 mb-5">
               <input
                 type="text"
-                placeholder={modalType === 'upload-timetable' ? 'Select File (.xlsx, .csv)' : 'Full Name'}
+                placeholder="Full Name"
                 className="w-full h-11 px-3.5 rounded-[12px] border border-slate-200 dark:border-[#223354] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13.5px] focus:outline-none focus:border-[#0075FF]"
               />
             </div>

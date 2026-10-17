@@ -80,12 +80,14 @@ export function useRealtimeTimetable(targetDay = null) {
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('focus', handleFocus);
+    window.addEventListener('classhere_timetable_updated', loadSchedule);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('classhere_timetable_updated', loadSchedule);
     };
-  }, [updateTick]);
+  }, [updateTick, loadSchedule]);
 
   // Compute real-time status and progress
   const realtimeData = enrichScheduleWithRealtime(rawSlots, istTime, isToday);
