@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 import {
   LayoutDashboard,
   Building2,
@@ -27,6 +28,7 @@ import {
   Download,
   MoreVertical,
   FileDown,
+  FileSpreadsheet,
   Printer,
   Trash2,
 } from 'lucide-react';
@@ -673,6 +675,8 @@ export default function AdminDashboard() {
   const [importPreviewList, setImportPreviewList] = useState([]);
   const [importFileName, setImportFileName] = useState('');
   const [importSuccessNotification, setImportSuccessNotification] = useState(null);
+  const [importError, setImportError] = useState(null);
+  const [isDragOver, setIsDragOver] = useState(false);
   const importFileInputRef = useRef(null);
 
   const [newStudentForm, setNewStudentForm] = useState({
@@ -817,9 +821,34 @@ export default function AdminDashboard() {
     setIsMoreOptionsOpen(false);
   };
 
+  const handleExportExcel = () => {
+    const exportData = filteredStudents.map((s) => ({
+      'Name': s.name,
+      'Roll Number': s.rollNumber,
+      'Course': s.course,
+      'Semester': s.semester,
+      'Status': s.status,
+      'Joined On': s.joinedOn,
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    worksheet['!cols'] = [
+      { wch: 22 },
+      { wch: 16 },
+      { wch: 24 },
+      { wch: 16 },
+      { wch: 12 },
+      { wch: 16 },
+    ];
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+    XLSX.writeFile(workbook, `students_export_${Date.now()}.xlsx`);
+    setIsMoreOptionsOpen(false);
+  };
+
   const handleOpenImportModal = () => {
     setImportPreviewList(DEMO_IMPORT_STUDENTS);
-    setImportFileName('demo_student_batch.csv');
+    setImportFileName('demo_student_batch.xlsx');
+    setImportError(null);
     setIsImportModalOpen(true);
   };
 
@@ -843,50 +872,157 @@ export default function AdminDashboard() {
     URL.revokeObjectURL(url);
   };
 
-  const handleCSVFileUpload = (e) => {
-    const file = e.target.files?.[0];
+  const handleDownloadSampleExcel = () => {
+    const sampleData = [
+      { 'Name': 'Aman Kumar', 'Roll Number': '23BCA001', 'Course': 'BCA', 'Semester': '3rd Semester', 'Status': 'Active' },
+      { 'Name': 'Simran Preet', 'Roll Number': '23BCA002', 'Course': 'BCA', 'Semester': '3rd Semester', 'Status': 'Active' },
+      { 'Name': 'Rohit Sharma', 'Roll Number': '23IT015', 'Course': 'B.Sc IT', 'Semester': '5th Semester', 'Status': 'Active' },
+      { 'Name': 'Arjun Rana', 'Roll Number': '23BVOC007', 'Course': 'B.Voc (Web Dev)', 'Semester': '1st Semester', 'Status': 'Active' },
+      { 'Name': 'Vansh K.', 'Roll Number': '23AIML004', 'Course': 'B.Sc AI & ML', 'Semester': '1st Semester', 'Status': 'Active' },
+      { 'Name': 'Jasleen Tiwari', 'Roll Number': '23AIML018', 'Course': 'B.Sc AI & ML', 'Semester': '1st Semester', 'Status': 'Active' },
+      { 'Name': 'Priya Garg', 'Roll Number': '23CS012', 'Course': 'B.Sc Computer Science', 'Semester': '3rd Semester', 'Status': 'Active' },
+      { 'Name': 'Nikhil Handa', 'Roll Number': '23CS027', 'Course': 'B.Sc Computer Science', 'Semester': '3rd Semester', 'Status': 'Active' },
+    ];
+    const worksheet = XLSX.utils.json_to_sheet(sampleData);
+    worksheet['!cols'] = [
+      { wch: 22 },
+      { wch: 16 },
+      { wch: 24 },
+      { wch: 16 },
+      { wch: 12 },
+    ];
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Students Template');
+    XLSX.writeFile(workbook, 'classhere_students_template.xlsx');
+  };
+
+  const processStudentFile = (file) => {
     if (!file) return;
 
-    setImportFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const text = event.target?.result;
-      if (typeof text === 'string') {
-        const lines = text
-          .split(/\r?\n/)
-          .map((l) => l.trim())
-          .filter((l) => l.length > 0);
+    const fileName = file.name;
+    const ext = fileName.split('.').pop()?.toLowerCase() || '';
+    setImportFileName(fileName);
+    setImportError(null);
 
-        if (lines.length > 1) {
-          const headerCols = lines[0]
-            .split(',')
-            .map((h) => h.replace(/^["']|["']$/g, '').trim().toLowerCase());
+    // 1. Excel files (.xlsx, .xls)
+    if (ext === 'xlsx' || ext === 'xls') {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const buffer = event.target?.result;
+          const workbook = XLSX.read(buffer, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          if (!firstSheetName) {
+            setImportError('The Excel file does not contain any sheets.');
+            return;
+          }
+          const worksheet = workbook.Sheets[firstSheetName];
+          const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
 
-          const nameIdx = headerCols.findIndex((h) => h.includes('name'));
-          const rollIdx = headerCols.findIndex((h) => h.includes('roll'));
-          const courseIdx = headerCols.findIndex((h) => h.includes('course'));
-          const semIdx = headerCols.findIndex((h) => h.includes('sem'));
-          const statusIdx = headerCols.findIndex((h) => h.includes('status'));
+          if (!rawRows || rawRows.length < 2) {
+            setImportError('The Excel sheet has no data rows below the header.');
+            return;
+          }
+
+          // Locate header row (first non-empty row)
+          let headerIdx = 0;
+          for (let r = 0; r < Math.min(5, rawRows.length); r++) {
+            const rowStr = rawRows[r].map((c) => String(c || '').toLowerCase()).join(' ');
+            if (rowStr.includes('name') || rowStr.includes('roll')) {
+              headerIdx = r;
+              break;
+            }
+          }
+
+          const headerRow = rawRows[headerIdx].map((h) => String(h || '').trim().toLowerCase());
+          const nameIdx = headerRow.findIndex((h) => h.includes('name'));
+          const rollIdx = headerRow.findIndex((h) => h.includes('roll') || h.includes('id') || h.includes('reg'));
+          const courseIdx = headerRow.findIndex((h) => h.includes('course') || h.includes('dept') || h.includes('branch') || h.includes('prog'));
+          const semIdx = headerRow.findIndex((h) => h.includes('sem'));
+          const statusIdx = headerRow.findIndex((h) => h.includes('status'));
 
           const parsed = [];
-          for (let i = 1; i < lines.length; i++) {
-            const cols = lines[i]
+          for (let i = headerIdx + 1; i < rawRows.length; i++) {
+            const row = rawRows[i];
+            if (!row || row.length === 0) continue;
+
+            const name = String(nameIdx !== -1 ? row[nameIdx] : row[0] || '').trim();
+            if (!name) continue;
+
+            const rollNumber = String(
+              rollIdx !== -1 ? row[rollIdx] : row[1] || `23IMP${String(i).padStart(3, '0')}`
+            ).trim();
+            const course = String(courseIdx !== -1 ? row[courseIdx] : row[2] || 'BCA').trim();
+            const semester = String(semIdx !== -1 ? row[semIdx] : row[3] || '1st Semester').trim();
+            const rawStatus = String(statusIdx !== -1 ? row[statusIdx] : row[4] || 'Active').trim();
+            const status = rawStatus.toLowerCase().includes('inact') ? 'Inactive' : 'Active';
+
+            parsed.push({
+              name,
+              rollNumber,
+              course: course || 'BCA',
+              semester: semester || '1st Semester',
+              status,
+              joinedOn: '17 Oct 2026',
+            });
+          }
+
+          if (parsed.length > 0) {
+            setImportPreviewList(parsed);
+          } else {
+            setImportError('No valid student rows found in the Excel file.');
+          }
+        } catch (err) {
+          console.error('Excel parse error:', err);
+          setImportError('Failed to parse Excel file. Please ensure it is a valid .xlsx or .xls file.');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+      return;
+    }
+
+    // 2. CSV / Plain Text files (.csv, .txt)
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result;
+        if (typeof text === 'string') {
+          const lines = text
+            .split(/\r?\n/)
+            .map((l) => l.trim())
+            .filter((l) => l.length > 0);
+
+          if (lines.length > 1) {
+            const headerCols = lines[0]
               .split(',')
-              .map((c) => c.replace(/^["']|["']$/g, '').trim());
-            if (cols.length === 0 || !cols[0]) continue;
+              .map((h) => h.replace(/^["']|["']$/g, '').trim().toLowerCase());
 
-            const name = nameIdx !== -1 ? cols[nameIdx] : cols[0];
-            const rollNumber =
-              rollIdx !== -1
-                ? cols[rollIdx]
-                : cols[1] || `23IMP${String(i).padStart(3, '0')}`;
-            const course = courseIdx !== -1 ? cols[courseIdx] : cols[2] || 'BCA';
-            const semester =
-              semIdx !== -1 ? cols[semIdx] : cols[3] || '1st Semester';
-            const status =
-              statusIdx !== -1 ? cols[statusIdx] : cols[4] || 'Active';
+            const nameIdx = headerCols.findIndex((h) => h.includes('name'));
+            const rollIdx = headerCols.findIndex((h) => h.includes('roll') || h.includes('id') || h.includes('reg'));
+            const courseIdx = headerCols.findIndex((h) => h.includes('course') || h.includes('dept') || h.includes('branch'));
+            const semIdx = headerCols.findIndex((h) => h.includes('sem'));
+            const statusIdx = headerCols.findIndex((h) => h.includes('status'));
 
-            if (name) {
+            const parsed = [];
+            for (let i = 1; i < lines.length; i++) {
+              const cols = lines[i]
+                .split(',')
+                .map((c) => c.replace(/^["']|["']$/g, '').trim());
+              if (cols.length === 0 || !cols[0]) continue;
+
+              const name = nameIdx !== -1 ? cols[nameIdx] : cols[0];
+              if (!name) continue;
+
+              const rollNumber =
+                rollIdx !== -1
+                  ? cols[rollIdx]
+                  : cols[1] || `23IMP${String(i).padStart(3, '0')}`;
+              const course = courseIdx !== -1 ? cols[courseIdx] : cols[2] || 'BCA';
+              const semester =
+                semIdx !== -1 ? cols[semIdx] : cols[3] || '1st Semester';
+              const rawStatus = statusIdx !== -1 ? cols[statusIdx] : cols[4] || 'Active';
+              const status = rawStatus.toLowerCase().includes('inact') ? 'Inactive' : 'Active';
+
               parsed.push({
                 name,
                 rollNumber,
@@ -896,16 +1032,39 @@ export default function AdminDashboard() {
                 joinedOn: '17 Oct 2026',
               });
             }
-          }
 
-          if (parsed.length > 0) {
-            setImportPreviewList(parsed);
+            if (parsed.length > 0) {
+              setImportPreviewList(parsed);
+            } else {
+              setImportError('No valid student rows found in the CSV file.');
+            }
+          } else {
+            setImportError('The CSV file does not contain enough rows.');
           }
         }
+      } catch (err) {
+        console.error('CSV parse error:', err);
+        setImportError('Failed to parse CSV file.');
       }
     };
     reader.readAsText(file);
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processStudentFile(file);
+    }
     e.target.value = '';
+  };
+
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer?.files?.[0];
+    if (file) {
+      processStudentFile(file);
+    }
   };
 
   const handleConfirmImport = () => {
@@ -1391,13 +1550,21 @@ export default function AdminDashboard() {
                   </button>
 
                   {isMoreOptionsOpen && (
-                    <div className="absolute right-0 top-12 w-48 bg-white border border-slate-100 rounded-xl shadow-lg p-1.5 z-20">
+                    <div className="absolute right-0 top-12 w-52 bg-white border border-slate-100 rounded-xl shadow-lg p-1.5 z-20">
+                      <button
+                        type="button"
+                        onClick={handleExportExcel}
+                        className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-lg flex items-center gap-2 cursor-pointer"
+                      >
+                        <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Export as Excel (.xlsx)</span>
+                      </button>
                       <button
                         type="button"
                         onClick={handleExportCSV}
                         className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-lg flex items-center gap-2 cursor-pointer"
                       >
-                        <FileDown className="w-3.5 h-3.5 text-slate-500" />
+                        <FileDown className="w-3.5 h-3.5 text-blue-600" />
                         <span>Export as CSV</span>
                       </button>
                       <button
@@ -2451,19 +2618,19 @@ export default function AdminDashboard() {
       {/* Import Students Modal */}
       {isImportModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 apple-backdrop z-50 flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-[560px] rounded-[24px] p-6 shadow-2xl border border-slate-100 apple-dialog max-h-[90vh] flex flex-col">
+          <div className="bg-white w-full max-w-[580px] rounded-[24px] p-6 shadow-2xl border border-slate-100 apple-dialog max-h-[92vh] flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[#EAF3FF] text-[#0075FF] flex items-center justify-center">
-                  <Upload className="w-5 h-5 stroke-[2.2]" />
+                  <FileSpreadsheet className="w-5 h-5 stroke-[2.2]" />
                 </div>
                 <div>
                   <h3 className="text-[18px] font-bold text-[#0F172A]">
                     Import Students
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    Upload a CSV file or load demo records to bulk enroll students.
+                    Upload an Excel (.xlsx, .xls) or CSV file to bulk enroll students.
                   </p>
                 </div>
               </div>
@@ -2478,35 +2645,113 @@ export default function AdminDashboard() {
 
             {/* Modal Body */}
             <div className="space-y-4 overflow-y-auto flex-1 pr-1">
-              {/* File Upload Zone */}
-              <div className="border-2 border-dashed border-slate-200 hover:border-[#0075FF] rounded-2xl p-5 text-center transition-colors bg-[#F8FAFC]">
-                <Upload className="w-8 h-8 text-[#0075FF] mx-auto mb-2" />
-                <p className="text-sm font-bold text-slate-800">
-                  {importFileName || 'Select or Drag & Drop CSV File'}
-                </p>
-                <p className="text-xs text-slate-500 mt-1 mb-3">
-                  Format: Name, Roll Number, Course, Semester, Status
-                </p>
+              {/* Error Notice */}
+              {importError && (
+                <div className="bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0" />
+                    <span>{importError}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setImportError(null)}
+                    className="text-rose-400 hover:text-rose-700 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
 
+              {/* File Upload / Drag & Drop Zone */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(true);
+                }}
+                onDragLeave={() => setIsDragOver(false)}
+                onDrop={handleFileDrop}
+                className={`border-2 border-dashed rounded-2xl p-5 text-center transition-all ${
+                  isDragOver
+                    ? 'border-[#0075FF] bg-blue-50/60 ring-4 ring-blue-500/10'
+                    : 'border-slate-200 hover:border-[#0075FF] bg-[#F8FAFC]'
+                }`}
+              >
+                {importFileName ? (
+                  <div className="flex flex-col items-center">
+                    {importFileName.endsWith('.xlsx') || importFileName.endsWith('.xls') ? (
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2 shadow-xs">
+                        <FileSpreadsheet className="w-6 h-6 stroke-[2.2]" />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-2 shadow-xs">
+                        <Upload className="w-6 h-6 stroke-[2.2]" />
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md ${
+                          importFileName.endsWith('.xlsx') || importFileName.endsWith('.xls')
+                            ? 'bg-emerald-100 text-emerald-700'
+                            : 'bg-blue-100 text-blue-700'
+                        }`}
+                      >
+                        {importFileName.endsWith('.xlsx')
+                          ? 'XLSX'
+                          : importFileName.endsWith('.xls')
+                          ? 'XLS'
+                          : 'CSV'}
+                      </span>
+                      <p className="text-sm font-bold text-slate-800 break-all max-w-xs">
+                        {importFileName}
+                      </p>
+                    </div>
+                    <p className="text-xs text-emerald-600 font-semibold mt-1 mb-3">
+                      ✓ {importPreviewList.length} student rows ready for preview
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0075FF] flex items-center justify-center mx-auto mb-2">
+                      <FileSpreadsheet className="w-6 h-6 stroke-[2.2]" />
+                    </div>
+                    <p className="text-sm font-bold text-slate-800">
+                      Select or Drag & Drop Excel or CSV File
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1 mb-3">
+                      Supports <span className="font-semibold text-slate-700">.xlsx, .xls, .csv</span> • Columns: Name, Roll No, Course, Semester, Status
+                    </p>
+                  </>
+                )}
+
+                {/* Upload & Template Actions */}
                 <div className="flex flex-wrap items-center justify-center gap-2">
-                  <label className="h-9 px-4 rounded-xl bg-[#0075FF] hover:bg-blue-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer transition-all">
+                  <label className="h-9 px-4 rounded-xl bg-[#0075FF] hover:bg-blue-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95">
                     <Upload className="w-3.5 h-3.5" />
-                    <span>Browse CSV</span>
+                    <span>{importFileName ? 'Change File' : 'Browse Excel / CSV'}</span>
                     <input
                       type="file"
-                      accept=".csv,text/csv"
-                      onChange={handleCSVFileUpload}
+                      accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                      onChange={handleFileUpload}
                       className="hidden"
                     />
                   </label>
 
                   <button
                     type="button"
+                    onClick={handleDownloadSampleExcel}
+                    className="h-9 px-3 rounded-xl bg-white border border-slate-200 text-emerald-700 hover:bg-emerald-50/50 hover:border-emerald-200 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Excel Template (.xlsx)</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={handleDownloadSampleCSV}
-                    className="h-9 px-3 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    className="h-9 px-3 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
                   >
                     <Download className="w-3.5 h-3.5 text-slate-500" />
-                    <span>Download CSV Template</span>
+                    <span>CSV Template</span>
                   </button>
                 </div>
               </div>
@@ -2514,20 +2759,24 @@ export default function AdminDashboard() {
               {/* Quick Test Demo Option */}
               <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-xs font-bold text-blue-900">
-                    Quick 1-Click Test Demo
-                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#0075FF]" />
+                    <p className="text-xs font-bold text-blue-900">
+                      Quick 1-Click Test Demo
+                    </p>
+                  </div>
                   <p className="text-[11px] text-blue-700 mt-0.5">
-                    Load 10 sample verified students ready to import immediately.
+                    Load 10 pre-verified sample students ready to import immediately.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => {
                     setImportPreviewList(DEMO_IMPORT_STUDENTS);
-                    setImportFileName('demo_student_batch.csv');
+                    setImportFileName('demo_student_batch.xlsx');
+                    setImportError(null);
                   }}
-                  className="h-8 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shrink-0 cursor-pointer shadow-2xs"
+                  className="h-8 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shrink-0 cursor-pointer shadow-2xs active:scale-95 transition-all"
                 >
                   Load 10 Demo
                 </button>
@@ -2542,7 +2791,10 @@ export default function AdminDashboard() {
                   {importPreviewList.length > 0 && (
                     <button
                       type="button"
-                      onClick={() => setImportPreviewList([])}
+                      onClick={() => {
+                        setImportPreviewList([]);
+                        setImportFileName('');
+                      }}
                       className="text-xs font-semibold text-red-500 hover:text-red-700 cursor-pointer"
                     >
                       Clear All
@@ -2552,7 +2804,7 @@ export default function AdminDashboard() {
 
                 {importPreviewList.length === 0 ? (
                   <div className="py-8 text-center text-slate-400 text-xs border border-slate-100 rounded-xl bg-slate-50">
-                    No records loaded yet. Choose a CSV or click &quot;Load 10 Demo&quot; above.
+                    No records loaded yet. Upload an Excel (.xlsx/.xls), CSV, or click &quot;Load 10 Demo&quot; above.
                   </div>
                 ) : (
                   <div className="border border-slate-200 rounded-xl overflow-hidden max-h-48 overflow-y-auto">
@@ -2574,7 +2826,13 @@ export default function AdminDashboard() {
                             <td className="py-2 px-3 text-slate-600">{st.rollNumber}</td>
                             <td className="py-2 px-3 text-slate-600">{st.course}</td>
                             <td className="py-2 px-3 text-right">
-                              <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E8F9EE] text-[#16A34A]">
+                              <span
+                                className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                  st.status === 'Inactive'
+                                    ? 'bg-rose-50 text-rose-600'
+                                    : 'bg-[#E8F9EE] text-[#16A34A]'
+                                }`}
+                              >
                                 {st.status || 'Active'}
                               </span>
                             </td>
@@ -2600,7 +2858,7 @@ export default function AdminDashboard() {
                 type="button"
                 disabled={importPreviewList.length === 0}
                 onClick={handleConfirmImport}
-                className="flex-1 h-11 rounded-xl bg-[#0075FF] hover:bg-[#0066E0] disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-sm font-bold shadow-md shadow-blue-500/25 cursor-pointer"
+                className="flex-1 h-11 rounded-xl bg-[#0075FF] hover:bg-[#0066E0] disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-sm font-bold shadow-md shadow-blue-500/25 cursor-pointer active:scale-95 transition-all"
               >
                 Confirm Import ({importPreviewList.length})
               </button>
