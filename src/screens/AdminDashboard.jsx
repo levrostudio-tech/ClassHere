@@ -31,6 +31,14 @@ import {
   FileSpreadsheet,
   Printer,
   Trash2,
+  Megaphone,
+  Pin,
+  ShieldCheck,
+  Sliders,
+  Check,
+  Edit3,
+  Bookmark,
+  Mail,
 } from 'lucide-react';
 import { adminLogout, getAdminUser } from '../lib/adminAuth';
 import {
@@ -879,6 +887,182 @@ const DEMO_IMPORT_TEACHERS = [
   { name: 'Prof. Neha Juneja', empId: 'FAC202618', department: 'B.Sc IT', designation: 'Assistant Professor', subjects: 'Internet of Things (IoT)', email: 'neha.j@college.edu', status: 'Active' },
   { name: 'Dr. Amit Bansal', empId: 'FAC202619', department: 'B.Voc (Web Dev)', designation: 'Associate Professor', subjects: 'DevOps & CI/CD', email: 'amit.b@college.edu', status: 'Active' },
   { name: 'Prof. Jyoti Sharma', empId: 'FAC202620', department: 'B.Sc Computer Science', designation: 'Assistant Professor', subjects: 'Big Data Analytics', email: 'jyoti.s@college.edu', status: 'Active' },
+];
+
+const INITIAL_DEPARTMENTS = [
+  {
+    id: 'dept-1',
+    name: 'Artificial Intelligence & Machine Learning',
+    code: 'B.Sc AI & ML',
+    degree: 'Undergraduate (3 Years)',
+    hod: 'Dr. Rajesh Sharma',
+    hodInitials: 'RS',
+    hodAvatarBg: 'bg-blue-100 text-blue-600',
+    studentsCount: 124,
+    facultyCount: 5,
+    subjectsCount: 12,
+    status: 'Active',
+  },
+  {
+    id: 'dept-2',
+    name: 'Computer Applications',
+    code: 'BCA',
+    degree: 'Undergraduate (3 Years)',
+    hod: 'Dr. Ananya Mukherjee',
+    hodInitials: 'AM',
+    hodAvatarBg: 'bg-emerald-100 text-emerald-600',
+    studentsCount: 148,
+    facultyCount: 4,
+    subjectsCount: 14,
+    status: 'Active',
+  },
+  {
+    id: 'dept-3',
+    name: 'Computer Science',
+    code: 'B.Sc Computer Science',
+    degree: 'Undergraduate (3 Years)',
+    hod: 'Prof. Meenakshi Sundaram',
+    hodInitials: 'MS',
+    hodAvatarBg: 'bg-purple-100 text-purple-600',
+    studentsCount: 96,
+    facultyCount: 4,
+    subjectsCount: 10,
+    status: 'Active',
+  },
+  {
+    id: 'dept-4',
+    name: 'Information Technology',
+    code: 'B.Sc IT',
+    degree: 'Undergraduate (3 Years)',
+    hod: 'Prof. Vikram Batra',
+    hodInitials: 'VB',
+    hodAvatarBg: 'bg-pink-100 text-pink-600',
+    studentsCount: 68,
+    facultyCount: 3,
+    subjectsCount: 10,
+    status: 'Active',
+  },
+  {
+    id: 'dept-5',
+    name: 'Vocational Web Development',
+    code: 'B.Voc (Web Dev)',
+    degree: 'Vocational (3 Years)',
+    hod: 'Prof. Harish Chander',
+    hodInitials: 'HC',
+    hodAvatarBg: 'bg-sky-100 text-sky-600',
+    studentsCount: 51,
+    facultyCount: 3,
+    subjectsCount: 8,
+    status: 'Active',
+  },
+  {
+    id: 'dept-6',
+    name: 'Data Science & Robotics',
+    code: 'M.Sc Data Science',
+    degree: 'Postgraduate (2 Years)',
+    hod: 'Dr. Kavita Iyer',
+    hodInitials: 'KI',
+    hodAvatarBg: 'bg-amber-100 text-amber-700',
+    studentsCount: 36,
+    facultyCount: 3,
+    subjectsCount: 6,
+    status: 'Active',
+  },
+];
+
+const INITIAL_EXAMS = [
+  {
+    id: 'exam-1',
+    subject: 'Python Mid-Term',
+    department: 'B.Sc. AI & ML',
+    date: '24 Oct 2026',
+    time: '10:00 AM - 01:00 PM',
+    room: 'Hall A-1',
+    status: 'Scheduled',
+  },
+  {
+    id: 'exam-2',
+    subject: 'Discrete Mathematics',
+    department: 'B.Sc. AI & ML',
+    date: '28 Oct 2026',
+    time: '10:00 AM - 01:00 PM',
+    room: 'Hall B-2',
+    status: 'Scheduled',
+  },
+  {
+    id: 'exam-3',
+    subject: 'Computer Fundamentals',
+    department: 'B.Sc. AI & ML',
+    date: '02 Nov 2026',
+    time: '02:00 PM - 05:00 PM',
+    room: 'Lab 3',
+    status: 'Draft',
+  },
+  {
+    id: 'exam-4',
+    subject: 'Data Structures & Algorithms',
+    department: 'BCA',
+    date: '05 Nov 2026',
+    time: '10:00 AM - 01:00 PM',
+    room: 'Hall C-1',
+    status: 'Scheduled',
+  },
+  {
+    id: 'exam-5',
+    subject: 'Web Technologies Practical',
+    department: 'B.Voc (Web Dev)',
+    date: '08 Nov 2026',
+    time: '09:00 AM - 12:00 PM',
+    room: 'Lab 1',
+    status: 'Scheduled',
+  },
+];
+
+const INITIAL_ANNOUNCEMENTS = [
+  {
+    id: 'ann-1',
+    title: 'Mid-Semester Examination Schedule Published',
+    category: 'Academic',
+    badgeColor: 'bg-blue-100 text-blue-700 border-blue-200',
+    audience: 'All Students & Faculty',
+    date: '17 Oct 2026',
+    author: 'Dean Academics',
+    pinned: true,
+    content: 'The mid-semester theory and practical examinations for Academic Year 2026–27 commence on 24th October 2026. Students must verify their hall tickets and seat allocations.',
+  },
+  {
+    id: 'ann-2',
+    title: 'Campus Network Maintenance Window (19 Oct)',
+    category: 'Urgent',
+    badgeColor: 'bg-rose-100 text-rose-700 border-rose-200',
+    audience: 'Campus-wide',
+    date: '16 Oct 2026',
+    author: 'IT Infrastructure Dept',
+    pinned: true,
+    content: 'Scheduled fiber optic maintenance will take place on Sunday, 19th October between 02:00 AM and 06:00 AM. Portal logins may experience momentary downtime.',
+  },
+  {
+    id: 'ann-3',
+    title: 'Annual TechFest & Hackathon Registrations Open',
+    category: 'Event',
+    badgeColor: 'bg-purple-100 text-purple-700 border-purple-200',
+    audience: 'Students',
+    date: '14 Oct 2026',
+    author: 'Student Affairs',
+    pinned: false,
+    content: 'Submissions are now open for the Inter-College Hackathon 2026. Teams from all computing and vocational streams can register up to 4 members before 30th October.',
+  },
+  {
+    id: 'ann-4',
+    title: 'Diwali Break and Academic Calendar Notice',
+    category: 'Holiday',
+    badgeColor: 'bg-amber-100 text-amber-700 border-amber-200',
+    audience: 'All Faculty & Staff',
+    date: '10 Oct 2026',
+    author: 'Registrar Office',
+    pinned: false,
+    content: 'The college will remain closed from 01 November to 04 November 2026 in observance of Diwali festivities. Regular timetable resumes on 05 November.',
+  },
 ];
 
 export default function AdminDashboard() {
@@ -2115,42 +2299,67 @@ export default function AdminDashboard() {
   ]);
 
   // Exam Data for Exam Tab
-  const examList = [
-    {
-      id: 1,
-      subject: 'Python Mid-Term',
-      department: 'B.Sc. AI & ML',
-      date: '24 Oct 2026',
-      time: '10:00 AM - 01:00 PM',
-      room: 'Hall A-1',
-      status: 'Scheduled',
-    },
-    {
-      id: 2,
-      subject: 'Discrete Mathematics',
-      department: 'B.Sc. AI & ML',
-      date: '28 Oct 2026',
-      time: '10:00 AM - 01:00 PM',
-      room: 'Hall B-2',
-      status: 'Scheduled',
-    },
-    {
-      id: 3,
-      subject: 'Computer Fundamentals',
-      department: 'B.Sc. AI & ML',
-      date: '02 Nov 2026',
-      time: '02:00 PM - 05:00 PM',
-      room: 'Lab 3',
-      status: 'Draft',
-    },
-  ];
+  const [examsList, setExamsList] = useState(INITIAL_EXAMS);
+  const [departmentsList, setDepartmentsList] = useState(INITIAL_DEPARTMENTS);
+  const [announcementsList, setAnnouncementsList] = useState(INITIAL_ANNOUNCEMENTS);
+  const [activeSyllabusMenuId, setActiveSyllabusMenuId] = useState(null);
+  const [activeExamMenuId, setActiveExamMenuId] = useState(null);
+  const [activeDeptMenuId, setActiveDeptMenuId] = useState(null);
+  const [adminSuccessNotification, setAdminSuccessNotification] = useState(null);
+
+  // Search & Filters for other tabs
+  const [departmentSearchQuery, setDepartmentSearchQuery] = useState('');
+  const [announcementSearchQuery, setAnnouncementSearchQuery] = useState('');
+  const [announcementCategoryFilter, setAnnouncementCategoryFilter] = useState('All');
+
+  // Form states for Modals
+  const [newExamForm, setNewExamForm] = useState({
+    subject: '',
+    department: 'B.Sc. AI & ML',
+    date: '24 Oct 2026',
+    time: '10:00 AM - 01:00 PM',
+    room: 'Hall A-1',
+    status: 'Scheduled',
+  });
+
+  const [newDeptForm, setNewDeptForm] = useState({
+    name: '',
+    code: '',
+    degree: 'Undergraduate (3 Years)',
+    hod: '',
+    studentsCount: 60,
+    facultyCount: 4,
+    subjectsCount: 8,
+  });
+
+  const [newAnnouncementForm, setNewAnnouncementForm] = useState({
+    title: '',
+    category: 'Academic',
+    audience: 'All Students & Faculty',
+    content: '',
+    pinned: false,
+  });
+
+  const [settingsForm, setSettingsForm] = useState({
+    institutionName: 'ClassHere University College of Computing',
+    shortCode: 'CHUC',
+    academicYear: '2026 – 27',
+    currentSemester: 'Odd Semester (1st, 3rd, 5th)',
+    adminEmail: adminUser?.username ? `${adminUser.username}@college.edu` : 'admin@college.edu',
+    notifyOnRegistration: true,
+    notifyOnTimetablePublish: true,
+    allowStudentSelfRegistration: true,
+    systemLockdown: false,
+  });
 
   // Filtered Syllabus Rows
   const filteredSyllabus = useMemo(() => {
     return syllabusList.filter((item) => {
+      const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
-        item.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.department.toLowerCase().includes(searchQuery.toLowerCase());
+        !q ||
+        item.subject.toLowerCase().includes(q) ||
+        item.department.toLowerCase().includes(q);
       const matchesDept =
         selectedDeptFilter === 'All' || item.department === selectedDeptFilter;
       const matchesSem =
@@ -2160,6 +2369,88 @@ export default function AdminDashboard() {
       return matchesSearch && matchesDept && matchesSem && matchesStatus;
     });
   }, [syllabusList, searchQuery, selectedDeptFilter, selectedSemesterFilter, selectedStatusFilter]);
+
+  const SYLLABUS_PAGE_SIZE = 5;
+  const totalFilteredSyllabus = filteredSyllabus.length;
+  const totalSyllabusPages = Math.max(1, Math.ceil(totalFilteredSyllabus / SYLLABUS_PAGE_SIZE));
+  const paginatedSyllabus = useMemo(() => {
+    const start = (currentPage - 1) * SYLLABUS_PAGE_SIZE;
+    return filteredSyllabus.slice(start, start + SYLLABUS_PAGE_SIZE);
+  }, [filteredSyllabus, currentPage]);
+
+  // Filtered Exam Rows
+  const filteredExams = useMemo(() => {
+    return examsList.filter((exam) => {
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        exam.subject.toLowerCase().includes(q) ||
+        exam.department.toLowerCase().includes(q) ||
+        exam.room.toLowerCase().includes(q) ||
+        exam.status.toLowerCase().includes(q);
+      const matchesDept =
+        selectedDeptFilter === 'All' || exam.department === selectedDeptFilter;
+      return matchesSearch && matchesDept;
+    });
+  }, [examsList, searchQuery, selectedDeptFilter]);
+
+  // Filtered Departments
+  const filteredDepartments = useMemo(() => {
+    return departmentsList.filter((dept) => {
+      const q = departmentSearchQuery.toLowerCase().trim();
+      return (
+        !q ||
+        dept.name.toLowerCase().includes(q) ||
+        dept.code.toLowerCase().includes(q) ||
+        dept.hod.toLowerCase().includes(q)
+      );
+    });
+  }, [departmentsList, departmentSearchQuery]);
+
+  // Filtered Announcements
+  const filteredAnnouncements = useMemo(() => {
+    return announcementsList.filter((ann) => {
+      const q = announcementSearchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        ann.title.toLowerCase().includes(q) ||
+        ann.content.toLowerCase().includes(q) ||
+        ann.author.toLowerCase().includes(q);
+      const matchesCategory =
+        announcementCategoryFilter === 'All' || ann.category === announcementCategoryFilter;
+      return matchesSearch && matchesCategory;
+    });
+  }, [announcementsList, announcementSearchQuery, announcementCategoryFilter]);
+
+  // Clamping effects to prevent showing empty pages
+  useEffect(() => {
+    if (studentCurrentPage > totalStudentPages) {
+      setStudentCurrentPage(Math.max(1, totalStudentPages));
+    }
+  }, [totalStudentPages, studentCurrentPage]);
+
+  useEffect(() => {
+    if (teacherCurrentPage > totalTeacherPages) {
+      setTeacherCurrentPage(Math.max(1, totalTeacherPages));
+    }
+  }, [totalTeacherPages, teacherCurrentPage]);
+
+  useEffect(() => {
+    if (currentPage > totalSyllabusPages) {
+      setCurrentPage(Math.max(1, totalSyllabusPages));
+    }
+  }, [totalSyllabusPages, currentPage]);
+
+  // Close menus on outside click
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      setActiveSyllabusMenuId(null);
+      setActiveExamMenuId(null);
+      setActiveDeptMenuId(null);
+    };
+    window.addEventListener('click', handleOutsideClick);
+    return () => window.removeEventListener('click', handleOutsideClick);
+  }, []);
 
   const handleAddSyllabusSubmit = (e) => {
     e.preventDefault();
@@ -2185,6 +2476,164 @@ export default function AdminDashboard() {
       status: 'Published',
     });
     setModalType(null);
+    setAdminSuccessNotification(`Syllabus for "${newEntry.subject}" created successfully!`);
+    setTimeout(() => setAdminSuccessNotification(null), 5000);
+  };
+
+  const toggleSyllabusStatus = (id) => {
+    setSyllabusList((prev) =>
+      prev.map((s) =>
+        s.id === id
+          ? { ...s, status: s.status === 'Published' ? 'Draft' : 'Published' }
+          : s
+      )
+    );
+  };
+
+  const deleteSyllabus = (id) => {
+    setSyllabusList((prev) => prev.filter((s) => s.id !== id));
+    setAdminSuccessNotification('Syllabus entry deleted.');
+    setTimeout(() => setAdminSuccessNotification(null), 4000);
+  };
+
+  const handleScheduleExamSubmit = (e) => {
+    e.preventDefault();
+    if (!newExamForm.subject.trim()) return;
+
+    const newExam = {
+      id: `exam-${Date.now()}`,
+      subject: newExamForm.subject.trim(),
+      department: newExamForm.department,
+      date: newExamForm.date || '24 Oct 2026',
+      time: newExamForm.time || '10:00 AM - 01:00 PM',
+      room: newExamForm.room.trim() || 'Hall A-1',
+      status: newExamForm.status || 'Scheduled',
+    };
+
+    setExamsList([newExam, ...examsList]);
+    setNewExamForm({
+      subject: '',
+      department: 'B.Sc. AI & ML',
+      date: '24 Oct 2026',
+      time: '10:00 AM - 01:00 PM',
+      room: 'Hall A-1',
+      status: 'Scheduled',
+    });
+    setModalType(null);
+    setAdminSuccessNotification(`Exam "${newExam.subject}" scheduled successfully!`);
+    setTimeout(() => setAdminSuccessNotification(null), 5000);
+  };
+
+  const toggleExamStatus = (id) => {
+    setExamsList((prev) =>
+      prev.map((e) =>
+        e.id === id
+          ? { ...e, status: e.status === 'Scheduled' ? 'Draft' : 'Scheduled' }
+          : e
+      )
+    );
+  };
+
+  const deleteExam = (id) => {
+    setExamsList((prev) => prev.filter((e) => e.id !== id));
+    setAdminSuccessNotification('Exam schedule entry removed.');
+    setTimeout(() => setAdminSuccessNotification(null), 4000);
+  };
+
+  const handleAddDepartmentSubmit = (e) => {
+    e.preventDefault();
+    if (!newDeptForm.name.trim() || !newDeptForm.code.trim()) return;
+
+    const initials = getInitials(newDeptForm.hod || newDeptForm.name);
+    const avatarBg = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
+
+    const newDept = {
+      id: `dept-${Date.now()}`,
+      name: newDeptForm.name.trim(),
+      code: newDeptForm.code.trim().toUpperCase(),
+      degree: newDeptForm.degree,
+      hod: newDeptForm.hod.trim() || 'Faculty Head Assigned',
+      hodInitials: initials,
+      hodAvatarBg: avatarBg,
+      studentsCount: Number(newDeptForm.studentsCount) || 40,
+      facultyCount: Number(newDeptForm.facultyCount) || 3,
+      subjectsCount: Number(newDeptForm.subjectsCount) || 6,
+      status: 'Active',
+    };
+
+    setDepartmentsList([newDept, ...departmentsList]);
+    setNewDeptForm({
+      name: '',
+      code: '',
+      degree: 'Undergraduate (3 Years)',
+      hod: '',
+      studentsCount: 60,
+      facultyCount: 4,
+      subjectsCount: 8,
+    });
+    setModalType(null);
+    setAdminSuccessNotification(`Department "${newDept.name}" added successfully!`);
+    setTimeout(() => setAdminSuccessNotification(null), 5000);
+  };
+
+  const deleteDepartment = (id) => {
+    setDepartmentsList((prev) => prev.filter((d) => d.id !== id));
+    setAdminSuccessNotification('Department removed.');
+    setTimeout(() => setAdminSuccessNotification(null), 4000);
+  };
+
+  const handleAddAnnouncementSubmit = (e) => {
+    e.preventDefault();
+    if (!newAnnouncementForm.title.trim()) return;
+
+    const badgeColorMap = {
+      Academic: 'bg-blue-100 text-blue-700 border-blue-200',
+      Urgent: 'bg-rose-100 text-rose-700 border-rose-200',
+      Event: 'bg-purple-100 text-purple-700 border-purple-200',
+      Holiday: 'bg-amber-100 text-amber-700 border-amber-200',
+    };
+
+    const newAnn = {
+      id: `ann-${Date.now()}`,
+      title: newAnnouncementForm.title.trim(),
+      category: newAnnouncementForm.category,
+      badgeColor: badgeColorMap[newAnnouncementForm.category] || 'bg-slate-100 text-slate-700 border-slate-200',
+      audience: newAnnouncementForm.audience,
+      date: '18 Oct 2026',
+      author: adminUser?.username ? adminUser.username.charAt(0).toUpperCase() + adminUser.username.slice(1) : 'Admin Office',
+      pinned: newAnnouncementForm.pinned,
+      content: newAnnouncementForm.content.trim() || 'Notice details issued by the institutional administration.',
+    };
+
+    setAnnouncementsList([newAnn, ...announcementsList]);
+    setNewAnnouncementForm({
+      title: '',
+      category: 'Academic',
+      audience: 'All Students & Faculty',
+      content: '',
+      pinned: false,
+    });
+    setModalType(null);
+    setAdminSuccessNotification('Notice published to portal noticeboard!');
+    setTimeout(() => setAdminSuccessNotification(null), 5000);
+  };
+
+  const togglePinAnnouncement = (id) => {
+    setAnnouncementsList((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, pinned: !a.pinned } : a))
+    );
+  };
+
+  const deleteAnnouncement = (id) => {
+    setAnnouncementsList((prev) => prev.filter((a) => a.id !== id));
+    setAdminSuccessNotification('Announcement deleted.');
+    setTimeout(() => setAdminSuccessNotification(null), 4000);
+  };
+
+  const handleSaveSettings = (e) => {
+    e.preventDefault();
+    setAdminSuccessNotification('Institutional settings saved successfully!');
+    setTimeout(() => setAdminSuccessNotification(null), 5000);
   };
 
   const navMenuItems = [
@@ -2282,6 +2731,23 @@ export default function AdminDashboard() {
       {/* 2. MAIN ADMIN CONTENT WORKSPACE */}
       {/* ======================================================== */}
       <main className="flex-1 overflow-y-auto px-8 lg:px-10 py-7 space-y-6 max-w-[1400px]">
+        {/* Global Action Notification Banner */}
+        {adminSuccessNotification && (
+          <div className="bg-[#E8F9EE] border border-[#A7F3D0] text-[#16A34A] px-4 py-3 rounded-2xl flex items-center justify-between text-sm font-semibold shadow-xs animate-fadeIn">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-[#16A34A] shrink-0" />
+              <span>{adminSuccessNotification}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAdminSuccessNotification(null)}
+              className="text-[#16A34A] hover:text-[#15803D] cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         {activeNav === 'students' ? (
           <div className="space-y-6">
             {/* Top Bar: Search Input (left) & Bell + Admin Profile (right) */}
@@ -2701,7 +3167,7 @@ export default function AdminDashboard() {
                     <ChevronLeft className="w-4 h-4" />
                   </button>
 
-                  {[1, 2, 3, 4, 5].map((page) => (
+                  {Array.from({ length: totalStudentPages }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
                       type="button"
@@ -2718,8 +3184,8 @@ export default function AdminDashboard() {
 
                   <button
                     type="button"
-                    disabled={studentCurrentPage === 5 || studentCurrentPage >= totalStudentPages}
-                    onClick={() => setStudentCurrentPage((p) => Math.min(5, p + 1))}
+                    disabled={studentCurrentPage >= totalStudentPages}
+                    onClick={() => setStudentCurrentPage((p) => Math.min(totalStudentPages, p + 1))}
                     className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -3179,6 +3645,498 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
+        ) : activeNav === 'departments' ? (
+          <div className="space-y-6">
+            {/* Top Bar: Search Input (left) & Bell + Admin Profile (right) */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="relative w-full sm:w-[440px]">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  value={departmentSearchQuery}
+                  onChange={(e) => setDepartmentSearchQuery(e.target.value)}
+                  placeholder="Search departments by name, code or HOD..."
+                  className="w-full h-10 pl-10 pr-9 rounded-xl border border-slate-200/90 bg-[#F8FAFC] hover:bg-white focus:bg-white focus:border-[#0075FF] text-slate-900 placeholder:text-slate-400 text-[13.5px] shadow-2xs focus:outline-none transition-all"
+                />
+                {departmentSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setDepartmentSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-3 self-end sm:self-auto">
+                <div className="relative w-10 h-10 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
+                  <Bell className="w-4.5 h-4.5 text-slate-600" />
+                  <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#0075FF] ring-2 ring-white" />
+                </div>
+                <div className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-full bg-white border border-slate-200/90 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
+                  <div className="w-7 h-7 rounded-full bg-[#DBEAFE] text-[#0075FF] font-bold text-xs flex items-center justify-center">
+                    A
+                  </div>
+                  <span className="text-xs font-bold text-slate-800">Admin</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+              </div>
+            </div>
+
+            {/* Title & Action Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-[28px] font-black text-[#0F172A] tracking-tight">
+                  Departments
+                </h1>
+                <p className="text-[13.5px] font-medium text-slate-500 mt-0.5">
+                  Manage academic faculties, curriculum degrees, and department leadership.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setModalType('add-department')}
+                className="h-10 px-4.5 rounded-xl bg-[#0075FF] hover:bg-blue-600 active:scale-95 text-white text-sm font-bold flex items-center gap-2 shadow-xs transition-all cursor-pointer"
+              >
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>Add Department</span>
+              </button>
+            </div>
+
+            {/* 4 Stat Metrics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#EAF3FF] flex items-center justify-center text-[#0075FF] shrink-0">
+                  <Building2 className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Total Departments</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    {departmentsList.length}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#E8FBF0] flex items-center justify-center text-[#10B981] shrink-0">
+                  <Users className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Enrolled Students</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    {departmentsList.reduce((acc, d) => acc + (Number(d.studentsCount) || 0), 0)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#F5EDFF] flex items-center justify-center text-[#9333EA] shrink-0">
+                  <GraduationCap className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Faculty Members</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    {departmentsList.reduce((acc, d) => acc + (Number(d.facultyCount) || 0), 0)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-[20px] p-5 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center gap-4">
+                <div className="w-[52px] h-[52px] rounded-[16px] bg-[#FFF7ED] flex items-center justify-center text-orange-600 shrink-0">
+                  <BookOpen className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500">Total Courses</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    {departmentsList.reduce((acc, d) => acc + (Number(d.subjectsCount) || 0), 0)}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Department Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {filteredDepartments.length === 0 ? (
+                <div className="col-span-full py-16 bg-white rounded-[24px] border border-slate-100 text-center">
+                  <Building2 className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                  <p className="text-base font-bold text-slate-700">No departments match your search</p>
+                  <p className="text-xs text-slate-400 mt-1">Try another keyword or add a new department.</p>
+                </div>
+              ) : (
+                filteredDepartments.map((dept) => (
+                  <div
+                    key={dept.id}
+                    className="bg-white rounded-[22px] p-6 border border-slate-100 shadow-[0_2px_16px_rgba(0,0,0,0.03)] hover:shadow-md transition-all flex flex-col justify-between gap-4"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span className="px-2.5 py-1 rounded-lg bg-[#EAF3FF] text-[#0075FF] font-bold text-xs">
+                          {dept.code}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E8F9EE] text-[#16A34A]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+                          <span>{dept.status || 'Active'}</span>
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-1">
+                        {dept.name}
+                      </h3>
+                      <p className="text-xs text-slate-500 font-medium mb-4">
+                        {dept.degree}
+                      </p>
+
+                      {/* HOD Info */}
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 mb-4">
+                        <div className={`w-9 h-9 rounded-full ${dept.hodAvatarBg || 'bg-blue-100 text-blue-600'} font-bold text-xs flex items-center justify-center shrink-0`}>
+                          {dept.hodInitials || 'HD'}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Department Head</p>
+                          <p className="text-xs font-bold text-slate-800 truncate">{dept.hod}</p>
+                        </div>
+                      </div>
+
+                      {/* Stats Row */}
+                      <div className="grid grid-cols-3 gap-2 py-2 border-y border-slate-100 text-center">
+                        <div>
+                          <p className="text-base font-black text-slate-900">{dept.studentsCount}</p>
+                          <p className="text-[11px] font-medium text-slate-400">Students</p>
+                        </div>
+                        <div>
+                          <p className="text-base font-black text-slate-900">{dept.facultyCount}</p>
+                          <p className="text-[11px] font-medium text-slate-400">Faculty</p>
+                        </div>
+                        <div>
+                          <p className="text-base font-black text-slate-900">{dept.subjectsCount}</p>
+                          <p className="text-[11px] font-medium text-slate-400">Subjects</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-between pt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedDeptFilter(dept.code);
+                          setActiveNav('syllabus');
+                        }}
+                        className="text-xs font-bold text-[#0075FF] hover:text-blue-700 flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>View Syllabus</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => deleteDepartment(dept.id)}
+                        className="w-8 h-8 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center transition-colors cursor-pointer"
+                        title="Delete Department"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        ) : activeNav === 'announcements' ? (
+          <div className="space-y-6">
+            {/* Top Bar: Search Input & Profile */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="relative w-full sm:w-[440px]">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  value={announcementSearchQuery}
+                  onChange={(e) => setAnnouncementSearchQuery(e.target.value)}
+                  placeholder="Search announcements by title, content or author..."
+                  className="w-full h-10 pl-10 pr-9 rounded-xl border border-slate-200/90 bg-[#F8FAFC] hover:bg-white focus:bg-white focus:border-[#0075FF] text-slate-900 placeholder:text-slate-400 text-[13.5px] shadow-2xs focus:outline-none transition-all"
+                />
+                {announcementSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setAnnouncementSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-3 self-end sm:self-auto">
+                <div className="relative w-10 h-10 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
+                  <Bell className="w-4.5 h-4.5 text-slate-600" />
+                  <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#0075FF] ring-2 ring-white" />
+                </div>
+                <div className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-full bg-white border border-slate-200/90 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
+                  <div className="w-7 h-7 rounded-full bg-[#DBEAFE] text-[#0075FF] font-bold text-xs flex items-center justify-center">
+                    A
+                  </div>
+                  <span className="text-xs font-bold text-slate-800">Admin</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+              </div>
+            </div>
+
+            {/* Title & Action Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-[28px] font-black text-[#0F172A] tracking-tight">
+                  Noticeboard & Announcements
+                </h1>
+                <p className="text-[13.5px] font-medium text-slate-500 mt-0.5">
+                  Broadcast academic notices, emergency alerts, exam updates, and holidays.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setModalType('add-announcement')}
+                className="h-10 px-4.5 rounded-xl bg-[#0075FF] hover:bg-blue-600 active:scale-95 text-white text-sm font-bold flex items-center gap-2 shadow-xs transition-all cursor-pointer"
+              >
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>Publish Notice</span>
+              </button>
+            </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              {['All', 'Academic', 'Urgent', 'Event', 'Holiday'].map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setAnnouncementCategoryFilter(cat)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    announcementCategoryFilter === cat
+                      ? 'bg-[#0075FF] text-white shadow-xs'
+                      : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Announcements Feed */}
+            <div className="space-y-4">
+              {filteredAnnouncements.length === 0 ? (
+                <div className="py-16 bg-white rounded-[24px] border border-slate-100 text-center">
+                  <Megaphone className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                  <p className="text-base font-bold text-slate-700">No notices found</p>
+                  <p className="text-xs text-slate-400 mt-1">Publish an announcement or choose another filter.</p>
+                </div>
+              ) : (
+                filteredAnnouncements.map((ann) => (
+                  <div
+                    key={ann.id}
+                    className={`bg-white rounded-[22px] p-6 border transition-all shadow-[0_2px_12px_rgba(0,0,0,0.02)] ${
+                      ann.pinned ? 'border-blue-200 ring-1 ring-blue-100' : 'border-slate-100'
+                    }`}
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-2.5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {ann.pinned && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-200">
+                            <Pin className="w-3 h-3 rotate-45" />
+                            <span>Pinned Notice</span>
+                          </span>
+                        )}
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${ann.badgeColor}`}>
+                          {ann.category}
+                        </span>
+                        <span className="text-xs text-slate-400 font-medium">• {ann.date}</span>
+                        <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                          {ann.audience}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1 self-end sm:self-auto">
+                        <button
+                          type="button"
+                          onClick={() => togglePinAnnouncement(ann.id)}
+                          className={`p-2 rounded-lg text-xs font-semibold cursor-pointer transition-colors ${
+                            ann.pinned
+                              ? 'text-blue-600 hover:bg-blue-50'
+                              : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'
+                          }`}
+                          title={ann.pinned ? 'Unpin Notice' : 'Pin to Top'}
+                        >
+                          <Pin className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteAnnouncement(ann.id)}
+                          className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 cursor-pointer transition-colors"
+                          title="Delete Notice"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-2">
+                      {ann.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed font-normal mb-3">
+                      {ann.content}
+                    </p>
+                    <p className="text-xs text-slate-400 font-semibold">
+                      Issued by: <span className="text-slate-700 font-bold">{ann.author}</span>
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        ) : activeNav === 'settings' ? (
+          <div className="space-y-6 max-w-[960px]">
+            {/* Title & Action Row */}
+            <div>
+              <h1 className="text-[28px] font-black text-[#0F172A] tracking-tight">
+                Portal & System Settings
+              </h1>
+              <p className="text-[13.5px] font-medium text-slate-500 mt-0.5">
+                Configure campus branding, academic calendar cycle, and portal administrative controls.
+              </p>
+            </div>
+
+            <form onSubmit={handleSaveSettings} className="space-y-6">
+              {/* Card 1: Institution Profile */}
+              <div className="bg-white rounded-[24px] p-6 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-[#0075FF]" />
+                  <span>Institution & Campus Details</span>
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-bold text-slate-600 block mb-1.5">Institution Name</label>
+                    <input
+                      type="text"
+                      value={settingsForm.institutionName}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, institutionName: e.target.value })}
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-slate-900 focus:outline-none focus:border-[#0075FF]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-slate-600 block mb-1.5">Short Code</label>
+                    <input
+                      type="text"
+                      value={settingsForm.shortCode}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, shortCode: e.target.value })}
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-slate-900 focus:outline-none focus:border-[#0075FF]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-bold text-slate-600 block mb-1.5">Active Academic Year</label>
+                    <input
+                      type="text"
+                      value={settingsForm.academicYear}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, academicYear: e.target.value })}
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-slate-900 focus:outline-none focus:border-[#0075FF]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-slate-600 block mb-1.5">Current Semester Cycle</label>
+                    <select
+                      value={settingsForm.currentSemester}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, currentSemester: e.target.value })}
+                      className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-slate-900 focus:outline-none focus:border-[#0075FF]"
+                    >
+                      <option value="Odd Semester (1st, 3rd, 5th)">Odd Semester (1st, 3rd, 5th)</option>
+                      <option value="Even Semester (2nd, 4th, 6th)">Even Semester (2nd, 4th, 6th)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Administrative Security */}
+              <div className="bg-white rounded-[24px] p-6 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                  <span>Admin Account & Communication</span>
+                </h3>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-600 block mb-1.5">Primary Notification Email</label>
+                  <input
+                    type="email"
+                    value={settingsForm.adminEmail}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, adminEmail: e.target.value })}
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-slate-900 focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+              </div>
+
+              {/* Card 3: System Policies */}
+              <div className="bg-white rounded-[24px] p-6 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Sliders className="w-5 h-5 text-purple-600" />
+                  <span>System Policies & Access</span>
+                </h3>
+
+                <div className="space-y-3.5">
+                  <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100 cursor-pointer">
+                    <div>
+                      <p className="text-sm font-bold text-slate-800">Student Self-Registration</p>
+                      <p className="text-xs text-slate-500">Allow prospective students to create portal accounts with roll numbers</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settingsForm.allowStudentSelfRegistration}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, allowStudentSelfRegistration: e.target.checked })}
+                      className="w-4 h-4 rounded text-[#0075FF] focus:ring-blue-500"
+                    />
+                  </label>
+
+                  <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100 cursor-pointer">
+                    <div>
+                      <p className="text-sm font-bold text-slate-800">Registration Alerts</p>
+                      <p className="text-xs text-slate-500">Notify admin when new students or faculty are registered</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settingsForm.notifyOnRegistration}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, notifyOnRegistration: e.target.checked })}
+                      className="w-4 h-4 rounded text-[#0075FF] focus:ring-blue-500"
+                    />
+                  </label>
+
+                  <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100 cursor-pointer">
+                    <div>
+                      <p className="text-sm font-bold text-slate-800">Broadcast Timetable Changes</p>
+                      <p className="text-xs text-slate-500">Send push notification to all students when custom timetable is updated</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settingsForm.notifyOnTimetablePublish}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, notifyOnTimetablePublish: e.target.checked })}
+                      className="w-4 h-4 rounded text-[#0075FF] focus:ring-blue-500"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="h-11 px-6 rounded-xl bg-[#0075FF] hover:bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-500/20 active:scale-95 transition-all cursor-pointer"
+                >
+                  Save System Settings
+                </button>
+              </div>
+            </form>
+          </div>
         ) : (
           <>
             {/* Top Header Row: Good morning, Admin 👋 & Department Dropdown */}
@@ -3372,12 +4330,18 @@ export default function AdminDashboard() {
                     <div className="relative">
                       <select
                         value={selectedDeptFilter}
-                        onChange={(e) => setSelectedDeptFilter(e.target.value)}
+                        onChange={(e) => {
+                          setSelectedDeptFilter(e.target.value);
+                          setCurrentPage(1);
+                        }}
                         className="appearance-none h-10 pl-3 pr-8 rounded-[12px] border border-[#E2E8F0] dark:border-[#223354] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[12.5px] font-semibold text-[#475569] dark:text-[#CBD5E1] cursor-pointer focus:outline-none focus:border-[#0075FF]"
                       >
-                        <option value="All">Department</option>
+                        <option value="All">All Departments</option>
                         <option value="B.Sc. AI & ML">B.Sc. AI & ML</option>
-                        <option value="B.Tech Computer Science">B.Tech CS</option>
+                        <option value="BCA">BCA</option>
+                        <option value="B.Sc IT">B.Sc IT</option>
+                        <option value="B.Voc (Web Dev)">B.Voc (Web Dev)</option>
+                        <option value="B.Sc Computer Science">B.Sc Computer Science</option>
                       </select>
                       <ChevronDown className="w-3.5 h-3.5 text-[#64748B] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
@@ -3386,13 +4350,19 @@ export default function AdminDashboard() {
                     <div className="relative">
                       <select
                         value={selectedSemesterFilter}
-                        onChange={(e) => setSelectedSemesterFilter(e.target.value)}
+                        onChange={(e) => {
+                          setSelectedSemesterFilter(e.target.value);
+                          setCurrentPage(1);
+                        }}
                         className="appearance-none h-10 pl-3 pr-8 rounded-[12px] border border-[#E2E8F0] dark:border-[#223354] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[12.5px] font-semibold text-[#475569] dark:text-[#CBD5E1] cursor-pointer focus:outline-none focus:border-[#0075FF]"
                       >
-                        <option value="All">Semester</option>
+                        <option value="All">All Semesters</option>
                         <option value="1">Semester 1</option>
                         <option value="2">Semester 2</option>
                         <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                        <option value="5">Semester 5</option>
+                        <option value="6">Semester 6</option>
                       </select>
                       <ChevronDown className="w-3.5 h-3.5 text-[#64748B] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
@@ -3401,10 +4371,13 @@ export default function AdminDashboard() {
                     <div className="relative">
                       <select
                         value={selectedStatusFilter}
-                        onChange={(e) => setSelectedStatusFilter(e.target.value)}
+                        onChange={(e) => {
+                          setSelectedStatusFilter(e.target.value);
+                          setCurrentPage(1);
+                        }}
                         className="appearance-none h-10 pl-3 pr-8 rounded-[12px] border border-[#E2E8F0] dark:border-[#223354] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[12.5px] font-semibold text-[#475569] dark:text-[#CBD5E1] cursor-pointer focus:outline-none focus:border-[#0075FF]"
                       >
-                        <option value="All">Status</option>
+                        <option value="All">All Statuses</option>
                         <option value="Published">Published</option>
                         <option value="Draft">Draft</option>
                       </select>
@@ -3443,21 +4416,22 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#EDF2F9] dark:divide-[#1E293B] text-[13.5px]">
-                    {filteredSyllabus.length === 0 ? (
+                    {paginatedSyllabus.length === 0 ? (
                       <tr>
                         <td colSpan="9" className="py-10 text-center text-[#94A3B8]">
                           No matching syllabus records found.
                         </td>
                       </tr>
                     ) : (
-                      filteredSyllabus.map((item, index) => {
+                      paginatedSyllabus.map((item, index) => {
                         const isPublished = item.status === 'Published';
                         const isFull = item.progress === 100;
+                        const rowIdx = (currentPage - 1) * SYLLABUS_PAGE_SIZE + index + 1;
 
                         return (
                           <tr key={item.id} className="hover:bg-slate-50/80 dark:hover:bg-[#1A2640]/50 transition-colors">
                             <td className="py-4 px-5 text-[#64748B] dark:text-[#94A3B8] font-medium">
-                              {index + 1}
+                              {rowIdx}
                             </td>
                             <td className="py-4 px-5 font-bold text-[#0F172A] dark:text-[#F8FAFC]">
                               {item.subject}
@@ -3500,14 +4474,41 @@ export default function AdminDashboard() {
                                 {item.status}
                               </span>
                             </td>
-                            <td className="py-4 px-5 text-right">
+                            <td className="py-4 px-5 text-right relative" onClick={(e) => e.stopPropagation()}>
                               <button
                                 type="button"
-                                onClick={() => alert(`Options for ${item.subject}`)}
-                                className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-[#1E293B] text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                                onClick={() => setActiveSyllabusMenuId(activeSyllabusMenuId === item.id ? null : item.id)}
+                                className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-[#1E293B] text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white inline-flex items-center justify-center transition-colors cursor-pointer"
                               >
                                 <MoreHorizontal className="w-4.5 h-4.5" />
                               </button>
+
+                              {activeSyllabusMenuId === item.id && (
+                                <div className="absolute right-5 top-12 w-44 bg-white dark:bg-[#131B2E] border border-slate-100 dark:border-[#1E293B] rounded-xl shadow-xl p-1.5 z-30 text-left">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      toggleSyllabusStatus(item.id);
+                                      setActiveSyllabusMenuId(null);
+                                    }}
+                                    className="w-full px-2.5 py-1.5 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1E293B] rounded-lg flex items-center gap-2 cursor-pointer"
+                                  >
+                                    <Check className="w-3.5 h-3.5 text-slate-400" />
+                                    <span>Mark {item.status === 'Published' ? 'Draft' : 'Published'}</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      deleteSyllabus(item.id);
+                                      setActiveSyllabusMenuId(null);
+                                    }}
+                                    className="w-full px-2.5 py-1.5 text-left text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg flex items-center gap-2 cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                                    <span>Delete Subject</span>
+                                  </button>
+                                </div>
+                              )}
                             </td>
                           </tr>
                         );
@@ -3525,68 +4526,132 @@ export default function AdminDashboard() {
                       <th className="py-3.5 px-5">Date</th>
                       <th className="py-3.5 px-5">Time Slot</th>
                       <th className="py-3.5 px-5">Room / Hall</th>
-                      <th className="py-3.5 px-5 text-right">Status</th>
+                      <th className="py-3.5 px-5">Status</th>
+                      <th className="py-3.5 px-5 text-right w-16">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#EDF2F9] dark:divide-[#1E293B] text-[13.5px]">
-                    {examList.map((exam, i) => (
-                      <tr key={exam.id} className="hover:bg-slate-50/80 dark:hover:bg-[#1A2640]/50 transition-colors">
-                        <td className="py-4 px-5 text-[#64748B] font-medium">{i + 1}</td>
-                        <td className="py-4 px-5 font-bold text-[#0F172A] dark:text-[#F8FAFC]">{exam.subject}</td>
-                        <td className="py-4 px-5 text-[#475569] dark:text-[#CBD5E1]">{exam.department}</td>
-                        <td className="py-4 px-5 text-[#0075FF] font-semibold">{exam.date}</td>
-                        <td className="py-4 px-5 text-[#64748B] dark:text-[#94A3B8]">{exam.time}</td>
-                        <td className="py-4 px-5 font-medium">{exam.room}</td>
-                        <td className="py-4 px-5 text-right">
-                          <span className="inline-flex px-2.5 py-0.5 rounded-full text-[11.5px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 border border-emerald-200 dark:border-emerald-900">
-                            {exam.status}
-                          </span>
+                    {filteredExams.length === 0 ? (
+                      <tr>
+                        <td colSpan="8" className="py-10 text-center text-[#94A3B8]">
+                          No scheduled exams match your search or filter.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      filteredExams.map((exam, i) => (
+                        <tr key={exam.id} className="hover:bg-slate-50/80 dark:hover:bg-[#1A2640]/50 transition-colors">
+                          <td className="py-4 px-5 text-[#64748B] font-medium">{i + 1}</td>
+                          <td className="py-4 px-5 font-bold text-[#0F172A] dark:text-[#F8FAFC]">{exam.subject}</td>
+                          <td className="py-4 px-5 text-[#475569] dark:text-[#CBD5E1]">{exam.department}</td>
+                          <td className="py-4 px-5 text-[#0075FF] font-semibold">{exam.date}</td>
+                          <td className="py-4 px-5 text-[#64748B] dark:text-[#94A3B8]">{exam.time}</td>
+                          <td className="py-4 px-5 font-medium">{exam.room}</td>
+                          <td className="py-4 px-5">
+                            <span
+                              className={`inline-flex px-2.5 py-0.5 rounded-full text-[11.5px] font-bold border ${
+                                exam.status === 'Scheduled'
+                                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 border-emerald-200 dark:border-emerald-900'
+                                  : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 border-amber-200 dark:border-amber-900'
+                              }`}
+                            >
+                              {exam.status}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5 text-right relative" onClick={(e) => e.stopPropagation()}>
+                            <button
+                              type="button"
+                              onClick={() => setActiveExamMenuId(activeExamMenuId === exam.id ? null : exam.id)}
+                              className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-[#1E293B] text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white inline-flex items-center justify-center transition-colors cursor-pointer"
+                            >
+                              <MoreHorizontal className="w-4.5 h-4.5" />
+                            </button>
+
+                            {activeExamMenuId === exam.id && (
+                              <div className="absolute right-5 top-12 w-44 bg-white dark:bg-[#131B2E] border border-slate-100 dark:border-[#1E293B] rounded-xl shadow-xl p-1.5 z-30 text-left">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    toggleExamStatus(exam.id);
+                                    setActiveExamMenuId(null);
+                                  }}
+                                  className="w-full px-2.5 py-1.5 text-left text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1E293B] rounded-lg flex items-center gap-2 cursor-pointer"
+                                >
+                                  <Check className="w-3.5 h-3.5 text-slate-400" />
+                                  <span>Mark {exam.status === 'Scheduled' ? 'Draft' : 'Scheduled'}</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    deleteExam(exam.id);
+                                    setActiveExamMenuId(null);
+                                  }}
+                                  className="w-full px-2.5 py-1.5 text-left text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg flex items-center gap-2 cursor-pointer"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                                  <span>Cancel Exam</span>
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               )}
             </div>
 
-            {/* Table Footer: Pagination matching screenshot */}
+            {/* Table Footer: Dynamic Pagination */}
             <div className="p-4 border-t border-[#EDF2F9] dark:border-[#1E293B] flex items-center justify-between text-[12.5px]">
               <span className="text-[#64748B] dark:text-[#94A3B8]">
-                Showing 1–{filteredSyllabus.length} of 24 syllabus
+                {activeTableTab === 'syllabus' ? (
+                  <>
+                    Showing {totalFilteredSyllabus > 0 ? (currentPage - 1) * SYLLABUS_PAGE_SIZE + 1 : 0}–
+                    {Math.min(currentPage * SYLLABUS_PAGE_SIZE, totalFilteredSyllabus)} of {totalFilteredSyllabus} syllabus
+                  </>
+                ) : (
+                  <>
+                    Showing {filteredExams.length} scheduled {filteredExams.length === 1 ? 'exam' : 'exams'}
+                  </>
+                )}
               </span>
 
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className="w-8 h-8 rounded-[8px] border border-[#E2E8F0] dark:border-[#26354D] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-50 dark:hover:bg-[#1A2640] cursor-pointer"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-
-                {[1, 2, 3, 4, 5].map((pageNum) => (
+              {activeTableTab === 'syllabus' && (
+                <div className="flex items-center gap-1.5">
                   <button
-                    key={pageNum}
                     type="button"
-                    onClick={() => setCurrentPage(pageNum)}
-                    className={`w-8 h-8 rounded-[8px] font-bold text-[12.5px] transition-all cursor-pointer ${
-                      currentPage === pageNum
-                        ? 'bg-[#0075FF] text-white shadow-xs'
-                        : 'border border-[#E2E8F0] dark:border-[#26354D] text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-50 dark:hover:bg-[#1A2640]'
-                    }`}
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    className="w-8 h-8 rounded-[8px] border border-[#E2E8F0] dark:border-[#26354D] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-50 dark:hover:bg-[#1A2640] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    {pageNum}
+                    <ChevronLeft className="w-4 h-4" />
                   </button>
-                ))}
 
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((p) => Math.min(5, p + 1))}
-                  className="w-8 h-8 rounded-[8px] border border-[#E2E8F0] dark:border-[#26354D] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-50 dark:hover:bg-[#1A2640] cursor-pointer"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+                  {Array.from({ length: totalSyllabusPages }, (_, i) => i + 1).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-8 h-8 rounded-[8px] font-bold text-[12.5px] transition-all cursor-pointer ${
+                        currentPage === pageNum
+                          ? 'bg-[#0075FF] text-white shadow-xs'
+                          : 'border border-[#E2E8F0] dark:border-[#26354D] text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-50 dark:hover:bg-[#1A2640]'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+
+                  <button
+                    type="button"
+                    disabled={currentPage >= totalSyllabusPages}
+                    onClick={() => setCurrentPage((p) => Math.min(totalSyllabusPages, p + 1))}
+                    className="w-8 h-8 rounded-[8px] border border-[#E2E8F0] dark:border-[#26354D] flex items-center justify-center text-[#64748B] dark:text-[#94A3B8] hover:bg-slate-50 dark:hover:bg-[#1A2640] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -4137,48 +5202,397 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Generic Modal for Quick Access Actions */}
-      {modalType && modalType !== 'add-syllabus' && modalType !== 'upload-timetable' && (
+      {/* Schedule Exam Modal */}
+      {modalType === 'schedule-exam' && (
         <div className="fixed inset-0 bg-slate-900/50 apple-backdrop z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[420px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] apple-dialog text-center">
-            <div className="w-12 h-12 rounded-[16px] bg-[#EAF3FF] dark:bg-[#182844] flex items-center justify-center text-[#0075FF] mx-auto mb-3.5">
-              <UserPlus className="w-6 h-6 stroke-[2.2]" />
-            </div>
-
-            <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC] capitalize mb-1.5">
-              {modalType.replace('-', ' ')}
-            </h3>
-            <p className="text-[13px] text-[#64748B] dark:text-[#94A3B8] mb-5 leading-relaxed">
-              Enter institutional credentials and enroll the new {modalType.split('-')[1]} into the portal database.
-            </p>
-
-            <div className="space-y-3 mb-5">
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full h-11 px-3.5 rounded-[12px] border border-slate-200 dark:border-[#223354] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13.5px] focus:outline-none focus:border-[#0075FF]"
-              />
-            </div>
-
-            <div className="flex gap-2.5">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[500px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] apple-dialog">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <div>
+                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">
+                  Schedule Examination
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Assign exam slot, room hall, and target department.
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setModalType(null)}
-                className="flex-1 h-11 rounded-[12px] border border-slate-200 dark:border-slate-800 text-[13px] font-bold text-[#64748B] hover:bg-slate-50 dark:hover:bg-[#1A2640] cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer"
               >
-                Close
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  alert('Action submitted successfully.');
-                  setModalType(null);
-                }}
-                className="flex-1 h-11 rounded-[12px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[13px] font-bold shadow-md shadow-blue-500/25 cursor-pointer"
-              >
-                Confirm
+                <X className="w-4 h-4" />
               </button>
             </div>
+
+            <form onSubmit={handleScheduleExamSubmit} className="space-y-4">
+              <div>
+                <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                  Exam Title / Subject
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Computer Networks Final"
+                  value={newExamForm.subject}
+                  onChange={(e) => setNewExamForm({ ...newExamForm, subject: e.target.value })}
+                  className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[14px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Department
+                  </label>
+                  <select
+                    value={newExamForm.department}
+                    onChange={(e) => setNewExamForm({ ...newExamForm, department: e.target.value })}
+                    className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="B.Sc. AI & ML">B.Sc. AI & ML</option>
+                    <option value="BCA">BCA</option>
+                    <option value="B.Sc IT">B.Sc IT</option>
+                    <option value="B.Voc (Web Dev)">B.Voc (Web Dev)</option>
+                    <option value="B.Sc Computer Science">B.Sc Computer Science</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Date
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. 28 Oct 2026"
+                    value={newExamForm.date}
+                    onChange={(e) => setNewExamForm({ ...newExamForm, date: e.target.value })}
+                    className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Time Slot
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. 10:00 AM - 01:00 PM"
+                    value={newExamForm.time}
+                    onChange={(e) => setNewExamForm({ ...newExamForm, time: e.target.value })}
+                    className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Room / Hall
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Hall A-2"
+                    value={newExamForm.room}
+                    onChange={(e) => setNewExamForm({ ...newExamForm, room: e.target.value })}
+                    className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                  Status
+                </label>
+                <select
+                  value={newExamForm.status}
+                  onChange={(e) => setNewExamForm({ ...newExamForm, status: e.target.value })}
+                  className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                >
+                  <option value="Scheduled">Scheduled</option>
+                  <option value="Draft">Draft</option>
+                </select>
+              </div>
+
+              <div className="pt-2 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setModalType(null)}
+                  className="flex-1 h-11 rounded-[12px] border border-slate-200 dark:border-slate-800 text-[13.5px] font-bold text-[#64748B] hover:bg-slate-50 dark:hover:bg-[#1E293B] cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 h-11 rounded-[12px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[13.5px] font-bold shadow-md shadow-blue-500/25 cursor-pointer"
+                >
+                  Save Exam
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Department Modal */}
+      {modalType === 'add-department' && (
+        <div className="fixed inset-0 bg-slate-900/50 apple-backdrop z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[500px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] apple-dialog">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <div>
+                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">
+                  Add New Department
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Set up department stream, leadership, and student capacity.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalType(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddDepartmentSubmit} className="space-y-4">
+              <div>
+                <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                  Department Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Artificial Intelligence & Data Science"
+                  value={newDeptForm.name}
+                  onChange={(e) => setNewDeptForm({ ...newDeptForm, name: e.target.value })}
+                  className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[14px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Department Code / Short
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. B.Sc AI & DS"
+                    value={newDeptForm.code}
+                    onChange={(e) => setNewDeptForm({ ...newDeptForm, code: e.target.value })}
+                    className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Degree Type
+                  </label>
+                  <select
+                    value={newDeptForm.degree}
+                    onChange={(e) => setNewDeptForm({ ...newDeptForm, degree: e.target.value })}
+                    className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="Undergraduate (3 Years)">Undergraduate (3 Years)</option>
+                    <option value="Postgraduate (2 Years)">Postgraduate (2 Years)</option>
+                    <option value="Vocational (3 Years)">Vocational (3 Years)</option>
+                    <option value="Diploma (1 Year)">Diploma (1 Year)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                  Head of Department (HOD)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Dr. Rajesh Sharma"
+                  value={newDeptForm.hod}
+                  onChange={(e) => setNewDeptForm({ ...newDeptForm, hod: e.target.value })}
+                  className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Students
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={newDeptForm.studentsCount}
+                    onChange={(e) => setNewDeptForm({ ...newDeptForm, studentsCount: e.target.value })}
+                    className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Faculty
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={newDeptForm.facultyCount}
+                    onChange={(e) => setNewDeptForm({ ...newDeptForm, facultyCount: e.target.value })}
+                    className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Subjects
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={newDeptForm.subjectsCount}
+                    onChange={(e) => setNewDeptForm({ ...newDeptForm, subjectsCount: e.target.value })}
+                    className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setModalType(null)}
+                  className="flex-1 h-11 rounded-[12px] border border-slate-200 dark:border-slate-800 text-[13.5px] font-bold text-[#64748B] hover:bg-slate-50 dark:hover:bg-[#1E293B] cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 h-11 rounded-[12px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[13.5px] font-bold shadow-md shadow-blue-500/25 cursor-pointer"
+                >
+                  Create Department
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Announcement Modal */}
+      {modalType === 'add-announcement' && (
+        <div className="fixed inset-0 bg-slate-900/50 apple-backdrop z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-[520px] rounded-[24px] p-6 shadow-2xl border border-slate-100 dark:border-[#1E293B] apple-dialog">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B] mb-4">
+              <div>
+                <h3 className="text-[18px] font-bold text-[#0F172A] dark:text-[#F8FAFC]">
+                  Publish Noticeboard Announcement
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Broadcast academic alerts, campus events, and notices.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalType(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#1E293B] flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddAnnouncementSubmit} className="space-y-4">
+              <div>
+                <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                  Notice Title
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. End Semester Exam Fee Submission Deadline"
+                  value={newAnnouncementForm.title}
+                  onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, title: e.target.value })}
+                  className="w-full h-11 px-3.5 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[14px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Category
+                  </label>
+                  <select
+                    value={newAnnouncementForm.category}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, category: e.target.value })}
+                    className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="Academic">Academic</option>
+                    <option value="Urgent">Urgent</option>
+                    <option value="Event">Event</option>
+                    <option value="Holiday">Holiday</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                    Audience
+                  </label>
+                  <select
+                    value={newAnnouncementForm.audience}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, audience: e.target.value })}
+                    className="w-full h-11 px-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="All Students & Faculty">All Students & Faculty</option>
+                    <option value="Students">Students Only</option>
+                    <option value="Faculty & Staff">Faculty & Staff</option>
+                    <option value="Campus-wide">Campus-wide</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[12.5px] font-bold text-[#475569] dark:text-[#94A3B8] block mb-1">
+                  Notice Details / Body
+                </label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="Enter details, instructions, or links relevant to this notice..."
+                  value={newAnnouncementForm.content}
+                  onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, content: e.target.value })}
+                  className="w-full p-3 rounded-[12px] border border-[#CBD5E1] dark:border-[#26354D] bg-[#F8FAFC] dark:bg-[#0B0F19] text-[13px] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#0075FF]"
+                />
+              </div>
+
+              <div className="flex items-center gap-2.5 pt-1">
+                <input
+                  type="checkbox"
+                  id="pinNoticeCheckbox"
+                  checked={newAnnouncementForm.pinned}
+                  onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, pinned: e.target.checked })}
+                  className="w-4 h-4 rounded text-[#0075FF] focus:ring-blue-500 cursor-pointer"
+                />
+                <label htmlFor="pinNoticeCheckbox" className="text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer">
+                  Pin notice to top of noticeboard
+                </label>
+              </div>
+
+              <div className="pt-2 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setModalType(null)}
+                  className="flex-1 h-11 rounded-[12px] border border-slate-200 dark:border-slate-800 text-[13.5px] font-bold text-[#64748B] hover:bg-slate-50 dark:hover:bg-[#1E293B] cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 h-11 rounded-[12px] bg-[#0075FF] hover:bg-[#0066E0] text-white text-[13.5px] font-bold shadow-md shadow-blue-500/25 cursor-pointer"
+                >
+                  Publish Notice
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
