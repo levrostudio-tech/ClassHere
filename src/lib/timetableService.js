@@ -555,27 +555,7 @@ export async function fetchDayTimetable(dayOfWeek) {
     try {
       const { data, error } = await supabase
         .from('timetable_slots')
-        .select(`
-          id,
-          day_of_week,
-          start_time,
-          end_time,
-          room_number,
-          class_type,
-          is_published,
-          teacher_assignments (
-            subjects (
-              id,
-              name,
-              code,
-              color_theme
-            ),
-            batches (
-              code,
-              semester
-            )
-          )
-        `)
+        .select('*')
         .eq('is_published', true)
         .eq('day_of_week', normalizedDay)
         .order('start_time', { ascending: true });
@@ -583,9 +563,13 @@ export async function fetchDayTimetable(dayOfWeek) {
       if (!error && Array.isArray(data) && data.length > 0) {
         return data.map((item) => {
           const subject =
-            item.teacher_assignments?.subjects?.name || 'Academic Class';
+            item.subject ||
+            item.teacher_assignments?.subjects?.name ||
+            'Academic Class';
           const grade =
-            item.teacher_assignments?.batches?.code || 'B.Sc AI/ML – 1st Year';
+            item.batch_grade ||
+            item.teacher_assignments?.batches?.code ||
+            'B.Sc. AI & ML';
           return {
             id: item.id,
             startTime: formatTimeDisplay(item.start_time),
@@ -625,6 +609,14 @@ export function saveCustomTimetable(scheduleByDay, batchMeta = {}) {
     };
     localStorage.setItem('classhere_timetable', JSON.stringify(payload));
     window.dispatchEvent(new CustomEvent('classhere_timetable_updated', { detail: payload }));
+
+    // Sync to Supabase in background if configured
+    if (isSupabaseConfigured && supabase) {
+      import('./supabaseService.js').then(({ syncWeeklyTimetableToDb }) => {
+        syncWeeklyTimetableToDb(scheduleByDay, batchMeta.batch || 'B.Sc. AI & ML').catch(console.error);
+      });
+    }
+
     return true;
   } catch (err) {
     console.error('Failed to save custom timetable:', err);

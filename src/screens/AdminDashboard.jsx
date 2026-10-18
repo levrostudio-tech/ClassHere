@@ -39,6 +39,11 @@ import {
   Edit3,
   Bookmark,
   Mail,
+  Database,
+  RefreshCw,
+  ExternalLink,
+  Copy,
+  Zap,
 } from 'lucide-react';
 import { adminLogout, getAdminUser } from '../lib/adminAuth';
 import {
@@ -47,6 +52,44 @@ import {
   resetCustomTimetable,
   FALLBACK_SCHEDULE,
 } from '../lib/timetableService';
+import {
+  getSupabaseConfig,
+  saveSupabaseConfig,
+  clearSupabaseConfig,
+  testSupabaseConnection,
+} from '../lib/supabase';
+import {
+  isConnected as isSupabaseConnected,
+  fetchStudentsFromDb,
+  insertStudentToDb,
+  updateStudentStatusInDb,
+  deleteStudentFromDb,
+  batchImportStudentsToDb,
+  fetchTeachersFromDb,
+  insertTeacherToDb,
+  updateTeacherStatusInDb,
+  deleteTeacherFromDb,
+  batchImportTeachersToDb,
+  fetchDepartmentsFromDb,
+  insertDepartmentToDb,
+  deleteDepartmentFromDb,
+  fetchExamsFromDb,
+  insertExamToDb,
+  updateExamStatusInDb,
+  deleteExamFromDb,
+  fetchSyllabusFromDb,
+  insertSyllabusToDb,
+  updateSyllabusStatusInDb,
+  deleteSyllabusFromDb,
+  fetchAnnouncementsFromDb,
+  insertAnnouncementToDb,
+  updateAnnouncementPinInDb,
+  deleteAnnouncementFromDb,
+  fetchInstitutionSettingsFromDb,
+  saveInstitutionSettingsToDb,
+  syncAllLocalToSupabase,
+} from '../lib/supabaseService';
+import { SUPABASE_SCHEMA_SQL } from '../lib/supabaseSchemaSql';
 
 const AVATAR_COLORS = [
   'bg-blue-100 text-blue-600',
@@ -1523,17 +1566,21 @@ export default function AdminDashboard() {
 
   const toggleStudentStatus = (id) => {
     setStudentsList((prev) =>
-      prev.map((s) =>
-        s.id === id
-          ? { ...s, status: s.status === 'Active' ? 'Inactive' : 'Active' }
-          : s
-      )
+      prev.map((s) => {
+        if (s.id === id) {
+          const newStatus = s.status === 'Active' ? 'Inactive' : 'Active';
+          updateStudentStatusInDb(id, newStatus);
+          return { ...s, status: newStatus };
+        }
+        return s;
+      })
     );
   };
 
   const deleteStudent = (id) => {
     setStudentsList((prev) => prev.filter((s) => s.id !== id));
     setSelectedStudentIds((prev) => prev.filter((itemId) => itemId !== id));
+    deleteStudentFromDb(id);
   };
 
   const handleAddStudentSubmit = (e) => {
@@ -1556,6 +1603,7 @@ export default function AdminDashboard() {
     };
 
     setStudentsList((prev) => [newStudent, ...prev]);
+    insertStudentToDb(newStudent);
     setIsAddStudentModalOpen(false);
     setStudentCurrentPage(1);
     setNewStudentForm({
@@ -1851,6 +1899,7 @@ export default function AdminDashboard() {
     });
 
     setStudentsList((prev) => [...newRecords, ...prev]);
+    batchImportStudentsToDb(newRecords);
     setIsImportModalOpen(false);
     setImportPreviewList([]);
     setStudentCurrentPage(1);
@@ -1949,17 +1998,21 @@ export default function AdminDashboard() {
 
   const toggleTeacherStatus = (id) => {
     setTeachersList((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? { ...t, status: t.status === 'Active' ? 'Inactive' : 'Active' }
-          : t
-      )
+      prev.map((t) => {
+        if (t.id === id) {
+          const newStatus = t.status === 'Active' ? 'Inactive' : 'Active';
+          updateTeacherStatusInDb(id, newStatus);
+          return { ...t, status: newStatus };
+        }
+        return t;
+      })
     );
   };
 
   const deleteTeacher = (id) => {
     setTeachersList((prev) => prev.filter((t) => t.id !== id));
     setSelectedTeacherIds((prev) => prev.filter((itemId) => itemId !== id));
+    deleteTeacherFromDb(id);
   };
 
   const handleExportTeachersExcel = () => {
@@ -2199,6 +2252,7 @@ export default function AdminDashboard() {
     });
 
     setTeachersList((prev) => [...newRecords, ...prev]);
+    batchImportTeachersToDb(newRecords);
     setIsImportTeacherModalOpen(false);
     setImportTeacherPreviewList([]);
     setTeacherCurrentPage(1);
@@ -2228,6 +2282,7 @@ export default function AdminDashboard() {
     };
 
     setTeachersList((prev) => [newTeacher, ...prev]);
+    insertTeacherToDb(newTeacher);
     setIsAddTeacherModalOpen(false);
     setModalType(null);
     setTeacherCurrentPage(1);
@@ -2352,6 +2407,17 @@ export default function AdminDashboard() {
     systemLockdown: false,
   });
 
+  // Supabase Cloud Integration State
+  const [supabaseConfig, setSupabaseConfig] = useState(() => getSupabaseConfig());
+  const [supabaseFormUrl, setSupabaseFormUrl] = useState(() => getSupabaseConfig().url);
+  const [supabaseFormKey, setSupabaseFormKey] = useState(() => getSupabaseConfig().key);
+  const [supabaseTesting, setSupabaseTesting] = useState(false);
+  const [supabaseTestResult, setSupabaseTestResult] = useState(null);
+  const [isSyncingToSupabase, setIsSyncingToSupabase] = useState(false);
+  const [syncResult, setSyncResult] = useState(null);
+  const [isSqlModalOpen, setIsSqlModalOpen] = useState(false);
+  const [sqlCopied, setSqlCopied] = useState(false);
+
   // Filtered Syllabus Rows
   const filteredSyllabus = useMemo(() => {
     return syllabusList.filter((item) => {
@@ -2452,6 +2518,118 @@ export default function AdminDashboard() {
     return () => window.removeEventListener('click', handleOutsideClick);
   }, []);
 
+  // Fetch initial data from Supabase if connected
+  useEffect(() => {
+    async function loadDataFromSupabase() {
+      if (!isSupabaseConnected()) return;
+
+      try {
+        const [dbStudents, dbTeachers, dbDepts, dbExams, dbSyllabus, dbAnnouncements, dbSettings] =
+          await Promise.all([
+            fetchStudentsFromDb(),
+            fetchTeachersFromDb(),
+            fetchDepartmentsFromDb(),
+            fetchExamsFromDb(),
+            fetchSyllabusFromDb(),
+            fetchAnnouncementsFromDb(),
+            fetchInstitutionSettingsFromDb(),
+          ]);
+
+        if (Array.isArray(dbStudents) && dbStudents.length > 0) setStudentsList(dbStudents);
+        if (Array.isArray(dbTeachers) && dbTeachers.length > 0) setTeachersList(dbTeachers);
+        if (Array.isArray(dbDepts) && dbDepts.length > 0) setDepartmentsList(dbDepts);
+        if (Array.isArray(dbExams) && dbExams.length > 0) setExamsList(dbExams);
+        if (Array.isArray(dbSyllabus) && dbSyllabus.length > 0) setSyllabusList(dbSyllabus);
+        if (Array.isArray(dbAnnouncements) && dbAnnouncements.length > 0) setAnnouncementsList(dbAnnouncements);
+        if (dbSettings) setSettingsForm((prev) => ({ ...prev, ...dbSettings }));
+      } catch (err) {
+        console.warn('Could not load data from Supabase:', err);
+      }
+    }
+
+    loadDataFromSupabase();
+
+    const handleSupabaseChanged = () => {
+      const cfg = getSupabaseConfig();
+      setSupabaseConfig(cfg);
+      setSupabaseFormUrl(cfg.url);
+      setSupabaseFormKey(cfg.key);
+      loadDataFromSupabase();
+    };
+
+    window.addEventListener('classhere_supabase_changed', handleSupabaseChanged);
+    return () => window.removeEventListener('classhere_supabase_changed', handleSupabaseChanged);
+  }, []);
+
+  const handleTestSupabaseConnection = async () => {
+    setSupabaseTesting(true);
+    setSupabaseTestResult(null);
+    const result = await testSupabaseConnection(supabaseFormUrl, supabaseFormKey);
+    setSupabaseTesting(false);
+    setSupabaseTestResult(result);
+  };
+
+  const handleSaveSupabaseConfig = async (e) => {
+    e.preventDefault();
+    if (!supabaseFormUrl.trim() || !supabaseFormKey.trim()) {
+      setSupabaseTestResult({
+        success: false,
+        message: 'Please provide both your Supabase Project URL and Anon API Key.',
+      });
+      return;
+    }
+
+    setSupabaseTesting(true);
+    const result = await testSupabaseConnection(supabaseFormUrl, supabaseFormKey);
+    setSupabaseTesting(false);
+    setSupabaseTestResult(result);
+
+    if (result.success) {
+      saveSupabaseConfig(supabaseFormUrl, supabaseFormKey);
+      setAdminSuccessNotification('Supabase database connected successfully! Real-time cloud sync is now active.');
+      setTimeout(() => setAdminSuccessNotification(null), 5000);
+    }
+  };
+
+  const handleDisconnectSupabase = () => {
+    clearSupabaseConfig();
+    setSupabaseFormUrl('');
+    setSupabaseFormKey('');
+    setSupabaseTestResult(null);
+    setAdminSuccessNotification('Supabase disconnected. Switched back to local storage mode.');
+    setTimeout(() => setAdminSuccessNotification(null), 5000);
+  };
+
+  const handleSyncAllToSupabase = async () => {
+    setIsSyncingToSupabase(true);
+    setSyncResult(null);
+    const customTt = getCustomTimetable();
+    const result = await syncAllLocalToSupabase({
+      students: studentsList,
+      teachers: teachersList,
+      departments: departmentsList,
+      exams: examsList,
+      syllabus: syllabusList,
+      announcements: announcementsList,
+      timetable: customTt,
+      settings: settingsForm,
+    });
+    setIsSyncingToSupabase(false);
+    setSyncResult(result);
+    if (result.success) {
+      setAdminSuccessNotification('All local data successfully synced to Supabase database!');
+      setTimeout(() => setAdminSuccessNotification(null), 5000);
+    }
+  };
+
+  const handleCopySqlSchema = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(SUPABASE_SCHEMA_SQL);
+      setSqlCopied(true);
+      setTimeout(() => setSqlCopied(false), 3000);
+    }
+  };
+
   const handleAddSyllabusSubmit = (e) => {
     e.preventDefault();
     if (!newSubject.subject.trim()) return;
@@ -2468,6 +2646,7 @@ export default function AdminDashboard() {
     };
 
     setSyllabusList([newEntry, ...syllabusList]);
+    insertSyllabusToDb(newEntry);
     setNewSubject({
       subject: '',
       department: 'B.Sc. AI & ML',
@@ -2482,16 +2661,20 @@ export default function AdminDashboard() {
 
   const toggleSyllabusStatus = (id) => {
     setSyllabusList((prev) =>
-      prev.map((s) =>
-        s.id === id
-          ? { ...s, status: s.status === 'Published' ? 'Draft' : 'Published' }
-          : s
-      )
+      prev.map((s) => {
+        if (s.id === id) {
+          const newStatus = s.status === 'Published' ? 'Draft' : 'Published';
+          updateSyllabusStatusInDb(id, newStatus);
+          return { ...s, status: newStatus };
+        }
+        return s;
+      })
     );
   };
 
   const deleteSyllabus = (id) => {
     setSyllabusList((prev) => prev.filter((s) => s.id !== id));
+    deleteSyllabusFromDb(id);
     setAdminSuccessNotification('Syllabus entry deleted.');
     setTimeout(() => setAdminSuccessNotification(null), 4000);
   };
@@ -2511,6 +2694,7 @@ export default function AdminDashboard() {
     };
 
     setExamsList([newExam, ...examsList]);
+    insertExamToDb(newExam);
     setNewExamForm({
       subject: '',
       department: 'B.Sc. AI & ML',
@@ -2526,16 +2710,20 @@ export default function AdminDashboard() {
 
   const toggleExamStatus = (id) => {
     setExamsList((prev) =>
-      prev.map((e) =>
-        e.id === id
-          ? { ...e, status: e.status === 'Scheduled' ? 'Draft' : 'Scheduled' }
-          : e
-      )
+      prev.map((e) => {
+        if (e.id === id) {
+          const newStatus = e.status === 'Scheduled' ? 'Draft' : 'Scheduled';
+          updateExamStatusInDb(id, newStatus);
+          return { ...e, status: newStatus };
+        }
+        return e;
+      })
     );
   };
 
   const deleteExam = (id) => {
     setExamsList((prev) => prev.filter((e) => e.id !== id));
+    deleteExamFromDb(id);
     setAdminSuccessNotification('Exam schedule entry removed.');
     setTimeout(() => setAdminSuccessNotification(null), 4000);
   };
@@ -2562,6 +2750,7 @@ export default function AdminDashboard() {
     };
 
     setDepartmentsList([newDept, ...departmentsList]);
+    insertDepartmentToDb(newDept);
     setNewDeptForm({
       name: '',
       code: '',
@@ -2578,6 +2767,7 @@ export default function AdminDashboard() {
 
   const deleteDepartment = (id) => {
     setDepartmentsList((prev) => prev.filter((d) => d.id !== id));
+    deleteDepartmentFromDb(id);
     setAdminSuccessNotification('Department removed.');
     setTimeout(() => setAdminSuccessNotification(null), 4000);
   };
@@ -2606,6 +2796,7 @@ export default function AdminDashboard() {
     };
 
     setAnnouncementsList([newAnn, ...announcementsList]);
+    insertAnnouncementToDb(newAnn);
     setNewAnnouncementForm({
       title: '',
       category: 'Academic',
@@ -2620,18 +2811,27 @@ export default function AdminDashboard() {
 
   const togglePinAnnouncement = (id) => {
     setAnnouncementsList((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, pinned: !a.pinned } : a))
+      prev.map((a) => {
+        if (a.id === id) {
+          const newPinned = !a.pinned;
+          updateAnnouncementPinInDb(id, newPinned);
+          return { ...a, pinned: newPinned };
+        }
+        return a;
+      })
     );
   };
 
   const deleteAnnouncement = (id) => {
     setAnnouncementsList((prev) => prev.filter((a) => a.id !== id));
+    deleteAnnouncementFromDb(id);
     setAdminSuccessNotification('Announcement deleted.');
     setTimeout(() => setAdminSuccessNotification(null), 4000);
   };
 
   const handleSaveSettings = (e) => {
     e.preventDefault();
+    saveInstitutionSettingsToDb(settingsForm);
     setAdminSuccessNotification('Institutional settings saved successfully!');
     setTimeout(() => setAdminSuccessNotification(null), 5000);
   };
@@ -2697,6 +2897,42 @@ export default function AdminDashboard() {
 
         {/* Sidebar Footer: Academic Year Card & Log Out Button */}
         <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          {/* Database Live Status Card */}
+          <button
+            type="button"
+            onClick={() => setActiveNav('settings')}
+            className="w-full text-left bg-[#F8FAFC] dark:bg-[#0B0F19] border border-[#E8EFF7] dark:border-[#223354] rounded-[16px] p-2.5 flex items-center justify-between cursor-pointer hover:border-[#0075FF]/30 transition-all apple-card group"
+            title="Click to manage Supabase database settings"
+          >
+            <div className="flex items-center gap-2.5">
+              <div
+                className={`w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 transition-colors ${
+                  isSupabaseConnected()
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 border border-emerald-200 dark:border-emerald-800'
+                    : 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 border border-amber-200 dark:border-amber-800'
+                }`}
+              >
+                <Database className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold text-[#94A3B8] dark:text-[#64748B] uppercase tracking-wider leading-none">
+                  Database
+                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                      isSupabaseConnected() ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                    }`}
+                  />
+                  <p className="text-[12px] font-bold text-[#0F172A] dark:text-[#F8FAFC] truncate leading-tight group-hover:text-[#0075FF] transition-colors">
+                    {isSupabaseConnected() ? 'Supabase Live' : 'Local Storage'}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+          </button>
+
           {/* Academic Year Info Card */}
           <div className="bg-[#F8FAFC] dark:bg-[#0B0F19] border border-[#E8EFF7] dark:border-[#223354] rounded-[16px] p-3 flex items-center justify-between cursor-pointer hover:border-[#0075FF]/30 transition-all apple-card">
             <div className="flex items-center gap-2.5">
@@ -2779,8 +3015,27 @@ export default function AdminDashboard() {
                 )}
               </div>
 
-              {/* Right: Notification Bell & Admin Profile Pill */}
+              {/* Right: Database Quick Pill, Notification Bell & Admin Profile Pill */}
               <div className="flex items-center gap-3 self-end sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setActiveNav('settings')}
+                  className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer shadow-2xs hover:shadow-xs ${
+                    isSupabaseConnected()
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                      : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
+                  }`}
+                  title="Click to manage Supabase Database in Settings"
+                >
+                  <Database className="w-3.5 h-3.5" />
+                  <span>{isSupabaseConnected() ? 'Supabase' : 'Local Mode'}</span>
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isSupabaseConnected() ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                    }`}
+                  />
+                </button>
+
                 <div className="relative w-10 h-10 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
                   <Bell className="w-4.5 h-4.5 text-slate-600" />
                   <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#0075FF] ring-2 ring-white" />
@@ -3225,8 +3480,27 @@ export default function AdminDashboard() {
                 )}
               </div>
 
-              {/* Right: Notification Bell & Admin Profile Pill */}
+              {/* Right: Database Quick Pill, Notification Bell & Admin Profile Pill */}
               <div className="flex items-center gap-3 self-end sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setActiveNav('settings')}
+                  className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer shadow-2xs hover:shadow-xs ${
+                    isSupabaseConnected()
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                      : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
+                  }`}
+                  title="Click to manage Supabase Database in Settings"
+                >
+                  <Database className="w-3.5 h-3.5" />
+                  <span>{isSupabaseConnected() ? 'Supabase' : 'Local Mode'}</span>
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isSupabaseConnected() ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                    }`}
+                  />
+                </button>
+
                 <div className="relative w-10 h-10 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer shadow-2xs transition-all">
                   <Bell className="w-4.5 h-4.5 text-slate-600" />
                   <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#0075FF] ring-2 ring-white" />
@@ -4127,6 +4401,169 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
+              {/* Card 4: Supabase Cloud Database Integration */}
+              <div className="bg-white rounded-[24px] p-6 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                      <Database className="w-5 h-5 stroke-[2.2]" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span>Supabase Cloud Database</span>
+                        {isSupabaseConnected() ? (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F9EE] text-[#16A34A] border border-[#A7F3D0]">
+                            <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
+                            <span>Connected</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                            <span className="w-2 h-2 rounded-full bg-amber-500" />
+                            <span>Local Storage Mode</span>
+                          </span>
+                        )}
+                      </h3>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        Connect your PostgreSQL backend for real-time cloud syncing and cross-device persistence.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsSqlModalOpen(true)}
+                      className="h-8.5 px-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
+                    >
+                      <Copy className="w-3.5 h-3.5 text-slate-500" />
+                      <span>SQL Setup Script</span>
+                    </button>
+                    {isSupabaseConnected() && (
+                      <button
+                        type="button"
+                        onClick={handleDisconnectSupabase}
+                        className="h-8.5 px-3 rounded-lg border border-red-200 text-xs font-semibold text-red-600 hover:bg-red-50 cursor-pointer transition-all"
+                      >
+                        Disconnect
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Connection inputs */}
+                <div className="grid grid-cols-1 gap-4 pt-1">
+                  <div>
+                    <label className="text-xs font-bold text-slate-600 block mb-1.5">
+                      Supabase Project URL
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="https://yourprojectid.supabase.co"
+                      value={supabaseFormUrl}
+                      onChange={(e) => setSupabaseFormUrl(e.target.value)}
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-slate-900 font-mono text-xs focus:outline-none focus:border-[#0075FF]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-slate-600 block mb-1.5">
+                      Supabase Anon / Public API Key
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      value={supabaseFormKey}
+                      onChange={(e) => setSupabaseFormKey(e.target.value)}
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-[#F8FAFC] text-sm text-slate-900 font-mono text-xs focus:outline-none focus:border-[#0075FF]"
+                    />
+                  </div>
+                </div>
+
+                {/* Test Result Message */}
+                {supabaseTestResult && (
+                  <div
+                    className={`p-3.5 rounded-xl text-xs flex items-start gap-2.5 ${
+                      supabaseTestResult.success
+                        ? supabaseTestResult.needsSchema
+                          ? 'bg-amber-50 border border-amber-200 text-amber-800'
+                          : 'bg-[#E8F9EE] border border-[#A7F3D0] text-[#16A34A]'
+                        : 'bg-rose-50 border border-rose-200 text-rose-700'
+                    }`}
+                  >
+                    <div className="shrink-0 mt-0.5">
+                      {supabaseTestResult.success ? (
+                        <CheckCircle2 className="w-4 h-4 text-[#16A34A]" />
+                      ) : (
+                        <AlertTriangle className="w-4 h-4 text-rose-500" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold">{supabaseTestResult.message}</p>
+                      {supabaseTestResult.needsSchema && (
+                        <button
+                          type="button"
+                          onClick={() => setIsSqlModalOpen(true)}
+                          className="mt-1 text-xs font-bold underline hover:text-amber-900 cursor-pointer"
+                        >
+                          Click here to open and copy the SQL Schema script
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sync Result Banner */}
+                {syncResult && (
+                  <div
+                    className={`p-3.5 rounded-xl text-xs flex items-center gap-2.5 ${
+                      syncResult.success
+                        ? 'bg-[#E8F9EE] border border-[#A7F3D0] text-[#16A34A]'
+                        : 'bg-rose-50 border border-rose-200 text-rose-700'
+                    }`}
+                  >
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>{syncResult.message}</span>
+                  </div>
+                )}
+
+                {/* Supabase Action Buttons */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <button
+                      type="button"
+                      disabled={supabaseTesting || !supabaseFormUrl}
+                      onClick={handleTestSupabaseConnection}
+                      className="h-10 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 disabled:opacity-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${supabaseTesting ? 'animate-spin' : ''}`} />
+                      <span>{supabaseTesting ? 'Testing...' : 'Test Connection'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSaveSupabaseConfig}
+                      disabled={supabaseTesting || !supabaseFormUrl || !supabaseFormKey}
+                      className="h-10 px-4.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Save & Connect Supabase</span>
+                    </button>
+                  </div>
+
+                  {isSupabaseConnected() && (
+                    <button
+                      type="button"
+                      disabled={isSyncingToSupabase}
+                      onClick={handleSyncAllToSupabase}
+                      className="h-10 px-4 rounded-xl bg-blue-50 border border-blue-200 text-[#0075FF] hover:bg-blue-100 disabled:opacity-50 text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all active:scale-95"
+                    >
+                      <Upload className={`w-3.5 h-3.5 ${isSyncingToSupabase ? 'animate-bounce' : ''}`} />
+                      <span>{isSyncingToSupabase ? 'Syncing...' : '1-Click Sync Local Data to Supabase'}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
               <div className="flex justify-end">
                 <button
                   type="submit"
@@ -4151,19 +4588,41 @@ export default function AdminDashboard() {
                 </p>
               </div>
 
-              {/* Department Selection Pill Dropdown */}
-              <div className="relative">
-                <select
-                  value={selectedBatch}
-                  onChange={(e) => setSelectedBatch(e.target.value)}
-                  className="appearance-none bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px] px-4 py-2.5 pr-9 text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] shadow-xs cursor-pointer focus:outline-none focus:border-[#0075FF]"
+              {/* Right: Database Status Pill & Department Selection Pill */}
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setActiveNav('settings')}
+                  className={`flex items-center gap-2 px-3.5 py-2.5 rounded-[14px] text-xs font-bold border transition-all cursor-pointer shadow-2xs hover:shadow-xs ${
+                    isSupabaseConnected()
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100'
+                      : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 hover:bg-amber-100'
+                  }`}
+                  title="Click to configure Supabase Database in Settings"
                 >
-                  <option value="B.Sc. AI & ML">B.Sc. AI & ML</option>
-                  <option value="B.Tech Computer Science">B.Tech Computer Science</option>
-                  <option value="B.Sc. Data Science">B.Sc. Data Science</option>
-                  <option value="M.Sc. AI & Robotics">M.Sc. AI & Robotics</option>
-                </select>
-                <ChevronDown className="w-4 h-4 text-[#64748B] dark:text-[#94A3B8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <Database className="w-3.5 h-3.5 text-current shrink-0" />
+                  <span>{isSupabaseConnected() ? 'Supabase Connected' : 'Local Storage Mode'}</span>
+                  <span
+                    className={`w-2 h-2 rounded-full shrink-0 ${
+                      isSupabaseConnected() ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                    }`}
+                  />
+                </button>
+
+                {/* Department Selection Pill Dropdown */}
+                <div className="relative">
+                  <select
+                    value={selectedBatch}
+                    onChange={(e) => setSelectedBatch(e.target.value)}
+                    className="appearance-none bg-white dark:bg-[#131B2E] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px] px-4 py-2.5 pr-9 text-[13.5px] font-bold text-[#0F172A] dark:text-[#F8FAFC] shadow-xs cursor-pointer focus:outline-none focus:border-[#0075FF]"
+                  >
+                    <option value="B.Sc. AI & ML">B.Sc. AI & ML</option>
+                    <option value="B.Tech Computer Science">B.Tech Computer Science</option>
+                    <option value="B.Sc. Data Science">B.Sc. Data Science</option>
+                    <option value="M.Sc. AI & Robotics">M.Sc. AI & Robotics</option>
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-[#64748B] dark:text-[#94A3B8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
               </div>
             </div>
 
@@ -6413,6 +6872,126 @@ export default function AdminDashboard() {
               >
                 Confirm Import ({importTeacherPreviewList.length})
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* SUPABASE SQL SCHEMA SETUP MODAL */}
+      {/* ======================================================== */}
+      {isSqlModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center">
+                  <Database className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-[#0F172A] tracking-tight">
+                    Supabase PostgreSQL Schema Script
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Creates all 8 required tables, indexes, RLS policies, and seed data in seconds.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSqlModalOpen(false)}
+                className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Quick 3-Step Guide */}
+            <div className="py-3 px-4 my-3 bg-[#F8FAFC] border border-slate-200 rounded-2xl text-xs space-y-1.5 shrink-0">
+              <p className="font-bold text-slate-800 flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-amber-500" />
+                <span>3-Step Quick Setup in Supabase:</span>
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-slate-600 text-[11.5px] pt-1">
+                <div className="p-2 rounded-xl bg-white border border-slate-200/80">
+                  <span className="font-bold text-[#0075FF]">1.</span> Open{' '}
+                  <a
+                    href="https://supabase.com/dashboard"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-bold underline text-[#0075FF] inline-flex items-center gap-0.5"
+                  >
+                    SQL Editor <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+                <div className="p-2 rounded-xl bg-white border border-slate-200/80">
+                  <span className="font-bold text-[#0075FF]">2.</span> Paste this script & click{' '}
+                  <span className="font-bold text-slate-900">Run</span>
+                </div>
+                <div className="p-2 rounded-xl bg-white border border-slate-200/80">
+                  <span className="font-bold text-[#0075FF]">3.</span> Copy URL & Key into Settings and hit{' '}
+                  <span className="font-bold text-emerald-600">Save & Connect</span>
+                </div>
+              </div>
+            </div>
+
+            {/* SQL Code Preview Block */}
+            <div className="flex-1 min-h-[220px] overflow-hidden flex flex-col border border-slate-800 rounded-2xl bg-slate-950 text-slate-200">
+              <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800 text-[11px] font-mono text-slate-400">
+                <span className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+                  <span className="ml-2 font-semibold">supabase_schema.sql (8 tables: students, teachers, depts, exams, etc.)</span>
+                </span>
+                <span>PostgreSQL</span>
+              </div>
+              <pre className="flex-1 p-4 overflow-y-auto font-mono text-xs text-emerald-400 leading-relaxed selection:bg-emerald-900 select-all">
+                {SUPABASE_SCHEMA_SQL}
+              </pre>
+            </div>
+
+            {/* Actions */}
+            <div className="pt-4 mt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 shrink-0">
+              <a
+                href="https://supabase.com/dashboard"
+                target="_blank"
+                rel="noreferrer"
+                className="h-10 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              >
+                <span>Open Supabase Dashboard</span>
+                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+              </a>
+
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsSqlModalOpen(false)}
+                  className="h-10 px-4 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopySqlSchema}
+                  className={`h-10 px-5 rounded-xl text-xs font-bold flex items-center gap-2 text-white shadow-sm transition-all cursor-pointer active:scale-95 ${
+                    sqlCopied ? 'bg-[#16A34A]' : 'bg-[#0075FF] hover:bg-blue-600'
+                  }`}
+                >
+                  {sqlCopied ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>Copied to Clipboard!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>Copy Entire SQL Script</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
