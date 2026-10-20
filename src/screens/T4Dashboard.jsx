@@ -26,6 +26,16 @@ export default function T4Dashboard() {
   const [isNavVisible, setIsNavVisible] = useState(true);
   const lastScrollTopRef = useRef(0);
 
+  // Guard: redirect students to student dashboard, and unauthenticated to /login
+  React.useEffect(() => {
+    const role = localStorage.getItem('classhere_role');
+    if (role === 'student') {
+      navigate('/student-dashboard', { replace: true });
+    } else if (role !== 'teacher') {
+      navigate('/login', { replace: true });
+    }
+  }, [navigate]);
+
   // Hook connecting to real-time IST schedule & Supabase data
   const {
     istTime,

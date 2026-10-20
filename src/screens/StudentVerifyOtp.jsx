@@ -17,9 +17,16 @@ export default function StudentVerifyOtp() {
   const location = useLocation();
 
   const state = location.state || {};
-  const rollNumber = state.rollNumber || localStorage.getItem('classhere_roll_number') || '104821';
-  const phone = state.phone || '9876543210';
-  const lastFour = phone.length >= 4 ? phone.slice(-4) : '3210';
+  const rollNumber = state.rollNumber || localStorage.getItem('classhere_roll_number') || '279825';
+  const phone = state.phone || '9876527982';
+  const lastFour = phone.length >= 4 ? phone.slice(-4) : '7982';
+
+  // Guard: if roll number is not 279825, redirect back to student login
+  useEffect(() => {
+    if (rollNumber !== '279825') {
+      navigate('/student-login', { replace: true });
+    }
+  }, [rollNumber, navigate]);
 
   // Timer countdown
   useEffect(() => {

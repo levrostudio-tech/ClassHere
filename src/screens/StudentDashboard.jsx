@@ -34,11 +34,20 @@ export default function StudentDashboard() {
   // Search query within modals
   const [modalSearch, setModalSearch] = useState('');
 
-  // Handle student name passed in navigation state, default to "Prof. Mehta" matching the reference mockup
-  const studentName = location.state?.studentName || location.state?.name || 'Prof. Mehta';
-  const studentRollNumber = location.state?.rollNumber || localStorage.getItem('classhere_roll_number') || '104821';
+  // Handle student name and roll number, strictly for sample student 279825
+  const studentRollNumber = location.state?.rollNumber || localStorage.getItem('classhere_roll_number') || '279825';
+  const studentName = location.state?.studentName || location.state?.name || 'Sample Student';
   const userRole = location.state?.role || localStorage.getItem('classhere_role') || 'student';
   const isTeacher = userRole === 'teacher';
+
+  // Guard: strictly ensure only student with roll number 279825 can access Student Dashboard
+  React.useEffect(() => {
+    const role = localStorage.getItem('classhere_role');
+    const roll = localStorage.getItem('classhere_roll_number');
+    if (role !== 'student' || roll !== '279825') {
+      navigate('/student-login', { replace: true });
+    }
+  }, [navigate]);
 
   // Real-time IST timetable hook for current weekday
   const {
@@ -148,12 +157,7 @@ export default function StudentDashboard() {
     },
   ];
 
-  const historyData = [
-    { id: 1, title: 'Introduction to Functions & Scope', subject: 'Python', time: 'Yesterday, 10:00 AM', room: 'Room 204', faculty: 'Dr. Aman Sharma' },
-    { id: 2, title: 'Matrix Inverses & Cramer\'s Rule', subject: 'Mathematics', time: '08 Oct, 11:00 AM', room: 'Room 108', faculty: 'Dr. Neha Verma' },
-    { id: 3, title: 'Von Neumann Architecture Details', subject: 'Computer Fundamentals', time: '07 Oct, 12:00 PM', room: 'Room 108', faculty: 'Prof. Rajiv Kapoor' },
-    { id: 4, title: 'Phonetics & Pronunciation Workshop', subject: 'English Communication', time: '06 Oct, 9:00 AM', room: 'Room 101', faculty: 'Mrs. Simran Kaur' },
-  ];
+  const historyData = [];
 
 
   return (
@@ -565,27 +569,33 @@ export default function StudentDashboard() {
             </div>
 
             <div className="space-y-2.5">
-              {historyData.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px]"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
-                      {item.title}
-                    </h4>
-                    <span className="text-[11px] font-semibold text-[#64748B] dark:text-[#94A3B8]">
-                      {item.time}
-                    </span>
-                  </div>
-                  <p className="text-[12px] font-medium text-[#0075FF] dark:text-[#3894FF]">
-                    {item.subject} • {item.faculty}
-                  </p>
-                  <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">
-                    Conducted in {item.room}
-                  </p>
+              {historyData.length === 0 ? (
+                <div className="py-8 text-center text-slate-400 text-xs border border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-900/50">
+                  No past lecture recordings or history yet.
                 </div>
-              ))}
+              ) : (
+                historyData.map((item) => (
+                  <div
+                    key={item.id}
+                    className="p-3.5 bg-[#F8FAFC] dark:bg-[#162036] border border-[#E2E8F0] dark:border-[#223354] rounded-[14px]"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <h4 className="text-[14px] font-bold text-[#0F172A] dark:text-[#F8FAFC] leading-snug">
+                        {item.title}
+                      </h4>
+                      <span className="text-[11px] font-semibold text-[#64748B] dark:text-[#94A3B8]">
+                        {item.time}
+                      </span>
+                    </div>
+                    <p className="text-[12px] font-medium text-[#0075FF] dark:text-[#3894FF]">
+                      {item.subject} • {item.faculty}
+                    </p>
+                    <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] mt-0.5">
+                      Conducted in {item.room}
+                    </p>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

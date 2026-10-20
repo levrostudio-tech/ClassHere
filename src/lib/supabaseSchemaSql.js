@@ -172,4 +172,26 @@ drop policy if exists "Allow anon read settings" on public.institution_settings;
 create policy "Allow anon read settings" on public.institution_settings for select using (true);
 drop policy if exists "Allow anon write settings" on public.institution_settings;
 create policy "Allow anon write settings" on public.institution_settings for all using (true) with check (true);
+
+-- ========================================================
+-- SEED INITIAL DATA (Optional - safe with ON CONFLICT)
+-- ========================================================
+insert into public.departments (id, name, code, degree, hod, hod_initials, hod_avatar_bg, students_count, faculty_count, subjects_count, status)
+values
+  ('dept-1', 'Artificial Intelligence & Machine Learning', 'B.Sc. AI & ML', 'Undergraduate (3 Years)', 'Dr. Rajesh Sharma', 'RS', 'bg-blue-100 text-blue-600', 124, 5, 12, 'Active'),
+  ('dept-2', 'Computer Applications', 'BCA', 'Undergraduate (3 Years)', 'Dr. Ananya Mukherjee', 'AM', 'bg-emerald-100 text-emerald-600', 148, 4, 14, 'Active'),
+  ('dept-3', 'Computer Science', 'B.Sc Computer Science', 'Undergraduate (3 Years)', 'Prof. Meenakshi Sundaram', 'MS', 'bg-purple-100 text-purple-600', 96, 4, 10, 'Active'),
+  ('dept-4', 'Information Technology', 'B.Sc IT', 'Undergraduate (3 Years)', 'Prof. Vikram Batra', 'VB', 'bg-pink-100 text-pink-600', 68, 3, 10, 'Active'),
+  ('dept-5', 'Vocational Web Development', 'B.Voc (Web Dev)', 'Vocational (3 Years)', 'Prof. Harish Chander', 'HC', 'bg-sky-100 text-sky-600', 51, 3, 8, 'Active')
+on conflict (code) do nothing;
+
+insert into public.institution_settings (id, institution_name, short_code, academic_year, current_semester, admin_email, allow_self_registration, notify_on_registration, notify_on_timetable)
+values ('primary', 'ClassHere University College of Computing', 'CHUC', '2026 – 27', 'Odd Semester (1st, 3rd, 5th)', 'admin@college.edu', true, true, true)
+on conflict (id) do nothing;
+
+-- Seed Single Authorized Sample Student (Roll No. 279825)
+insert into public.students (id, roll_number, name, initials, avatar_bg, course, semester, status, joined_on)
+values
+  ('std-279825', '279825', 'Sample Student', 'SS', 'bg-blue-100 text-blue-600', 'B.Sc AI & ML', '3rd Semester', 'Active', '01 Aug 2025')
+on conflict (roll_number) do nothing;
 `;

@@ -76,6 +76,14 @@ export default function T2VerifyOtp({ onNavigate, phone: propPhone }) {
       setError('Please enter the full 6-digit code');
       return;
     }
+    if (!isStudent) {
+      setError('Access restricted: Faculty login is disabled.');
+      return;
+    }
+    if (rollNumber !== '279825') {
+      setError('Access restricted: Only sample roll number 279825 can log in.');
+      return;
+    }
     setError('');
     setLoading(true);
 
@@ -87,8 +95,8 @@ export default function T2VerifyOtp({ onNavigate, phone: propPhone }) {
         navigate('/consent', {
           state: {
             ...state,
-            role: isStudent ? 'student' : 'teacher',
-            rollNumber,
+            role: 'student',
+            rollNumber: '279825',
           },
         });
       }

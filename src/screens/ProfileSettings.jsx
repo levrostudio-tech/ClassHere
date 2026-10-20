@@ -24,8 +24,11 @@ export default function ProfileSettings() {
 
   // If a student somehow accesses profile settings, redirect them immediately to student dashboard
   useEffect(() => {
-    if (localStorage.getItem('classhere_role') === 'student') {
+    const role = localStorage.getItem('classhere_role');
+    if (role === 'student') {
       navigate('/student-dashboard', { replace: true });
+    } else if (role !== 'teacher') {
+      navigate('/login', { replace: true });
     }
   }, [navigate]);
 
@@ -48,14 +51,14 @@ export default function ProfileSettings() {
 
   // Profile data state
   const [profile, setProfile] = useState({
-    name: 'Dr. Aman Sharma',
+    name: 'Faculty Member',
     designation: 'Assistant Professor',
     department: 'Computer Science',
-    college: 'DAV College, Amritsar',
-    email: 'aman.sharma@davcollegeasr.ac.in',
-    phone: '+91 98765 43210',
-    employeeId: 'EMP-CS-2021-042',
-    cabin: 'Cabin 304, Block-B',
+    college: 'ClassHere University College',
+    email: 'faculty@college.edu',
+    phone: '',
+    employeeId: '',
+    cabin: '',
     joiningYear: '2021',
   });
 

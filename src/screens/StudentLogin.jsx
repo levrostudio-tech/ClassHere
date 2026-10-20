@@ -24,18 +24,24 @@ export default function StudentLogin() {
       return;
     }
 
+    if (trimmed !== '279825') {
+      setError('Access restricted: Roll number not found in college registry. Only authorized sample roll number (279825) can log in.');
+      return;
+    }
+
     setError('');
     setLoading(true);
     localStorage.setItem('classhere_role', 'student');
-    localStorage.setItem('classhere_roll_number', trimmed);
+    localStorage.setItem('classhere_roll_number', '279825');
 
     setTimeout(() => {
       setLoading(false);
       navigate('/student-verify-otp', {
         state: {
           role: 'student',
-          rollNumber: trimmed,
-          phone: '9876543210',
+          rollNumber: '279825',
+          studentName: 'Sample Student',
+          phone: '9876527982',
         },
       });
     }, 350);
@@ -64,7 +70,10 @@ export default function StudentLogin() {
             Student Login
           </h1>
           <p className="text-[14.5px] font-medium text-[#64748B] dark:text-[#94A3B8] leading-snug">
-            Enter your 6-digit roll number to continue.
+            Enter your 6-digit roll number to continue.<br />
+            <span className="inline-block mt-1 text-xs font-bold text-[#0075FF] bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+              Sample Roll No: 279825
+            </span>
           </p>
         </div>
 
@@ -100,7 +109,7 @@ export default function StudentLogin() {
                     setRollNumber(digitsOnly);
                     if (error) setError('');
                   }}
-                  placeholder="e.g. 104821"
+                  placeholder="e.g. 279825"
                   className="w-full bg-transparent text-[16px] font-semibold text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-[#93C5FD] dark:placeholder:text-[#475569] focus:outline-none tracking-wider"
                   autoFocus
                 />

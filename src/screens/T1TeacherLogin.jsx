@@ -19,17 +19,8 @@ export default function T1TeacherLogin({ onNavigate, initialPhone = '' }) {
       setError('Please enter a valid 10-digit mobile number');
       return;
     }
-    setError('');
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-      if (onNavigate) {
-        onNavigate('t2', { phone });
-      } else {
-        navigate('/verify-otp', { state: { phone } });
-      }
-    }, 300);
+    setError('Access restricted: Faculty mobile login is currently disabled by administration. No authorized teacher accounts available.');
+    setLoading(false);
   };
 
   return (

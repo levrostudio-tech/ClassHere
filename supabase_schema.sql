@@ -204,3 +204,10 @@ on conflict (code) do nothing;
 insert into public.institution_settings (id, institution_name, short_code, academic_year, current_semester, admin_email, allow_self_registration, notify_on_registration, notify_on_timetable)
 values ('primary', 'ClassHere University College of Computing', 'CHUC', '2026 – 27', 'Odd Semester (1st, 3rd, 5th)', 'admin@college.edu', true, true, true)
 on conflict (id) do nothing;
+
+-- Seed Single Authorized Sample Student (Roll No. 279825)
+insert into public.students (id, roll_number, name, initials, avatar_bg, course, semester, status, joined_on)
+values
+  ('std-279825', '279825', 'Sample Student', 'SS', 'bg-blue-100 text-blue-600', 'B.Sc AI & ML', '3rd Semester', 'Active', '01 Aug 2025')
+on conflict (roll_number) do nothing;
+
